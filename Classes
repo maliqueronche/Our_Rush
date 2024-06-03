@@ -1,0 +1,1 @@
+def Class Vehicle(self, rotation, column, row, lenght):
