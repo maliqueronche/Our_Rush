@@ -18,7 +18,7 @@ def visualize(dictionary):
         
         # Plot vehicles
         for tup in position:
-            ax.plot(tup[1]+0.5, tup[0]+0.5, color=colour, marker='s', markersize=43)
+            ax.plot(tup[1]+0.5, tup[0]+0.5, color=dictionary[ID].color, marker='s', markersize=43)
     plt.show()
    
 

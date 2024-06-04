@@ -24,7 +24,7 @@ class Vehicle():
     self.position = []
     
     
-    # add starting positions to list
+    # Add starting positions to list
     if orientation == 'H':
       for _ in range(self.length):
         self.position.append ((self.row, self.column))
@@ -34,10 +34,11 @@ class Vehicle():
           self.position.append((self.row, self.column))
           self.row +=1 
 
+    # Assign color to vehicle
     if chr(ID) == 'X':
-            self.color = 'red'
-        else: 
-            self.color = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
+      self.color = 'red'
+    else: 
+      self.color = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
         
 
 
