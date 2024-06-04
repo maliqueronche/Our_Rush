@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 from pprint import pprint
-import random 
 
 
 def visualize(dictionary):
@@ -18,13 +16,6 @@ def visualize(dictionary):
     for ID, value in dictionary.items():
         position = dictionary[ID].position
         
-        # Make the objective vehicle red
-        if chr(ID) == 'X':
-            colour = 'red'
-        else: 
-            colour = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
-        
-        print(colour, position)
         # Plot vehicles
         for tup in position:
             ax.plot(tup[1]+0.5, tup[0]+0.5, color=colour, marker='s', markersize=43)
