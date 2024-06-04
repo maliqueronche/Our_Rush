@@ -16,20 +16,20 @@ class Board():
     self.start_board = self.board
     print (self.board)
 
-  # Gets the place of one space before (pos) or behind (neg) a car given a rotation (H or V)
-  def get_place(self, car_rotation, loc_tup, side)
+  # Gets the place of one space before (pos) or behind (neg) a car given a orientation (H or V)
+  def get_place(self, car_orientation, loc_tup, side):
 
     row, col = loc_tup
-    if car_rotation == 'H':
-       if side == 'pos':
-          col +=1
-        else: 
-          col -= 1
-    else :
-       if side == 'pos':
-          row += 1
-       else :
-          row -=1
+    if car_orientation == 'H':
+      if side == 'pos':
+        col +=1
+      else:
+        col -= 1
+    else:
+      if side == 'pos':
+        row += 1
+      else :
+        row -=1
     return row,col
   
   # Checks what the space is given the location
@@ -44,10 +44,10 @@ class Board():
     moving_car = self.cars[ID]
     car_front = moving_car.position[-1]
     car_back = moving_car.position[0]
-    car_rotation = moving_car.rotation
+    car_orientation = moving_car.orientation
 
-    new_front = self.get_place(car_rotation, car_front, 'front')
-    new_back = self.get_place(car_rotation, car_back, 'back')
+    new_front = self.get_place(car_orientation, car_front, 'front')
+    new_back = self.get_place(car_orientation, car_back, 'back')
 
     availability_front = self.check_availability(new_front)
     availability_back = self.check_availability(new_back)
