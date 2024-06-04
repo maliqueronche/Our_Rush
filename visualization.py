@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 from pprint import pprint
 import random 
 
@@ -21,7 +22,8 @@ def visualize(dictionary):
         if chr(ID) == 'X':
             colour = 'red'
         else: 
-            colour = random.choice(['blue', 'green', 'yellow', 'purple', 'brown'])
+            colour = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
+        
 
         # Plot vehicles
         for tup in position:
