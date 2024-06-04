@@ -10,7 +10,7 @@ def visualize(dictionary):
     """
     
     fig, ax = plt.subplots(1)
-    ax.axis([0, 6, 0, 6])
+    ax.axis([0, 6, 6, 0])
     ax.grid(True)
     ax.set_aspect('equal')
 
@@ -24,10 +24,10 @@ def visualize(dictionary):
         else: 
             colour = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
         
-
+        print(colour, position)
         # Plot vehicles
         for tup in position:
-            ax.plot(tup[0]+0.5, tup[1]+0.5, color=colour, marker='s', markersize=43)
+            ax.plot(tup[1]+0.5, tup[0]+0.5, color=colour, marker='s', markersize=43)
     plt.show()
    
 

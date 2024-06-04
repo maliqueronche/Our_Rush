@@ -35,6 +35,6 @@ def game(filepath):
 
 
 if __name__ == '__main__':
-    filepath = 'Rushhour6x6_2.csv'
+    filepath = 'Rushhour6x6_1.csv'
     game(filepath)
     
