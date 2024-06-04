@@ -19,7 +19,8 @@ def game(filepath):
     game_board = board.Board()
     game_board.place_cars(cars_dict)
 
-    game_board.one_move()
+    game_board.one_move(88)
+    game_board.one_move(74)
     
     print (game_board)
         
