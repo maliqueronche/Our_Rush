@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import Classes
 import board
+from visualization import visualize
 
 
 
@@ -29,7 +30,7 @@ def game(filepath):
     game_board.one_move(74)
     
     print (game_board)
-        
+    visualize(cars_dict)
 
 
 

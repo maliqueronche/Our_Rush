@@ -21,6 +21,7 @@ class Vehicle():
     self.row = row -1
     self.length = length
     self.position = []
+    
 
     # add starting positions to list
     if orientation == 'H':
@@ -31,6 +32,7 @@ class Vehicle():
       for _ in range(self.length):
           self.position.append((self.row, self.column))
           self.row +=1 
+        
 
 
 
