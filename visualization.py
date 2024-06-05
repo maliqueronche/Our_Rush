@@ -8,6 +8,8 @@ def visualize(dictionary):
     """
 
     fig, ax = plt.subplots(1)
+
+    #Moet dit niet board size zijn???
     ax.axis([0, 6, 6, 0])
     ax.grid(True)
     ax.set_aspect('equal')
@@ -20,6 +22,5 @@ def visualize(dictionary):
         for tup in position:
             ax.plot(tup[1]+0.5, tup[0]+0.5, color=dictionary[ID].color, marker='s', markersize=43)
     plt.show()
-
 
     #HELLO
