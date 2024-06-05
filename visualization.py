@@ -6,7 +6,7 @@ def visualize(dictionary):
     """
     Takes dictionary containing all positions of all vehicles and plots every vehicle onto a grid.
     """
-    
+
     fig, ax = plt.subplots(1)
     ax.axis([0, 6, 6, 0])
     ax.grid(True)
@@ -15,22 +15,11 @@ def visualize(dictionary):
     # Loop over vehicles, assign them a color, and plot them
     for ID, value in dictionary.items():
         position = dictionary[ID].position
-        
+
         # Plot vehicles
         for tup in position:
             ax.plot(tup[1]+0.5, tup[0]+0.5, color=dictionary[ID].color, marker='s', markersize=43)
     plt.show()
-   
-
-    
-
-        
-            
-    
-
-            
 
 
-
-
-
+    #HELLO
