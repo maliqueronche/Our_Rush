@@ -1,13 +1,13 @@
 import numpy as np
 
 class Board():
-    """
-    Board class creates board instance:
-    - Initialise board with given size
-    - Places car instances on empty playing board
-    -
+  """
+  Board class creates board instance:
+  - Initialise board with given size
+  - Places car instances on empty playing board
+  -
 
-    """
+  """
   def __init__(self, size = 6):
     self.size = size
     self.board = np.zeros((size, size))
@@ -17,7 +17,7 @@ class Board():
   def place_cars(self, cars_dict):
     self.cars = cars_dict
 
-    Reset board for new position
+    # Reset board for new position
     self.board = np.zeros((self.size, self.size))
     for id, vehicle in cars_dict.items():
         location = vehicle.position

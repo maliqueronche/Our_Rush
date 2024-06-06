@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import Classes
+import classes
 import board
 from visualization import visualize
 
@@ -19,8 +19,8 @@ def game(filepath):
 
     # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
-        # ID = ord(row['car'])
-        vehicle = Classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
+        ID = ord(row['car'])
+        vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
         cars_dict[ID] = vehicle
 
     # Initialise board and add cars in starting positions
@@ -54,5 +54,5 @@ def game(filepath):
 
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour9x9_4.csv'
+    filepath = 'data/Rushhour6x6_1.csv'
     game(filepath)
