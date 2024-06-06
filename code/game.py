@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import Classes
+import classes
 import board
 from visualization import visualize
 
@@ -9,30 +9,35 @@ from visualization import visualize
 def game(filepath):
     """
     Takes a csv file containing vehicles and adds them to the game.
+    Creates dictionary containing all car instances in the game.
+    Generates board with cars in their starting position.
+    Takes input from user and makes moves based on this input.
     """
     cars = pd.read_csv(filepath)
     cars_dict = {}
     print (cars)
 
-    # Loop over cars dataframe, create vehicles and store them in a dictionary
+    # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
-        print (row['car'])
         ID = ord(row['car'])
-        vehicle = Classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
+        vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
         cars_dict[ID] = vehicle
 
     # Initialise board and add cars in starting positions
     game_board = board.Board()
     game_board.place_cars(cars_dict)
 
-    #visualize starting point
-    visualize(cars_dict)
+    # Visualize starting point
+    visualize(cars_dict, game_board)
 
+    # Ask for user input and keep playing until user quits
     keep_playing = True
     while keep_playing:
         move_input = input("Enter move (ID direction) or 'q' to quit: ").split()
         if len(move_input) == 1 and move_input[0].lower() == 'q':
             keep_playing = False
+
+        # If input is correctly formatted, make a move
         elif len(move_input) != 2:
             print("Invalid input. Enter move as 'ID direction' or 'q' to quit.")
         else:
@@ -45,15 +50,9 @@ def game(filepath):
                     print("Invalid direction. Use 'left', 'right', 'up', or 'down'.")
                 else:
                     game_board.one_move(ID, direction.lower())
-                    visualize(cars_dict)#, game_board)
-
-
-
-    print (game_board)
-    visualize(cars_dict)
-
+                    visualize(cars_dict, game_board)
 
 
 if __name__ == '__main__':
-    filepath = 'Rushhour6x6_1.csv'
+    filepath = 'data/Rushhour6x6_1.csv'
     game(filepath)
