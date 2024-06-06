@@ -31,7 +31,9 @@ def game(filepath):
     keep_playing = True
     while keep_playing:
         move_input = input("Enter move (ID direction) or 'q' to quit: ").split()
-        if len(move_input) == 1 and move_input[0].lower() == 'q':
+
+        
+        if move_input[0].lower() == 'q':
             keep_playing = False
         elif len(move_input) != 2:
             print("Invalid input. Enter move as 'ID direction' or 'q' to quit.")
@@ -45,7 +47,7 @@ def game(filepath):
                     print("Invalid direction. Use 'left', 'right', 'up', or 'down'.")
                 else:
                     game_board.one_move(ID, direction.lower())
-                    visualize(cars_dict)#, game_board)
+                    visualize(cars_dict)
 
 
 
@@ -55,5 +57,5 @@ def game(filepath):
 
 
 if __name__ == '__main__':
-    filepath = 'Rushhour6x6_1.csv'
+    filepath = 'data/Rushhour6x6_1.csv'
     game(filepath)
