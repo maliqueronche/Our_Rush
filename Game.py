@@ -25,10 +25,30 @@ def game(filepath):
     game_board = board.Board()
     game_board.place_cars(cars_dict)
 
-    # Move cars
-    game_board.one_move(88)
-    game_board.one_move(74)
-    
+    #visualize starting point
+    visualize(cars_dict)
+
+    keep_playing = True
+    while keep_playing:
+        move_input = input("Enter move (ID direction) or 'q' to quit: ").split()
+        if len(move_input) == 1 and move_input[0].lower() == 'q':
+            keep_playing = False
+        elif len(move_input) != 2:
+            print("Invalid input. Enter move as 'ID direction' or 'q' to quit.")
+        else:
+            move_id, direction = move_input
+            if not move_id.isdigit():
+                print("Invalid ID. ID should be a number.")
+            else:
+                ID = int(move_id)
+                if direction.lower() not in ['left', 'right', 'up', 'down']:
+                    print("Invalid direction. Use 'left', 'right', 'up', or 'down'.")
+                else:
+                    game_board.one_move(ID, direction.lower())
+                    visualize(cars_dict)#, game_board)
+
+
+
     print (game_board)
     visualize(cars_dict)
 
@@ -37,4 +57,3 @@ def game(filepath):
 if __name__ == '__main__':
     filepath = 'Rushhour6x6_1.csv'
     game(filepath)
-    
