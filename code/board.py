@@ -74,7 +74,7 @@ class Board():
     elif direction in ['right', 'down']:
 
         #new position based on orientation and desired direction
-        new_front = self.new_position(car_orientation, car_front, 'front')
+        new_front = self.new_position(car_orientation, car_front, 'forward')
 
         #check whether new front is availible
         availability_front = self.check_availability(new_front)
@@ -82,8 +82,8 @@ class Board():
 
         #if availible, move car
         if availability_front == 0:
-            print("Available")
-            moving_car.position.pop()
-            moving_car.position.insert(0, new_front)
+          
+            moving_car.position.pop(0)
+            moving_car.position.append(new_front)
 
     self.place_cars(self.cars)
