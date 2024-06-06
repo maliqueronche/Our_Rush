@@ -28,7 +28,7 @@ def game(filepath):
     game_board.place_cars(cars_dict)
 
     # Visualize starting point
-    visualize(cars_dict)
+    visualize(cars_dict, game_board)
 
     # Ask for user input and keep playing until user quits
     keep_playing = True
@@ -50,9 +50,9 @@ def game(filepath):
                     print("Invalid direction. Use 'left', 'right', 'up', or 'down'.")
                 else:
                     game_board.one_move(ID, direction.lower())
-                    visualize(cars_dict)
+                    visualize(cars_dict, game_board)
 
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour6x6_1.csv'
+    filepath = 'data/Rushhour9x9_4.csv'
     game(filepath)

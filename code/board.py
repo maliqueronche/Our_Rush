@@ -17,14 +17,14 @@ class Board():
   def place_cars(self, cars_dict):
     self.cars = cars_dict
 
-    # Reset board for new position
-    # self.board = np.zeros((self.size, self.size))
-    # for id, vehicle in cars_dict.items():
-    #     location = vehicle.position
-    #     for tup in location:
-    #         self.board[tup] = vehicle.ID
-    # self.start_board = self.board
-    # print (self.board)
+    Reset board for new position
+    self.board = np.zeros((self.size, self.size))
+    for id, vehicle in cars_dict.items():
+        location = vehicle.position
+        for tup in location:
+            self.board[tup] = vehicle.ID
+    self.start_board = self.board
+    print (self.board)
 
   # Gets the place of one space before (pos) or behind (neg) a car given a orientation (H or V)
   def new_position(self, car_orientation, loc_tup, direction):
