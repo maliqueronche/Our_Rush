@@ -1,6 +1,13 @@
 import numpy as np
 
 class Board():
+  """
+  Board class creates board instance:
+  - Initialise board with given size
+  - Places car instances on empty playing board
+  -
+
+  """
   def __init__(self, size = 6):
     self.size = size
     self.board = np.zeros((size, size))
@@ -10,7 +17,7 @@ class Board():
   def place_cars(self, cars_dict):
     self.cars = cars_dict
 
-    #Reset board for new position
+    # Reset board for new position
     self.board = np.zeros((self.size, self.size))
     for id, vehicle in cars_dict.items():
         location = vehicle.position
@@ -20,7 +27,7 @@ class Board():
     print (self.board)
 
   # Gets the place of one space before (pos) or behind (neg) a car given a orientation (H or V)
-  def get_place(self, car_orientation, loc_tup, direction):
+  def new_position(self, car_orientation, loc_tup, direction):
 
     row, col = loc_tup
     if car_orientation == 'H':
@@ -52,7 +59,7 @@ class Board():
     if direction in ['left', 'up']:
 
         #new position based on orientation and desired direction
-        new_back = self.get_place(car_orientation, car_back, 'back')
+        new_back = self.new_position(car_orientation, car_back, 'back')
 
         #check whether new back is availible
         availability_back = self.check_availability(new_back)
@@ -67,7 +74,7 @@ class Board():
     elif direction in ['right', 'down']:
 
         #new position based on orientation and desired direction
-        new_front = self.get_place(car_orientation, car_front, 'front')
+        new_front = self.new_position(car_orientation, car_front, 'forward')
 
         #check whether new front is availible
         availability_front = self.check_availability(new_front)
@@ -75,8 +82,8 @@ class Board():
 
         #if availible, move car
         if availability_front == 0:
-            print("Available")
-            moving_car.position.pop()
-            moving_car.position.insert(0, new_front)
+          
+            moving_car.position.pop(0)
+            moving_car.position.append(new_front)
 
     self.place_cars(self.cars)

@@ -55,4 +55,8 @@ def game(filepath):
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
+<<<<<<< HEAD
     game(filepath)
+=======
+    game(filepath)
+>>>>>>> 9887ff64c4aace3472bc2c7816276206d764faa7

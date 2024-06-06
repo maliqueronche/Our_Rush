@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.colors as mcolors
-import random 
+import random
 
 class Vehicle():
 
@@ -13,7 +13,7 @@ class Vehicle():
     - column: the first column of occurrence for the vehicle
     - row: the first row of occurrence for the vehicle
     - length: length of the vehicle, (either 2, or 3)
-    - position: list containing the position of the vehicle 
+    - position: list containing the position of the vehicle
     - color: color of the vehicle
     """
     self.ID = ID
@@ -22,8 +22,8 @@ class Vehicle():
     self.row = row -1
     self.length = length
     self.position = []
-    
-    
+
+
     # Add starting positions to list
     if orientation == 'H':
       for _ in range(self.length):
@@ -32,16 +32,10 @@ class Vehicle():
     else:
       for _ in range(self.length):
           self.position.append((self.row, self.column))
-          self.row +=1 
+          self.row +=1
 
     # Assign color to vehicle
     if chr(ID) == 'X':
       self.color = 'red'
-    else: 
+    else:
       self.color = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
-        
-
-
-
-    
-
