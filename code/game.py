@@ -6,7 +6,6 @@ from visualization import visualize
 from user_input import user_input
 
 
-
 def game(filepath):
     """
     Takes csv file containing vehicles and adds them to game.
@@ -31,7 +30,7 @@ def game(filepath):
     # Visualize starting point
     visualize(cars_dict, game_board)
 
-    # Ask for user input and keep playing until user quits
+    # Ask for user input and move based on input, keep asking until player quits
     user_input(cars_dict, game_board)
 
 

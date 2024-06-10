@@ -11,10 +11,12 @@ class Board():
   def __init__(self, size = 6):
     self.size = size
     self.board = np.zeros((size, size))
-    print (self.board)
 
-  # Places cars on an empty playing board
+
   def place_cars(self, cars_dict):
+    '''
+    Places cars on an empty playing board
+    '''
     self.cars = cars_dict
 
     # Reset board for new position
@@ -28,6 +30,11 @@ class Board():
 
   # Takes place of space before (pos) or behind (neg) a car given orientation (H or V)
   def new_position(self, car_orientation, loc_tup, direction):
+    '''
+    Generates new position for car instance based on orientation (H or V),
+    column/row of new postition (loc_tup) and direction (forward or
+    backward).
+    '''
 
     row, col = loc_tup
     if car_orientation == 'H':
@@ -42,8 +49,11 @@ class Board():
         row -=1
     return row, col
 
-  # Checks what the space is, given the location
+  
   def check_availability(self, location):
+    '''
+    Checks whether there is space for moving, given the location.
+    '''
     row, col = location
     if row > self.size or col > self.size:
       return None
