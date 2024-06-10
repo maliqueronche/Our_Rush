@@ -26,7 +26,7 @@ class Board():
     self.start_board = self.board
     print (self.board)
 
-  # Gets the place of one space before (pos) or behind (neg) a car given a orientation (H or V)
+  # Takes place of space before (pos) or behind (neg) a car given orientation (H or V)
   def new_position(self, car_orientation, loc_tup, direction):
 
     row, col = loc_tup
@@ -82,7 +82,7 @@ class Board():
 
         #if availible, move car
         if availability_front == 0:
-          
+
             moving_car.position.pop(0)
             moving_car.position.append(new_front)
 

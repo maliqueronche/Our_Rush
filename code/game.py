@@ -8,8 +8,8 @@ from visualization import visualize
 
 def game(filepath):
     """
-    Takes a csv file containing vehicles and adds them to the game.
-    Creates dictionary containing all car instances in the game.
+    Takes csv file containing vehicles and adds them to game.
+    Creates dictionary containing all car instances in game.
     Generates board with cars in their starting position.
     Takes input from user and makes moves based on this input.
     """
