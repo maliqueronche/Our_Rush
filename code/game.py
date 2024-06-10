@@ -3,6 +3,7 @@ import pandas as pd
 import classes
 import board
 from visualization import visualize
+from user_input import user_input
 
 
 
@@ -31,26 +32,7 @@ def game(filepath):
     visualize(cars_dict, game_board)
 
     # Ask for user input and keep playing until user quits
-    keep_playing = True
-    while keep_playing:
-        move_input = input("Enter move (ID direction) or 'q' to quit: ").split()
-        if len(move_input) == 1 and move_input[0].lower() == 'q':
-            keep_playing = False
-
-        # If input is correctly formatted, make a move
-        elif len(move_input) != 2:
-            print("Invalid input. Enter move as 'ID direction' or 'q' to quit.")
-        else:
-            move_id, direction = move_input
-            if not move_id.isdigit():
-                print("Invalid ID. ID should be a number.")
-            else:
-                ID = int(move_id)
-                if direction.lower() not in ['left', 'right', 'up', 'down']:
-                    print("Invalid direction. Use 'left', 'right', 'up', or 'down'.")
-                else:
-                    game_board.one_move(ID, direction.lower())
-                    visualize(cars_dict, game_board)
+    user_input(cars_dict, game_board)
 
 
 if __name__ == '__main__':
