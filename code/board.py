@@ -44,14 +44,14 @@ class Board():
       else:
         new_col = col - 1
       if -1 < new_col < 6:
-        return new_row, new_col
+        return row, new_col
     else:
       if direction == 'forward':
         new_row = row + 1
       else :
         new_row = row - 1
       if -1 < new_row < 6 :
-        return new_row, new_col
+        return new_row, col
     return row, col
 
 
