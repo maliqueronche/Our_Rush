@@ -4,7 +4,7 @@ import classes
 import board
 from visualization import visualize
 from user_input import user_input
-from algorithm_random import random_algorithm
+from algorithm_random import Random_algorithm as ra
 
 
 def game(filepath):
@@ -32,7 +32,8 @@ def game(filepath):
     visualize(cars_dict, game_board)
 
     # Initiate random step
-    random_step(cars_dict, game_board)
+    random_exp = ra(cars_dict, game_board)
+    random_exp.random_step()
 
 
 
