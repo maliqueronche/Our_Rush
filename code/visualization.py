@@ -4,7 +4,8 @@ from pprint import pprint
 
 def visualize(dictionary, board):
     """
-    Takes dictionary containing all positions of all vehicles and plots every vehicle onto a grid.
+    Takes dictionary containing all positions of all vehicles and plots every
+    vehicle onto a grid.
     """
 
     fig, ax = plt.subplots(1)
