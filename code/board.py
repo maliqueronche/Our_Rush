@@ -39,7 +39,7 @@ class Board():
     new_positions = []
     car = self.cars[car_id]
     positions = car.position
-    #print (car_id)
+    print (car_id)
 
     for car_tup in positions:
       new_pos = self.get_new_pos(car_tup, direction)
@@ -51,7 +51,7 @@ class Board():
     for new_pos in new_positions:
       self.board[new_pos] = car.ID
 
-    #print (self.board)
+    print (self.board)
       
 
      

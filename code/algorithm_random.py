@@ -10,12 +10,13 @@ class Random_algorithm():
 
     def random_step(self): #dictionary and board instance
         moveable = False
+        pick = self.get_available_cars()
 
         while moveable == False:
             car_id, car = self.get_random_car()
             self.car = car
             self.car_id = car_id
-            moveable_list = self.is_moveable()
+            moveable_list = self.is_moveable(car)
             if True in moveable_list:
                 moveable = True
         side = random.randint(0,1)
@@ -47,10 +48,17 @@ class Random_algorithm():
     def get_random_car(self):
         key = random.choice(list(self.cars.keys()))
         return key, self.cars[key]
+    
+    def get_available_cars(self):
+        for car in self.cars.keys():
+            moveable_list = self.is_moveable(self.cars[car])
+            if True in moveable_list:
+                print ('True')
+                pass
 
-    def is_moveable(self):
-        positions_list = self.car.position
-        orientation = self.car.orientation
+    def is_moveable(self, car):
+        positions_list = car.position
+        orientation = car.orientation
         self.orientation = orientation
         positions_to_check = []
         checklist = []
