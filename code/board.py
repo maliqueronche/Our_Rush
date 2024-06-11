@@ -20,6 +20,7 @@ class Board():
     print (self.board)
 
   def get_new_pos(car_tup, direction):
+    '''recieves a tuple for location and a direction and moves the tuple one place'''
     row, col = car_tup
 
     if direction == 'up':
@@ -34,6 +35,7 @@ class Board():
     return row, col
 
   def move_car(car_id, direction):
+    '''recieves a car_id with direction and moves this car across the board'''
     new_positions = []
     positions = car.positions
     car = self.cars[car_id]
