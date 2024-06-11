@@ -33,7 +33,12 @@ def game(filepath):
 
     # Initiate random step
     random_exp = ra(cars_dict, game_board)
-    random_exp.random_step()
+
+    # while the red car is not yet in the right position, the algorithm goes on
+    i = 0
+    while cars_dict[ord('X')] != ((2,4), (2,5)):
+        random_exp.random_step()
+        i +=1
 
 
 
