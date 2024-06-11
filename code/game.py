@@ -36,7 +36,8 @@ def game(filepath):
 
     # while the red car is not yet in the right position, the algorithm goes on
     i = 0
-    while cars_dict[ord('X')] != ((2,4), (2,5)):
+    # while cars_dict[ord('X')] != ((2,4), (2,5)):
+    while i <= 4:
         random_exp.random_step()
         i +=1
 

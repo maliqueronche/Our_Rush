@@ -22,18 +22,28 @@ class Random_algorithm():
         print (self.car_id)
         side = random.randint(0,1)
         print (side)
-        if moveable_list[side]: 
-            if side == 0:
+        if side == 0: 
+            if moveable_list[0] == True:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'left')
                 else :
                     self.board.move_car(self.car_id, 'up')
-        elif side == 1:
-            if 
-            if self.orientation == 'H':
-                self.board.move_car(self.car_id, 'right')
             else:
-                self.board.move_car(self.car_id, 'down')
+                if self.orientation == 'H':
+                    self.board.move_car(self.car_id, 'right')
+                else:
+                    self.board.move_car(self.car_id, 'down')
+        if side == 1:
+            if moveable_list[1] == True:
+                if self.orientation == 'H':
+                    self.board.move_car(self.car_id, 'right')
+                else:
+                    self.board.move_car(self.car_id, 'down')
+            else:
+                if self.orientation == 'H':
+                    self.board.move_car(self.car_id, 'left')
+                else :
+                    self.board.move_car(self.car_id, 'up')
 
 
     def get_random_car(self):
