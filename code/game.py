@@ -4,12 +4,9 @@ import classes
 import board
 from visualization import visualize
 from user_input import user_input
-<<<<<<< HEAD
 from random_algorithm import random_step
 
-=======
 from algorithm_random import random_algorithm
->>>>>>> e50975fcda697cd7e5c5df8b2ee37bb3eaab0842
 
 
 def game(filepath):
@@ -29,8 +26,7 @@ def game(filepath):
         cars_dict[ID] = vehicle
 
     # Initialise board and add cars in starting positions
-    game_board = board.Board()
-    game_board.place_cars(cars_dict)
+    game_board = board.Board(cars_dict)
 
     # Visualize starting point
     visualize(cars_dict, game_board)
@@ -46,19 +42,5 @@ def game(filepath):
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-# <<<<<<< HEAD
-#     filepath = 'data/Rushhour6x6_1.csv'
-# <<<<<<< HEAD
-# =======
-#     filepath = 'data/Rushhour6x6_1_test_red_only.csv'
-# >>>>>>> 18ebfd6d252faaba670dbf84fae259f71a7d5a05
-#     game(filepath)
-# =======
-#     game(filepath)
-# >>>>>>> 9887ff64c4aace3472bc2c7816276206d764faa7
-
-=======
->>>>>>> e50975fcda697cd7e5c5df8b2ee37bb3eaab0842
     filepath = 'data/Rushhour6x6_1.csv'
     game(filepath)
