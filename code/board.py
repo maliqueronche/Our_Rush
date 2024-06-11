@@ -29,76 +29,80 @@ class Board():
     print (self.board)
 
   # Takes place of space before (pos) or behind (neg) a car given orientation (H or V)
-  def new_position(self, car_orientation, loc_tup, direction):
+  def new_position(self, car_orientation, positions, direction):
     '''
     Generates new position for car instance based on orientation (H or V),
     column/row of postition (loc_tup) and direction (forward or
     backward).
     '''
 
-    row, col = loc_tup
+    new_positions = []
 
     if car_orientation == 'H':
-      if direction == 'forward':
-        new_col = col + 1
+      if direction == 'right':
+        for position in positions:
+          row, col = position
+          new_col = col + 1
+          if -1 < new_col < 6:
+            new_positions.append((row, new_col))
+          else:
+            return positions
       else:
-        new_col = col - 1
-      if -1 < new_col < 6:
-        return row, new_col
+        for position in positions:
+          row, col = position
+          new_col = col - 1
+          if -1 < new_col < 6:
+            new_positions.append((row, new_col))
+          else:
+            return positions
+
     else:
-      if direction == 'forward':
-        new_row = row + 1
+      if direction == 'down':
+        for position in positions:
+          row, col = position
+          new_row = row + 1
+          if -1 < new_row < 6:
+              new_positions.append((new_row, col))
+          else:
+            return positions
+        
       else :
-        new_row = row - 1
-      if -1 < new_row < 6 :
-        return new_row, col
-    return row, col
+        for position in positions:
+          row, col = position
+          new_row = row - 1
+          if -1 < new_row < 6:
+              new_positions.append((new_row, col))
+          else:
+            return positions
+        
+    return new_positions
 
 
-  def check_availability(self, location):
+  def check_availability(self, location, direction):
     '''
     Checks whether there is space for moving, given the location.
     '''
-    row, col = location
-    if row > self.size or col > self.size:
-      return None
+
+    if direction in ['right, down']:
+      row, col = location[-1]
+    else:
+      row, col = location[0]
+
     return self.board[row,col]
 
   # does one move or logs which cars are blocking it's way
   def one_move(self, ID, direction):
     moving_car = self.cars[ID]
-    car_front = moving_car.position[-1]
-    car_back = moving_car.position[0]
-    car_orientation = moving_car.orientation
+    
+    #new position based on orientation and desired direction
+    new_positions = self.new_position(moving_car.orientation, moving_car.position, direction)
 
-    if direction in ['left', 'up']:
+    #check whether new back is availible
+    availability_position = self.check_availability(new_positions, direction)
 
-        #new position based on orientation and desired direction
-        new_back = self.new_position(car_orientation, car_back, 'back')
+    #if availible, move car
+    if availability_position == 0:
+      moving_car.position = new_positions
 
-        #check whether new back is availible
-        availability_back = self.check_availability(new_back)
-
-
-        #if availible, move car
-        if availability_back == 0:
-            moving_car.position.pop()
-            moving_car.position.insert(0, new_back)
-
-
-    elif direction in ['right', 'down']:
-
-        #new position based on orientation and desired direction
-        new_front = self.new_position(car_orientation, car_front, 'forward')
-
-        #check whether new front is availible
-        availability_front = self.check_availability(new_front)
-
-
-        #if availible, move car
-        if availability_front == 0:
-
-            moving_car.position.pop(0)
-            moving_car.position.append(new_front)
 
     self.place_cars(self.cars)

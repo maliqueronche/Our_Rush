@@ -4,8 +4,12 @@ import classes
 import board
 from visualization import visualize
 from user_input import user_input
+<<<<<<< HEAD
 from random_algorithm import random_step
 
+=======
+from algorithm_random import random_algorithm
+>>>>>>> e50975fcda697cd7e5c5df8b2ee37bb3eaab0842
 
 
 def game(filepath):
@@ -17,7 +21,6 @@ def game(filepath):
     """
     cars = pd.read_csv(filepath)
     cars_dict = {}
-    print (cars)
 
     # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
@@ -38,8 +41,12 @@ def game(filepath):
     # Initiate random step
     random_step(cars_dict, game_board)
 
+    #Random algorithm
+    random_algorithm(cars_dict, game_board)
+
 
 if __name__ == '__main__':
+<<<<<<< HEAD
 # <<<<<<< HEAD
 #     filepath = 'data/Rushhour6x6_1.csv'
 # <<<<<<< HEAD
@@ -51,5 +58,7 @@ if __name__ == '__main__':
 #     game(filepath)
 # >>>>>>> 9887ff64c4aace3472bc2c7816276206d764faa7
 
+=======
+>>>>>>> e50975fcda697cd7e5c5df8b2ee37bb3eaab0842
     filepath = 'data/Rushhour6x6_1.csv'
     game(filepath)
