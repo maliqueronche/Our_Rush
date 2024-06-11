@@ -32,24 +32,25 @@ class Board():
   def new_position(self, car_orientation, loc_tup, direction):
     '''
     Generates new position for car instance based on orientation (H or V),
-    column/row of new postition (loc_tup) and direction (forward or
+    column/row of postition (loc_tup) and direction (forward or
     backward).
     '''
 
     row, col = loc_tup
+
     if car_orientation == 'H':
       if direction == 'forward':
-        col +=1
+        new_col = col + 1
       else:
-        col -= 1
+        new_col = col - 1
     else:
       if direction == 'forward':
-        row += 1
+        new_row = row + 1
       else :
-        row -=1
+        new_row = row - 1
     return row, col
 
-  
+
   def check_availability(self, location):
     '''
     Checks whether there is space for moving, given the location.
