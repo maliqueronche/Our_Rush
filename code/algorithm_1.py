@@ -14,7 +14,7 @@
 # Step 2: Loop over vehicles and list all possible board configurations for one move.
 #         - keep track of which board configurations are already used, 
 #           so that the algorithm doesn't play moves that end up in configurations it has already seen.
-#         - Only play moves that reduce/retain the number of moves.
+#         - Only play moves that reduce/retain the number of moves to do.
 
 # TODO: implement
 
