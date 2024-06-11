@@ -4,6 +4,8 @@ import classes
 import board
 from visualization import visualize
 from user_input import user_input
+from random_algorithm import random_step
+
 
 
 def game(filepath):
@@ -31,17 +33,23 @@ def game(filepath):
     visualize(cars_dict, game_board)
 
     # Ask for user input and move based on input, keep asking until player quits
-    user_input(cars_dict, game_board)
+    #user_input(cars_dict, game_board)
+
+    # Initiate random step
+    random_step(cars_dict, game_board)
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
+# <<<<<<< HEAD
+#     filepath = 'data/Rushhour6x6_1.csv'
+# <<<<<<< HEAD
+# =======
+#     filepath = 'data/Rushhour6x6_1_test_red_only.csv'
+# >>>>>>> 18ebfd6d252faaba670dbf84fae259f71a7d5a05
+#     game(filepath)
+# =======
+#     game(filepath)
+# >>>>>>> 9887ff64c4aace3472bc2c7816276206d764faa7
+
     filepath = 'data/Rushhour6x6_1.csv'
-<<<<<<< HEAD
-=======
-    filepath = 'data/Rushhour6x6_1_test_red_only.csv'
->>>>>>> 18ebfd6d252faaba670dbf84fae259f71a7d5a05
     game(filepath)
-=======
-    game(filepath)
->>>>>>> 9887ff64c4aace3472bc2c7816276206d764faa7
