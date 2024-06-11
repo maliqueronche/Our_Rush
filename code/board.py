@@ -34,14 +34,15 @@ class Board():
 
     return row, col
 
-  def move_car(car_id, direction):
+  def move_car(self, car_id, direction):
     '''recieves a car_id with direction and moves this car across the board'''
     new_positions = []
-    positions = car.positions
     car = self.cars[car_id]
+    positions = car.position
+    print (car_id)
 
     for car_tup in positions:
-      new_pos = get_new_pos(car_tup, direction)
+      new_pos = self.get_new_pos(car_tup, direction)
       new_positions.append (new_pos)
 
     for old_pos in positions:
@@ -49,6 +50,8 @@ class Board():
     
     for new_pos in new_positions:
       self.board[new_pos] = car.ID
+
+    print (self.board)
       
 
      
