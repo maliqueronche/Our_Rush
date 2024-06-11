@@ -34,13 +34,18 @@ def game(filepath):
     # Initiate random step
     random_exp = ra(cars_dict, game_board)
 
+    # fro three times
+    iterations_list = []
+    for _ in range(3):
     # while the red car is not yet in the right position, the algorithm goes on
-    i = 0
-    # while cars_dict[ord('X')] != ((2,4), (2,5)):
-    while i <= 6:
-        random_exp.random_step()
-
-        i +=1
+        i = 0
+        # while cars_dict[ord('X')] != ((2,4), (2,5)):
+        while i <= 10:
+            random_exp.random_step()
+            print (i)
+            i +=1
+        print ('30 iteration happened')
+        iterations_list.append(i)
 
 
 
