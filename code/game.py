@@ -4,8 +4,6 @@ import classes
 import board
 from visualization import visualize
 from user_input import user_input
-from random_algorithm import random_step
-
 from algorithm_random import random_algorithm
 
 
@@ -21,7 +19,9 @@ def game(filepath):
 
     # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
-        ID = ord(row['car'])
+        ID = 0
+        for letter in row['car']:
+            ID += ord(row['car'])
         vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
         cars_dict[ID] = vehicle
 
@@ -31,14 +31,9 @@ def game(filepath):
     # Visualize starting point
     visualize(cars_dict, game_board)
 
-    # Ask for user input and move based on input, keep asking until player quits
-    #user_input(cars_dict, game_board)
-
     # Initiate random step
     random_step(cars_dict, game_board)
 
-    #Random algorithm
-    random_algorithm(cars_dict, game_board)
 
 
 if __name__ == '__main__':
