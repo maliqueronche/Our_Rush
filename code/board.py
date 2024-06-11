@@ -19,7 +19,7 @@ class Board():
             self.board[tup] = vehicle.ID
     print (self.board)
 
-  def get_new_pos(car_tup, direction):
+  def get_new_pos(self, car_tup, direction):
     '''recieves a tuple for location and a direction and moves the tuple one place'''
     row, col = car_tup
 
