@@ -19,6 +19,7 @@ class Random_algorithm():
             moveable_list = self.is_moveable(car)
             if True in moveable_list:
                 moveable = True
+
         side = random.randint(0,1)
 
         if side == 0: 
@@ -36,7 +37,7 @@ class Random_algorithm():
                 else:
                     self.board.move_car(self.car_id, 'down')
                     self.car.change_position('down')
-        if side == 1:
+        elif side == 1:
             if moveable_list[1] == True:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'right')
