@@ -17,34 +17,34 @@ def game(filepath):
     cars = pd.read_csv(filepath)
     cars_dict = {}
 
+    for _ in range (3):
     # Loop over cars dataframe, create vehicles and store them in dictionary
-    for idx, row in cars.iterrows():
-        ID = 0
-        for letter in row['car']:
-            ID += ord(row['car'])
-        vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
-        cars_dict[ID] = vehicle
+        for idx, row in cars.iterrows():
+            ID = 0
+            for letter in row['car']:
+                ID += ord(row['car'])
+            vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
+            cars_dict[ID] = vehicle
 
-    # Initialise board and add cars in starting positions
-    game_board = board.Board(cars_dict)
+        # Initialise board and add cars in starting positions
+        game_board = board.Board(cars_dict)
 
-    # Visualize starting point
-    # visualize(cars_dict, game_board)
+        # Visualize starting point
+        # visualize(cars_dict, game_board)
 
-    # Initiate random step
-    random_exp = ra(cars_dict, game_board)
+        # Initiate random step
+        random_exp = ra(cars_dict, game_board)
 
-    # fro three times
-    iterations_list = []
-    for _ in range(3):
-    # while the red car is not yet in the right position, the algorithm goes on
+        # fro three times
+        iterations_list = []
+        # while the red car is not yet in the right position, the algorithm goes on
         i = 0
         # while cars_dict[ord('X')] != ((2,4), (2,5)):
         while i <= 10:
             random_exp.random_step()
             print (i)
             i +=1
-        print ('30 iteration happened')
+        print ('10 iteration happened')
         iterations_list.append(i)
 
 

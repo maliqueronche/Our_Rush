@@ -39,3 +39,23 @@ class Vehicle():
       self.color = 'red'
     else:
       self.color = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
+
+  def change_position(self, direction):
+    new_position = []
+    for place in self.position:
+      row, col = place
+
+      if direction == 'up':
+        row -= 1
+      if direction == 'down':
+        row += 1
+      if direction == 'left':
+        col -= 1
+      if direction == 'right':
+        col +=1
+      
+      new_place = row, col
+      new_position.append(new_place)
+    self.position = new_position
+
+

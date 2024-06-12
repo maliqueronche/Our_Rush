@@ -24,24 +24,32 @@ class Random_algorithm():
             if moveable_list[0] == True:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'left')
+                    self.car.change_position('left')
                 else :
                     self.board.move_car(self.car_id, 'up')
+                    self.car.change_position('up')
             else:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'right')
+                    self.car.change_position('right')
                 else:
                     self.board.move_car(self.car_id, 'down')
+                    self.car.change_position('down')
         if side == 1:
             if moveable_list[1] == True:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'right')
+                    self.car.change_position('right')
                 else:
                     self.board.move_car(self.car_id, 'down')
+                    self.car.change_position('down')
             else:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'left')
+                    self.car.change_position('left')
                 else :
                     self.board.move_car(self.car_id, 'up')
+                    self.car.change_position('up')
         return self.board
 
 
@@ -54,9 +62,7 @@ class Random_algorithm():
         for car in self.cars.keys():
             moveable_list = self.is_moveable(self.cars[car])
             if True in moveable_list:
-                print (car)
                 available_cars[car] = self.cars[car]
-        print (available_cars)
         return available_cars
 
     def is_moveable(self, car):
@@ -85,5 +91,4 @@ class Random_algorithm():
                     checklist.append(True)
                 else:
                     checklist.append(False)
-        print (checklist)
         return checklist
