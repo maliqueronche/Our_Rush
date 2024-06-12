@@ -1,28 +1,44 @@
 import board
 import classes
 import random
+import visualization
 
 class Random_algorithm():
+    """
+    Contains functions to execute random algorithm.
+    - init: initialises cars and board in this class.
+    - random_step: does a random step for a random moveable vehicle.
+    - get_random_car: gets a random car.
+    - get_available_cars: gets all cars that can move.
+    - is_moveable: checks if car is moveable.
+    """
     
     def __init__(self, cars_dict, game_board):
+        """Initialise cars and board"""
+
         self.cars = cars_dict
         self.board = game_board
 
     def random_step(self): #dictionary and board instance
+        """Does a random step for a random moveable vehicle and returns the updated board."""
+
+        # Set moveable by default to False
         moveable = False
+
+        # Get dictionary with available cars (i.e. moveable)
         pick = self.get_available_cars()
 
-        while moveable == False:
-            car_id, car = self.get_random_car(pick)
-            self.car = car
-            self.car_id = car_id
-            moveable_list = self.is_moveable(car)
-            if True in moveable_list:
-                moveable = True
+        # Get a random car and get moveable directions
+        car_id, car = self.get_random_car(pick)
+        self.car = car
+        self.car_id = car_id
+        moveable_list = self.is_moveable(car)
 
-        side = random.randint(0,1)
+        # Pick a random direction (backwards (0) or forwards(1)) and move the car
+        direction = random.randint(0,1)
 
-        if side == 0: 
+        # If backwards, move car left or up, else right or down, 
+        if direction == 0: 
             if moveable_list[0] == True:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'left')
@@ -37,7 +53,9 @@ class Random_algorithm():
                 else:
                     self.board.move_car(self.car_id, 'down')
                     self.car.change_position('down')
-        elif side == 1:
+                    
+        # Elif forwards, move car right or down, else left or up
+        elif direction == 1:
             if moveable_list[1] == True:
                 if self.orientation == 'H':
                     self.board.move_car(self.car_id, 'right')
@@ -53,15 +71,24 @@ class Random_algorithm():
                     self.board.move_car(self.car_id, 'up')
                     self.car.change_position('up')
 
+        # Visualise the board           
+        visualization.visualize(self.cars, self.board)
+
         return self.board
 
 
     def get_random_car(self, cars_dict):
+        """Choose a random car from cars"""
+
         key = random.choice(list(cars_dict.keys()))
         return key, cars_dict[key]
     
     def get_available_cars(self):
+        """"For every car in cars, if it is moveable, add the car to available cars and return that dictionary."""
+
         available_cars = {}
+
+        # Loop over cars, check if a car can move and add it to dictionary
         for car in self.cars.keys():
             moveable_list = self.is_moveable(self.cars[car])
             if True in moveable_list:
@@ -69,12 +96,15 @@ class Random_algorithm():
         return available_cars
 
     def is_moveable(self, car):
+        """Takes a car, checks if it can move and returns list with tuples containing True or False."""
+
         positions_list = car.position
         orientation = car.orientation
         self.orientation = orientation
         positions_to_check = []
         checklist = []
 
+        # Get positions to check 
         if orientation == 'H':
             left_pos = self.board.get_new_pos(positions_list[0], 'left')
             positions_to_check.append(left_pos)
@@ -86,6 +116,7 @@ class Random_algorithm():
             down_pos = self.board.get_new_pos(positions_list[-1], 'down')
             positions_to_check.append(down_pos)
         
+        # Check if position can be moved to
         for row, col in positions_to_check:
                 position = row, col
                 if row > self.board.size -1 or row <0 or col > self.board.size -1 or col <0:

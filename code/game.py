@@ -53,5 +53,5 @@ def game(filepath, rounds):
 
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour6x6_1.csv'
-    data = game(filepath, 20)
+    filepath = 'data/Rushhour6x6_1_test_red_only.csv'
+    data = game(filepath, 10)
