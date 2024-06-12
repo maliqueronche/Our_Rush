@@ -53,7 +53,7 @@ class Random_algorithm():
                 else:
                     self.board.move_car(self.car_id, 'down')
                     self.car.change_position('down')
-                    
+
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
@@ -72,7 +72,7 @@ class Random_algorithm():
                     self.car.change_position('up')
 
         # Visualise the board           
-        visualization.visualize(self.cars, self.board)
+        # visualization.visualize(self.cars, self.board)
 
         return self.board
 

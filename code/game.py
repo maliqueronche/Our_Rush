@@ -56,14 +56,14 @@ def export_results_to_csv(experiment_path, results):
     
     iterations = results
     
-    with open(experiment_path, 'w') a output_file:
+    with open(experiment_path, 'w') as output_file:
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(results)
 
 
 
 if __name__ == '__main__':
-    if not os.path.exist('results'):
+    if not os.path.exists('results'):
         os.makedirs('results')
     
     rounds = 15
@@ -72,6 +72,6 @@ if __name__ == '__main__':
     results = game(filepath, rounds)
     
     experiment_name = 'random_results.csv'
-    export_results_to_csv(f'results{experiment_name}', results)
+    export_results_to_csv(f'results/{experiment_name}', results)
     
     
