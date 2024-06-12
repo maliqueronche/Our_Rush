@@ -7,7 +7,7 @@ from user_input import user_input
 from algorithm_random import Random_algorithm as ra
 
 
-def game(filepath):
+def game(filepath, rounds):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -15,9 +15,11 @@ def game(filepath):
     Takes input from user and makes moves based on this input.
     """
     cars = pd.read_csv(filepath)
-    cars_dict = {}
+    iterations_list = []
+    mean_i = 0
 
-    for _ in range (3):
+    for _ in range (rounds):
+        cars_dict = {}
     # Loop over cars dataframe, create vehicles and store them in dictionary
         for idx, row in cars.iterrows():
             ID = 0
@@ -29,26 +31,27 @@ def game(filepath):
         # Initialise board and add cars in starting positions
         game_board = board.Board(cars_dict)
 
-        # Visualize starting point
-        # visualize(cars_dict, game_board)
-
         # Initiate random step
         random_exp = ra(cars_dict, game_board)
 
-        # fro three times
-        iterations_list = []
         # while the red car is not yet in the right position, the algorithm goes on
         i = 0
-        # while cars_dict[ord('X')] != ((2,4), (2,5)):
-        while i <= 10:
+        while cars_dict[ord('X')].position != [(2,4), (2,5)]:
             random_exp.random_step()
-            print (i)
             i +=1
-        print ('10 iteration happened')
+
+        # Save the amount of iterations and use it to calculate the mean
         iterations_list.append(i)
+        mean_i += i
+
+    # Calculate the mean iterations and return the list of iterations
+    mean_i = mean_i/rounds
+    print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
+    print (iterations_list)
+    return (iterations_list)
 
 
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
-    game(filepath)
+    data = game(filepath, 20)
