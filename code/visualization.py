@@ -7,15 +7,15 @@ def visualize(dictionary, board):
     Takes dictionary containing all positions of all vehicles and plots every
     vehicle onto a grid.
     """
-
+    # Create subplots
     fig, ax = plt.subplots(1)
 
-    #Moet dit niet board size zijn???
+    # Set axis, grid and aspect
     ax.axis([0, board.size, board.size, 0])
     ax.grid(True)
     ax.set_aspect('equal')
 
-    # Loop over vehicles, assign them a color, and plot them
+    # Loop over vehicles, and plot them
     for ID, value in dictionary.items():
         position = dictionary[ID].position
 

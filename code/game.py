@@ -5,6 +5,8 @@ import board
 from visualization import visualize
 from user_input import user_input
 from algorithm_random import Random_algorithm as ra
+import csv
+import os
 
 
 def game(filepath, rounds):
@@ -50,8 +52,26 @@ def game(filepath, rounds):
     print (iterations_list)
     return (iterations_list)
 
+def export_results_to_csv(experiment_path, results):
+    
+    iterations = results
+    
+    with open(experiment_path, 'w') a output_file:
+        csv_writer = csv.writer(output_file)
+        csv_writer.writerow(results)
+
 
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour6x6_1_test_red_only.csv'
-    data = game(filepath, 10)
+    if not os.path.exist('results'):
+        os.makedirs('results')
+    
+    rounds = 15
+
+    filepath = 'data/Rushhour6x6_1.csv'
+    results = game(filepath, rounds)
+    
+    experiment_name = 'random_results.csv'
+    export_results_to_csv(f'results{experiment_name}', results)
+    
+    
