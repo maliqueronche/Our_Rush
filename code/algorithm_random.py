@@ -13,7 +13,7 @@ class Random_algorithm():
         pick = self.get_available_cars()
 
         while moveable == False:
-            car_id, car = self.get_random_car()
+            car_id, car = self.get_random_car(pick)
             self.car = car
             self.car_id = car_id
             moveable_list = self.is_moveable(car)
@@ -45,16 +45,19 @@ class Random_algorithm():
         return self.board
 
 
-    def get_random_car(self):
-        key = random.choice(list(self.cars.keys()))
-        return key, self.cars[key]
+    def get_random_car(self, cars_dict):
+        key = random.choice(list(cars_dict.keys()))
+        return key, cars_dict[key]
     
     def get_available_cars(self):
+        available_cars = {}
         for car in self.cars.keys():
             moveable_list = self.is_moveable(self.cars[car])
             if True in moveable_list:
-                print ('True')
-                pass
+                print (car)
+                available_cars[car] = self.cars[car]
+        print (available_cars)
+        return available_cars
 
     def is_moveable(self, car):
         positions_list = car.position
@@ -82,5 +85,5 @@ class Random_algorithm():
                     checklist.append(True)
                 else:
                     checklist.append(False)
-
+        print (checklist)
         return checklist
