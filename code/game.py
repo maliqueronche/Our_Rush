@@ -74,7 +74,7 @@ if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds)
     
-    experiment_name = 'random_results.csv'
-    export_results_to_csv(f'results/{experiment_name}_{rounds}', results)
+    experiment_name = 'random_results'
+    export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     
     
