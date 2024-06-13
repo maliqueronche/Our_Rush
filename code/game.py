@@ -19,7 +19,7 @@ def game(filepath, rounds):
     cars = pd.read_csv(filepath)
     iterations_list = []
     mean_i = 0
-
+    round = 1
     for _ in range (rounds):
         cars_dict = {}
     # Loop over cars dataframe, create vehicles and store them in dictionary
@@ -45,6 +45,9 @@ def game(filepath, rounds):
         # Save the amount of iterations and use it to calculate the mean
         iterations_list.append(i)
         mean_i += i
+        if round % 100 == 0:
+            print(f"progress:{(round/rounds) * 100}")
+        round += 1
 
     # Calculate the mean iterations and return the list of iterations
     mean_i = mean_i/rounds
@@ -66,12 +69,12 @@ if __name__ == '__main__':
     if not os.path.exists('results'):
         os.makedirs('results')
     
-    rounds = 15
+    rounds = 20000
 
     filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds)
     
     experiment_name = 'random_results.csv'
-    export_results_to_csv(f'results/{experiment_name}', results)
+    export_results_to_csv(f'results/{experiment_name}_{rounds}', results)
     
     
