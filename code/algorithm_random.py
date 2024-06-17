@@ -26,12 +26,13 @@ class Random_algorithm():
         moveable = False
 
         # Get dictionary with available cars (i.e. moveable)
-        pick = self.get_available_cars()
+        pick = self.get_available_cars(self.cars)
 
         # Get a random car and get moveable directions
         car_id, car = self.get_random_car(pick)
         self.car = car
         self.car_id = car_id
+        orientation = self.car.orientation
         moveable_list = self.is_moveable(car)
 
         # Pick a random direction (backwards (0) or forwards(1)) and move the car
@@ -40,39 +41,20 @@ class Random_algorithm():
         # If backwards, move car left or up, else right or down, 
         if direction == 0: 
             if moveable_list[0] == True:
-                if self.orientation == 'H':
-                    self.board.move_car(self.car_id, 'left')
-                    self.car.change_position('left')
-                else :
-                    self.board.move_car(self.car_id, 'up')
-                    self.car.change_position('up')
+                self.board.move_car(self.car_id, 'neg', orientation)
+                self.car.change_position('neg', orientation)
             else:
-                if self.orientation == 'H':
-                    self.board.move_car(self.car_id, 'right')
-                    self.car.change_position('right')
-                else:
-                    self.board.move_car(self.car_id, 'down')
-                    self.car.change_position('down')
+                self.board.move_car(self.car_id, 'pos', orientation)
+                self.car.change_position('pos', orientation)
 
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
-                if self.orientation == 'H':
-                    self.board.move_car(self.car_id, 'right')
-                    self.car.change_position('right')
-                else:
-                    self.board.move_car(self.car_id, 'down')
-                    self.car.change_position('down')
+                self.board.move_car(self.car_id, 'pos', orientation)
+                self.car.change_position('pos', orientation)
             else:
-                if self.orientation == 'H':
-                    self.board.move_car(self.car_id, 'left')
-                    self.car.change_position('left')
-                else :
-                    self.board.move_car(self.car_id, 'up')
-                    self.car.change_position('up')
-
-        # Visualise the board           
-        # visualization.visualize(self.cars, self.board)
+                self.board.move_car(self.car_id, 'neg', orientation)
+                self.car.change_position('neg', orientation)
 
         return self.board
 
@@ -83,7 +65,7 @@ class Random_algorithm():
         key = random.choice(list(cars_dict.keys()))
         return key, cars_dict[key]
     
-    def get_available_cars(self):
+    def get_available_cars(self, car_dict):
         """"For every car in cars, if it is moveable, add the car to available cars and return that dictionary."""
 
         available_cars = {}

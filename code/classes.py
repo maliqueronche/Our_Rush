@@ -40,20 +40,22 @@ class Vehicle():
     else:
       self.color = random.choice(list(mcolors.TABLEAU_COLORS.keys()))
 
-  def change_position(self, direction):
+  def change_position(self, direction, orientation):
     new_position = []
     for place in self.position:
       row, col = place
 
-      if direction == 'up':
-        row -= 1
-      if direction == 'down':
-        row += 1
-      if direction == 'left':
-        col -= 1
-      if direction == 'right':
-        col +=1
-      
+      if orientation == 'H':
+        if direction == 'pos':
+          col +=1
+        elif direction == 'neg':
+          col -= 1
+      elif orientation == 'V':
+        if direction == 'pos':
+          row +=1
+        elif direction == 'neg':
+          row -= 1
+        
       new_place = row, col
       new_position.append(new_place)
     self.position = new_position
