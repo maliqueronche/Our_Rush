@@ -35,7 +35,7 @@ class Vehicle():
           self.row +=1
 
     # Assign color to vehicle
-    if chr(ID) == 'X':
+    if chr(ID) == ord('X'):
       self.color = 'red'
     else:
       self.color = random.choice(list(mcolors.TABLEAU_COLORS.keys()))

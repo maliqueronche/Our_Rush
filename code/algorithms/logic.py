@@ -16,10 +16,11 @@ class Logic():
         if moveable == True:
             self.game_board.move_car(ord('X'), 'pos', 'H')
         else :
-            get_step_sequence():
+            get_step_sequence()
 
     def is_moveable(self, car):
-
+        pass
 
 
     def get_step_sequence(self):
+        pass
