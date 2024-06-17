@@ -26,64 +26,63 @@ class breadth_first_algorithm():
             cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
         print (cars_dict)
 
-
         end_position = [(2,4), (2,5)]
 
-        queue = queue.Queue()
-        starting_board = Board(cars_dict, self.size)
-        archive = set(starting_board)
+        bf_queue = queue.Queue()
+        starting_board = board.Board(cars_dict, self.size)
+        archive = {starting_board}
 
         state_dict = {}
         state_dict["start"] = cars_dict
     
-        queue.put("start")
+        bf_queue.put("start")
         solution_found = False
-
-        
 
         # while not solution_found:
         for i in range(3):
 
-            state = queue.get()  # This is a sequence of steps
+            state = bf_queue.get()  # This is a sequence of steps
             current_cars_dict = state_dict[state] # this is the dictionary with the vehicles
             
-            available_cars = get_available_cars(current_cars_dict) # shorter dictionary with available vehicles
+            current_board = board.Board(current_cars_dict, self.size)
+            print (current_board.board)
+            available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
             print (available_cars)
             
             
-            for car_id, car in available_cars:
+            for car_id, car in available_cars.items():
 
-                moveable = is_moveable(car)  #[True, False]
+                moveable = self.is_moveable(car, current_board.board)  #[True, False]
                 
                 # Make all possible moves for car:
                 # TODO: kan niet zomaar cars dictionary updaten, want ik wil meerdere states kunnen opslaan.
                 
                 if moveable[0] == True:
-                    car.change_position('neg', car.orientation)
-                    current_board = Board(current_cars_dict, self.size)
+                    print (car)
+                    new_position = []
+                    for car_tup in car['position']:
+                        new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
+                        new_position.append(new_pos)
+                    car['position']= new_position
+                    print (car)
                     if new_board not in archive:
                         archive.add(new_state)
                         queue.put()
                         state_dict[sequence] = posdict
                         car.change_position('neg')
-               
-
-
-
-                    # Move car --> new state 
+  
+                   # Move car --> new state 
                     # if new_state not in archive:
                         # add new state to queue
                         # update car_position in self.cars
                         # dictionary containing paths (keys) and lists of moves (values) which are tuples (car, move)
     
 
-    def get_available_cars(self, cars_dict):
+    def get_available_cars(self, cars_dict, board):
         available_cars = {}
 
-        game_board = Board(cars_dict, self.size)
-
-        for car_id, car in cars_dict:
-            moveable_list = is_moveable(car, game_board)
+        for car_id, car in cars_dict.items():
+            moveable_list = self.is_moveable(car, board)
             if True in moveable_list:
                 available_cars[car_id] = car
         return available_cars
@@ -109,27 +108,29 @@ class breadth_first_algorithm():
         
     
     def is_moveable(self, car, board):
+        print (board)
 
-        position = car.position
-        orientation = car.orientation
+        position = car['position']
+        orientation = car['orientation']
         positions_to_check = []
         checklist = []
 
-        neg_pos = get_new_pos(position[0], 'neg', orientation)
+        neg_pos = self.get_new_pos(position[0], 'neg', orientation)
         positions_to_check.append(neg_pos)
 
-        pos_pos = get_new_pos(position[-1], 'pos', orientation)
+        pos_pos = self.get_new_pos(position[-1], 'pos', orientation)
         positions_to_check.append(pos_pos)
 
         for row, col in positions_to_check:
-                position = row, col
-                if row > board.size -1 or row <0 or col > board.size -1 or col <0:
-                    checklist.append(False)
-                elif board[position] == 0:
-                    checklist.append(True)
-                else:
-                    checklist.append(False)
+            position = row, col
+            if row > self.size -1 or row <0 or col > self.size -1 or col <0:
+                checklist.append(False)
+            elif board[position] == 0:
+                checklist.append(True)
+            else:
+                checklist.append(False)
         return checklist
+
 
 
     

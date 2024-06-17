@@ -1,4 +1,5 @@
 import numpy as np
+import classes
 
 class Board():
   """
@@ -14,9 +15,18 @@ class Board():
     self.board = np.zeros((size, size))
 
     for id, vehicle in self.cars.items():
-        location = vehicle.position
-        for tup in location:
-            self.board[tup] = vehicle.ID
+        if type(vehicle) == classes.Vehicle:
+          location = vehicle.position
+          for tup in location:
+              self.board[tup] = vehicle.ID
+    
+        if vehicle == type(dict):
+          location = cars_dict[id][position]
+          for tup in location:
+              self.board[tup] = vehicle.ID
+    
+
+
     # print (self.board)
 
   def get_new_pos(self, car_tup, direction, orientation):
