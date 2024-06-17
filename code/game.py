@@ -37,7 +37,7 @@ def game(filepath, rounds, algorithm):
             # Initiate random step
             random_exp = ra(cars_dict, game_board)
 
-            while the red car is not yet in the right position, the algorithm goes on
+            # while the red car is not yet in the right position, the algorithm goes on
             i = 0
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
                 random_exp.random_step()
@@ -50,11 +50,11 @@ def game(filepath, rounds, algorithm):
                 print(f"progress:{(round/rounds) * 100}")
             round += 1
 
-    # Calculate the mean iterations and return the list of iterations
-    # mean_i = mean_i/rounds
-    # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
-    # print (iterations_list)
-    return (iterations_list)
+            # Calculate the mean iterations and return the list of iterations
+            mean_i = mean_i/rounds
+            print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
+            print (iterations_list)
+            return (iterations_list)
 
 def export_results_to_csv(experiment_path, results):
     
