@@ -42,6 +42,7 @@ class breadth_first_algorithm():
         for i in range(3):
 
             state = bf_queue.get()  # This is a sequence of steps
+            print (state_dict[state])
             current_cars_dict = state_dict[state] # this is the dictionary with the vehicles
             
             current_board = board.Board(current_cars_dict, self.size)
@@ -65,6 +66,8 @@ class breadth_first_algorithm():
                         new_position.append(new_pos)
                     car['position']= new_position
                     print (car)
+
+
                     if new_board not in archive:
                         archive.add(new_state)
                         queue.put()
