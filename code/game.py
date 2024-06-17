@@ -9,7 +9,7 @@ import csv
 import os
 
 
-def game(filepath, rounds):
+def game(filepath, rounds, algorithm):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -33,21 +33,22 @@ def game(filepath, rounds):
         # Initialise board and add cars in starting positions
         game_board = board.Board(cars_dict)
 
-        # Initiate random step
-        # random_exp = ra(cars_dict, game_board)
+        if algorithm == 'random':
+            # Initiate random step
+            random_exp = ra(cars_dict, game_board)
 
-        # while the red car is not yet in the right position, the algorithm goes on
-        # i = 0
-        # while cars_dict[ord('X')].position != [(2,4), (2,5)]:
-        #     random_exp.random_step()
-        #     i +=1
+            while the red car is not yet in the right position, the algorithm goes on
+            i = 0
+            while cars_dict[ord('X')].position != [(2,4), (2,5)]:
+                random_exp.random_step()
+                i +=1
 
-        # # Save the amount of iterations and use it to calculate the mean
-        # iterations_list.append(i)
-        # mean_i += i
-        # if round % 100 == 0:
-        #     print(f"progress:{(round/rounds) * 100}")
-        # round += 1
+            # Save the amount of iterations and use it to calculate the mean
+            iterations_list.append(i)
+            mean_i += i
+            if round % 100 == 0:
+                print(f"progress:{(round/rounds) * 100}")
+            round += 1
 
     # Calculate the mean iterations and return the list of iterations
     # mean_i = mean_i/rounds
@@ -70,9 +71,10 @@ if __name__ == '__main__':
         os.makedirs('results')
     
     rounds = 20000
+    algorithm = '_'
 
     filepath = 'data/Rushhour6x6_1.csv'
-    results = game(filepath, rounds)
+    results = game(filepath, rounds, algorithm)
     
     experiment_name = 'random_results'
     export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
