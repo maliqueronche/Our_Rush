@@ -105,16 +105,11 @@ class Random_algorithm():
         checklist = []
 
         # Get positions to check 
-        if orientation == 'H':
-            left_pos = self.board.get_new_pos(positions_list[0], 'left')
-            positions_to_check.append(left_pos)
-            right_pos = self.board.get_new_pos(positions_list[-1], 'right')
-            positions_to_check.append(right_pos)
-        if orientation == 'V':
-            up_pos = self.board.get_new_pos(positions_list[0], 'up')
-            positions_to_check.append(up_pos)
-            down_pos = self.board.get_new_pos(positions_list[-1], 'down')
-            positions_to_check.append(down_pos)
+        neg_pos = self.board.get_new_pos(positions_list[0], 'neg', 'orientation')
+        positions_to_check.append(neg_pos)
+        pos_pos = self.board.get_new_pos(positions_list[-1], 'pos', 'orientation')
+        positions_to_check.append(pos_pos)
+
         
         # Check if position can be moved to
         for row, col in positions_to_check:
