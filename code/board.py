@@ -19,18 +19,20 @@ class Board():
             self.board[tup] = vehicle.ID
     # print (self.board)
 
-  def get_new_pos(self, car_tup, direction):
+  def get_new_pos(self, car_tup, direction, orientation):
     '''recieves a tuple for location and a direction and moves the tuple one place'''
     row, col = car_tup
 
-    if direction == 'up':
-      row -= 1
-    if direction == 'down':
-      row += 1
-    if direction == 'left':
-      col -= 1
-    if direction == 'right':
-      col +=1
+    if orientation == 'H':
+      if direction == 'pos':
+        col +=1
+      elif direction == 'neg':
+        col -= 1
+    elif orientation == 'V':
+      if direction == 'pos':
+        row +=1
+      elif direction == 'neg':
+        row -= 1
 
     return row, col
 
@@ -39,10 +41,11 @@ class Board():
     new_positions = []
     car = self.cars[car_id]
     positions = car.position
+    orientation = car.orientation
     # print (car_id)
 
     for car_tup in positions:
-      new_pos = self.get_new_pos(car_tup, direction)
+      new_pos = self.get_new_pos(car_tup, direction, orientation)
       new_positions.append (new_pos)
 
     for old_pos in positions:
