@@ -1,10 +1,11 @@
 
 import queue
 import copy
+import numpy
 #from algorithm_random import get_available_cars, is_moveable
-from .board import move_car
-import code.board
-from classes import change_position
+#from board import move_car
+import board
+#from classes import change_position
 import copy
 
 class breadth_first_algorithm():
@@ -12,22 +13,21 @@ class breadth_first_algorithm():
 
 
     def __init__(self, size):
-
+        print ('initializing')
         self.size = size
-        self.cars = cars_dict
-        self.board = game_board
 
-    def search_breadth(self, cars_dict):
 
-        final_dict = {}
-        for car_id, car in cars_dict:
+    def search_breadth(self, car_ins_dict):
+
+        cars_dict = {}
+        for car_id, car in car_ins_dict.items():
             position_car = car.position
             orientation_car = car.orientation
-            final_dict[car_id] = {id : car_id, position : position_car, orientation: orientation_car}
-        print (final_dict)
+            cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
+        print (cars_dict)
 
 
-        end_position = self.cars[88].position
+        end_position = [(2,4), (2,5)]
 
         queue = queue.Queue()
         starting_board = Board(cars_dict, self.size)
@@ -132,13 +132,7 @@ class breadth_first_algorithm():
         return checklist
 
 
-
-
-
-
-def main():
-    pass
     
 if __name__ == '__main__':
-    main()
+    breadth_first_algorithm.search_breadth
 

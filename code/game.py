@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import classes
 import board
+import breadth_first as bf
 from visualization import visualize
 from user_input import user_input
 from algorithm_random import Random_algorithm as ra
@@ -56,6 +57,11 @@ def game(filepath, rounds, algorithm):
             print (iterations_list)
             return (iterations_list)
 
+        if algorithm == 'bf':
+            bf_alg = bf.breadth_first_algorithm(6)
+            bf_alg.search_breadth(cars_dict)
+
+
 def export_results_to_csv(experiment_path, results):
     
     iterations = results
@@ -71,12 +77,12 @@ if __name__ == '__main__':
         os.makedirs('results')
     
     rounds = 20000
-    algorithm = '_'
+    algorithm = 'bf'
 
     filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds, algorithm)
     
-    experiment_name = 'random_results'
-    export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
+    # experiment_name = 'random_results'
+    # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     
     
