@@ -8,9 +8,10 @@ from user_input import user_input
 from algorithm_random import Random_algorithm as ra
 import csv
 import os
+import copy
 
 
-def game(filepath, rounds, algorithm):
+def game(filepath, rounds, algorithm, hill_climb = False):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -21,9 +22,12 @@ def game(filepath, rounds, algorithm):
     iterations_list = []
     mean_i = 0
     round = 1
+    min_iterations = float('inf')
+    min_iterations_config = {}
+
     for _ in range (rounds):
         cars_dict = {}
-    # Loop over cars dataframe, create vehicles and store them in dictionary
+        # Loop over cars dataframe, create vehicles and store them in dictionary
         for idx, row in cars.iterrows():
             ID = 0
             for letter in row['car']:
@@ -41,7 +45,7 @@ def game(filepath, rounds, algorithm):
             # while the red car is not yet in the right position, the algorithm goes on
             i = 0
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
-                random_exp.random_step()
+                random_exp.random_step(hill_climb)
                 i +=1
 
             # Save the amount of iterations and use it to calculate the mean
@@ -51,15 +55,29 @@ def game(filepath, rounds, algorithm):
                 print(f"progress:{(round/rounds) * 100}")
             round += 1
 
+            if hill_climb and i < min_iterations:
+                min_iterations = i
+                min_iterations_config = copy.deepcopy(random_exp.hill_climb_config)
+
         elif algorithm == 'bf':
             bf_alg = bf.breadth_first_algorithm(6)
             path = bf_alg.search_breadth(cars_dict)
 
     # Calculate the mean iterations and return the list of iterations
     mean_i = mean_i/rounds
+<<<<<<< HEAD
     print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
     # print ("iteration list:", iterations_list)
     return iterations_list
+=======
+    # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
+    print ("iteration list:", iterations_list)
+
+    if hill_climb:
+        return iterations_list, min_iterations_config
+    else:
+        return iterations_list
+>>>>>>> 577ce100ceb34460434abbbd58df8d5fc894101c
 
 
 def export_results_to_csv(experiment_path, results):
