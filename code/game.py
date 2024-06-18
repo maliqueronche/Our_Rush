@@ -76,8 +76,8 @@ if __name__ == '__main__':
     if not os.path.exists('results'):
         os.makedirs('results')
     
-    rounds = 20000
-    algorithm = 'bf'
+    rounds = 10
+    algorithm = 'random'
 
     filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds, algorithm)
