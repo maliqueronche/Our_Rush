@@ -2,6 +2,7 @@ import board
 import classes
 import random
 import visualization
+import copy
 
 class Random_algorithm():
     """
@@ -18,8 +19,9 @@ class Random_algorithm():
 
         self.cars = cars_dict
         self.board = game_board
+        self.hill_climb_config = {}
 
-    def random_step(self): #dictionary and board instance
+    def random_step(self, hill_climb): #dictionary and board instance
         """Does a random step for a random moveable vehicle and returns the updated board."""
 
         # Set moveable by default to False
@@ -44,22 +46,32 @@ class Random_algorithm():
             if moveable_list[0] == True:
                 self.board.move_car(self.car_id, 'neg')
                 self.car.change_position('neg', orientation)
+                if hill_climb:
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
             else:
                 self.board.move_car(self.car_id, 'pos')
                 self.car.change_position('pos', orientation)
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
 
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
                 self.board.move_car(self.car_id, 'pos')
                 self.car.change_position('pos', orientation)
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
+
             else:
                 self.board.move_car(self.car_id, 'neg')
                 self.car.change_position('neg', orientation)
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
 
         return self.board
 
+    def copy_cars_dict(self):
+        """Returns a deep copy of cars dictionary"""
+        return {key: self.cars[key].copy() for key in self.cars}
 
+        
     def get_random_car(self, cars_dict):
         """Choose a random car from cars"""
         

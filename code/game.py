@@ -10,7 +10,7 @@ import csv
 import os
 
 
-def game(filepath, rounds, algorithm):
+def game(filepath, rounds, algorithm, hill_climb = False):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -21,9 +21,11 @@ def game(filepath, rounds, algorithm):
     iterations_list = []
     mean_i = 0
     round = 1
+    hill_climb_config = {}
+
     for _ in range (rounds):
         cars_dict = {}
-    # Loop over cars dataframe, create vehicles and store them in dictionary
+        # Loop over cars dataframe, create vehicles and store them in dictionary
         for idx, row in cars.iterrows():
             ID = 0
             for letter in row['car']:
@@ -41,8 +43,10 @@ def game(filepath, rounds, algorithm):
             # while the red car is not yet in the right position, the algorithm goes on
             i = 0
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
-                random_exp.random_step()
+                random_exp.random_step(hill_climb)
                 i +=1
+                if hill_climb and i % 100 == 0:
+                    print(f"Hill climb progress for round {round}: {i}")
 
             # Save the amount of iterations and use it to calculate the mean
             iterations_list.append(i)
@@ -59,6 +63,11 @@ def game(filepath, rounds, algorithm):
     mean_i = mean_i/rounds
     # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
     # print ("iteration list:", iterations_list)
+
+    if hill_climb:
+        hill_climb_config = random_exp.hill_climb_configurations
+        return iterations_list, hill_climb_config
+        
     return iterations_list
 
 
