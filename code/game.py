@@ -8,6 +8,7 @@ from user_input import user_input
 from algorithm_random import Random_algorithm as ra
 import csv
 import os
+import copy
 
 
 def game(filepath, rounds, algorithm, hill_climb = False):
@@ -21,7 +22,8 @@ def game(filepath, rounds, algorithm, hill_climb = False):
     iterations_list = []
     mean_i = 0
     round = 1
-    hill_climb_config = {}
+    min_iterations = float('inf')
+    min_iterations_config = {}
 
     for _ in range (rounds):
         cars_dict = {}
@@ -45,8 +47,6 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
                 random_exp.random_step(hill_climb)
                 i +=1
-                if hill_climb and i % 100 == 0:
-                    print(f"Hill climb progress for round {round}: {i}")
 
             # Save the amount of iterations and use it to calculate the mean
             iterations_list.append(i)
@@ -62,12 +62,13 @@ def game(filepath, rounds, algorithm, hill_climb = False):
     # Calculate the mean iterations and return the list of iterations
     mean_i = mean_i/rounds
     # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
-    # print ("iteration list:", iterations_list)
+    print ("iteration list:", iterations_list)
 
-    if hill_climb:
-        hill_climb_config = random_exp.hill_climb_configurations
-        return iterations_list, hill_climb_config
-        
+    if hill_climb and i < min_iterations:
+        min_iterations = i
+        min_iterations_config = copy.deepcopy(random_exp.hill_climb_config)
+        return iterations_list, min_iterations_config
+
     return iterations_list
 
 
