@@ -27,6 +27,7 @@ class Random_algorithm():
 
         # Get dictionary with available cars (i.e. moveable)
         pick = self.get_available_cars(self.cars)
+        
 
         # Get a random car and get moveable directions
         car_id, car = self.get_random_car(pick)
@@ -41,19 +42,19 @@ class Random_algorithm():
         # If backwards, move car left or up, else right or down, 
         if direction == 0: 
             if moveable_list[0] == True:
-                self.board.move_car(self.car_id, 'neg', orientation)
+                self.board.move_car(self.car_id, 'neg')
                 self.car.change_position('neg', orientation)
             else:
-                self.board.move_car(self.car_id, 'pos', orientation)
+                self.board.move_car(self.car_id, 'pos')
                 self.car.change_position('pos', orientation)
 
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
-                self.board.move_car(self.car_id, 'pos', orientation)
+                self.board.move_car(self.car_id, 'pos')
                 self.car.change_position('pos', orientation)
             else:
-                self.board.move_car(self.car_id, 'neg', orientation)
+                self.board.move_car(self.car_id, 'neg')
                 self.car.change_position('neg', orientation)
 
         return self.board
@@ -61,8 +62,9 @@ class Random_algorithm():
 
     def get_random_car(self, cars_dict):
         """Choose a random car from cars"""
-
+        
         key = random.choice(list(cars_dict.keys()))
+        
         return key, cars_dict[key]
     
     def get_available_cars(self, car_dict):
@@ -72,9 +74,12 @@ class Random_algorithm():
 
         # Loop over cars, check if a car can move and add it to dictionary
         for car in self.cars.keys():
+            
             moveable_list = self.is_moveable(self.cars[car])
+            
             if True in moveable_list:
                 available_cars[car] = self.cars[car]
+                
         return available_cars
 
     def is_moveable(self, car):
@@ -87,9 +92,9 @@ class Random_algorithm():
         checklist = []
 
         # Get positions to check 
-        neg_pos = self.board.get_new_pos(positions_list[0], 'neg', 'orientation')
+        neg_pos = self.board.get_new_pos(positions_list[0], 'neg', orientation)
         positions_to_check.append(neg_pos)
-        pos_pos = self.board.get_new_pos(positions_list[-1], 'pos', 'orientation')
+        pos_pos = self.board.get_new_pos(positions_list[-1], 'pos', orientation)
         positions_to_check.append(pos_pos)
 
         
