@@ -9,7 +9,7 @@ class Board():
   - creates the start positions
 
   """
-  def __init__(self, cars_dict, size = 6,):
+  def __init__(self, cars_dict, size=6):
     self.size = size
     self.cars = cars_dict
     self.board = np.zeros((size, size))
