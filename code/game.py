@@ -87,7 +87,7 @@ if __name__ == '__main__':
         os.makedirs('results')
     
     rounds = 10
-    algorithm = 'random'
+    algorithm = 'bf'
 
     filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds, algorithm)

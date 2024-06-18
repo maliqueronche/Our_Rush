@@ -21,7 +21,7 @@ class Board():
               self.board[tup] = vehicle.ID
     
         if type(vehicle) == dict:
-          print ('this is a dict')
+          # print ('this is a dict')
           location = cars_dict[id]['position']
           for tup in location:
               self.board[tup] = id

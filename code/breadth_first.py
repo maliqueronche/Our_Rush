@@ -7,6 +7,7 @@ import numpy
 import board
 #from classes import change_position
 import copy
+from pprint import pprint
 
 class breadth_first_algorithm():
     """Contains functions to run the breadth first algorithm"""
@@ -18,7 +19,9 @@ class breadth_first_algorithm():
 
 
     def search_breadth(self, car_ins_dict):
+        """Search algorithm that searches a complete layer for a solution, before moving on to the next layer."""
 
+        # Create copy of instances of cars with only relevant data
         cars_dict = {}
         for car_id, car in car_ins_dict.items():
             position_car = car.position
@@ -28,36 +31,53 @@ class breadth_first_algorithm():
 
         end_position = [(2,4), (2,5)]
 
+        # Create que, starting board and archive to check for duplicate boards
         bf_queue = queue.Queue()
         starting_board = board.Board(cars_dict, self.size)
         archive = {starting_board}
 
+        # dictionary containing all states
         state_dict = {}
-        state_dict["start"] = cars_dict
+        state_dict[""] = cars_dict
     
-        bf_queue.put("start")
+        # Add start state to queue 
+        bf_queue.put("")
+
+        # Solution by default not found 
         solution_found = False
 
         # while not solution_found:
-        for i in range(3):
+        for i in range(1):
 
-            state = bf_queue.get()  # This is a sequence of steps
+            # Get state first in queue
+            state = bf_queue.get()  
             print (state_dict[state])
+
+            # Get dictionary current cars
             current_cars_dict = state_dict[state] # this is the dictionary with the vehicles
+
             
+            
+            
+            # Create current board and get available cars
             current_board = board.Board(current_cars_dict, self.size)
             print (current_board.board)
             available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
             print (available_cars)
             
-            
+            # Loop over available cars, move them, add new states to queue
             for car_id, car in available_cars.items():
+                # print(type(car_id))
 
+                # Copy current dictionary
+                new_cars_dict = copy.deepcopy(current_cars_dict)
+                car = new_cars_dict[car_id]
                 moveable = self.is_moveable(car, current_board.board)  #[True, False]
                 
                 # Make all possible moves for car:
                 # TODO: kan niet zomaar cars dictionary updaten, want ik wil meerdere states kunnen opslaan.
                 
+                # Move car backwards if possible
                 if moveable[0] == True:
                     print (car)
                     new_position = []
@@ -67,12 +87,21 @@ class breadth_first_algorithm():
                     car['position']= new_position
                     print (car)
 
+                    # Create new state
+                    new_state = (state + str(car_id) + '-')
+
+                    
+                    
+
+                    # Create new board
+                    new_board = board.Board(new_cars_dict, self.size)
 
                     if new_board not in archive:
-                        archive.add(new_state)
-                        queue.put()
-                        state_dict[sequence] = posdict
-                        car.change_position('neg')
+                        archive.add(new_board)
+                        bf_queue.put(new_state)
+                        state_dict[new_state] = new_cars_dict
+                        pprint(state_dict)
+                        # car.change_position('neg')
   
                    # Move car --> new state 
                     # if new_state not in archive:
