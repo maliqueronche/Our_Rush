@@ -51,20 +51,20 @@ def game(filepath, rounds, algorithm):
                 print(f"progress:{(round/rounds) * 100}")
             round += 1
 
-            # Calculate the mean iterations and return the list of iterations
-            mean_i = mean_i/rounds
-            print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
-            print (iterations_list)
-            return (iterations_list)
-
-        if algorithm == 'bf':
+        elif algorithm == 'bf':
             bf_alg = bf.breadth_first_algorithm(6)
             bf_alg.search_breadth(cars_dict)
+
+    # Calculate the mean iterations and return the list of iterations
+    mean_i = mean_i/rounds
+    # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
+    # print ("iteration list:", iterations_list)
+    return iterations_list
 
 
 def export_results_to_csv(experiment_path, results):
     
-    iterations = results
+    # iterations = results
     
     with open(experiment_path, 'w') as output_file:
         csv_writer = csv.writer(output_file)
@@ -81,8 +81,8 @@ if __name__ == '__main__':
 
     filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds, algorithm)
-    
-    # experiment_name = 'random_results'
-    # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
+
+    experiment_name = 'hill_climb'
+    export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     
     

@@ -96,7 +96,6 @@ class Random_algorithm():
         positions_to_check.append(neg_pos)
         pos_pos = self.board.get_new_pos(positions_list[-1], 'pos', orientation)
         positions_to_check.append(pos_pos)
-
         
         # Check if position can be moved to
         for row, col in positions_to_check:
@@ -107,4 +106,5 @@ class Random_algorithm():
                     checklist.append(True)
                 else:
                     checklist.append(False)
+
         return checklist
