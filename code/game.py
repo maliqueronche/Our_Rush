@@ -55,6 +55,10 @@ def game(filepath, rounds, algorithm, hill_climb = False):
                 print(f"progress:{(round/rounds) * 100}")
             round += 1
 
+            if hill_climb and i < min_iterations:
+                min_iterations = i
+                min_iterations_config = copy.deepcopy(random_exp.hill_climb_config)
+
         elif algorithm == 'bf':
             bf_alg = bf.breadth_first_algorithm(6)
             bf_alg.search_breadth(cars_dict)
@@ -64,12 +68,10 @@ def game(filepath, rounds, algorithm, hill_climb = False):
     # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
     print ("iteration list:", iterations_list)
 
-    if hill_climb and i < min_iterations:
-        min_iterations = i
-        min_iterations_config = copy.deepcopy(random_exp.hill_climb_config)
+    if hill_climb:
         return iterations_list, min_iterations_config
-
-    return iterations_list
+    else:
+        return iterations_list
 
 
 def export_results_to_csv(experiment_path, results):
