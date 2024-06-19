@@ -36,7 +36,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             cars_dict[ID] = vehicle
 
         # Initialise board and add cars in starting positions
-        game_board = board.Board(cars_dict)
+        game_board = board.Board(cars_dict, size = 9)
 
         if algorithm == 'random':
             # Initiate random step
@@ -44,7 +44,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
 
             # while the red car is not yet in the right position, the algorithm goes on
             i = 0
-            while cars_dict[ord('X')].position != [(2,4), (2,5)]:
+            while cars_dict[ord('X')].position != [(2,7), (2,8)]:
                 random_exp.random_step(hill_climb)
                 i +=1
 
@@ -91,10 +91,10 @@ if __name__ == '__main__':
     rounds = 10
     algorithm = 'bf'
 
-    filepath = 'data/Rushhour6x6_1.csv'
+    filepath = 'data/Rushhour9x9_4.csv'
     results = game(filepath, rounds, algorithm)
 
-    experiment_name = 'hill_climb'
+    experiment_name = 'random_9x9'
     export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     
     
