@@ -138,7 +138,7 @@ if __name__ == '__main__':
     rounds = 1
     algorithm = 'bf'
 
-    filepath = 'data/Rushhour6x6_1.csv'
+    filepath = 'data/Rushhour6x6_2.csv'
     results = game(filepath, rounds, algorithm)
     print(results)
 

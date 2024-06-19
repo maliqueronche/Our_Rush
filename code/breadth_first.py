@@ -30,7 +30,7 @@ class breadth_first_algorithm():
             cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
         
 
-        end_position = [(2,4), (2,5)]
+        end_position = [(2,4), (2, 5)]
 
         # Create que, starting board and archive to check for duplicate boards
         bf_queue = queue.Queue()
@@ -61,12 +61,12 @@ class breadth_first_algorithm():
         while not solution_found:
         # for i in range(1):
             j += 1
-            print(j)
+            # print(j)
             
             # print(list(bf_queue.queue))
             # Get state first in queue
-            if j == 250:
-                print(list(bf_queue.queue))
+            # if j == 250:
+                # print(list(bf_queue.queue))
             # print (len(bf_queue.queue))
             
             state = bf_queue.get()
@@ -87,16 +87,16 @@ class breadth_first_algorithm():
             available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
             # print(f'available cars: {available_cars}')
 
-            # if j % 1000 == 0:
-            #     end = time()
+            if j % 10000 == 0:
+                end = time()
                 
-            #     print('\niteration:', j)
-            #     print("a state at this point:", state)
-            #     print("board", current_board.board)
-            #     print("available cars", available_cars)
-            #     print(f'The time elapsed: {end-start:.2f} seconds.')
+                print('\niteration:', j)
+                print("a state at this point:", state)
+                print("board", current_board.board)
+                print("available cars", available_cars)
+                print(f'The time elapsed: {end-start:.2f} seconds.')
                 
-            #     start = time()
+                start = time()
             
             # Loop over available cars, move them, add new states to queue
             for car_id, car in available_cars.items():
@@ -145,7 +145,7 @@ class breadth_first_algorithm():
                         # print (f'added to queue {board_name}')
                         new_archive.add(new_board)
                         bf_queue.put(new_state)
-                        print("added to queue")
+                        # print("added to queue")
                         if new_state not in state_dict.keys():
                             state_dict[new_state] = new_cars_dict
                             # pprint(state_dict)
@@ -192,7 +192,7 @@ class breadth_first_algorithm():
                     new_board = tuple(map(tuple, new_board.board))
 
                     if new_board not in new_archive:
-                        print (f'added to queue')
+                        # print (f'added to queue')
                         new_archive.add(new_board)
                         bf_queue.put(new_state)
                         if new_state not in state_dict.keys():
