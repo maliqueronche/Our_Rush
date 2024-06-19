@@ -27,24 +27,17 @@ class breadth_first_algorithm():
         for car_id, car in car_ins_dict.items():
             position_car = car.position
             orientation_car = car.orientation
-            cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
+            cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car,'parents' : {}}
         
 
         end_position = [(2,4), (2, 5)]
 
-        # Create que, starting board and archive to check for duplicate boards
+        # Create queue, starting board and archive to check for duplicate boards
         bf_queue = queue.Queue()
         starting_board = board.Board(cars_dict, self.size)
         print(starting_board.board)
-
-        # board_name = ''
-        # for car_id_name, car_name in cars_dict.items():
-        #     board_name += str(car_id_name)
-        #     board_name += str(car_name['position'])
-
-        starting_board = tuple(map(tuple, starting_board.board))
-        # print(starting_board)
-        new_archive = {starting_board}
+        starting_board_name = tuple(map(tuple, starting_board.board))
+        new_archive = {starting_board_name}
 
         # dictionary containing all states
         state_dict = {}
@@ -61,31 +54,18 @@ class breadth_first_algorithm():
         while not solution_found:
         # for i in range(1):
             j += 1
-            # print(j)
-            
-            # print(list(bf_queue.queue))
-            # Get state first in queue
-            # if j == 250:
-                # print(list(bf_queue.queue))
-            # print (len(bf_queue.queue))
             
             state = bf_queue.get()
-            # print(state)
-
             
-            
-            # Get dictionary current cars
-            current_cars_dict = state_dict[state] # this is the dictionary with the vehicles
-            # current_archive = state_dict[state]
+            # Get dictionary current cars (id: pos(tup), or(str), par(set))
+            current_cars_dict = state_dict[state] 
 
-            # Create current board and get available cars
+            # Create current board (Numpy arrays)
             current_board = board.Board(current_cars_dict, self.size)
-            # if j == 249:
-            #     print(state, current_board.board, current_cars_dict)
             
-            
+            # Get a dict of available cars (id: pos(tup), or(str), par(set))
             available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
-            # print(f'available cars: {available_cars}')
+
 
             if j % 10000 == 0:
                 end = time()
@@ -100,126 +80,93 @@ class breadth_first_algorithm():
             
             # Loop over available cars, move them, add new states to queue
             for car_id, car in available_cars.items():
-                # print(type(car_id))
 
                 # Copy current dictionary
                 new_cars_dict = copy.deepcopy(current_cars_dict)
-                # new_archive = copy.deepcopy(current_archive)
-                car = new_cars_dict[car_id]
-                moveable = self.is_moveable(car, current_board.board)  #[True, False]
-                # print (moveable)
+
+                # Get's a tuple for every side if it is moveable
+                moveable = self.is_moveable(car, current_board.board)
                 
-                # Make all possible moves for car:
-                # TODO: kan niet zomaar cars dictionary updaten, want ik wil meerdere states kunnen opslaan.
-                
+                # Copies the state of the parent
                 current_state = state
 
                 # Move car backwards if possible
                 while moveable[0] == True:
-                # if moveable[0] == True:
-                    # print('current_state', current_state)
+
+                    # Changes the position of a car
                     new_position = []
                     car = new_cars_dict[car_id]
                     for car_tup in car['position']:
                         new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
                         new_position.append(new_pos)
                     car['position']= new_position
-                    # print(car['position'])
-                    
 
-                    # Create new state
+                    # Create new statename
                     new_state = (current_state + str(car_id) + '-' + ' ')
-                    # print("new_state", new_state)
 
-                    # Create new board
-                    new_board = board.Board(new_cars_dict, self.size)
- 
-
+                    # Check if the red car is on the right position
                     if car_id == 88 and car['position'] == end_position:
                         solution_found = True
-                        return new_state            
-                    
-                    new_board = tuple(map(tuple, new_board.board))
+                        return new_state    
+
+                    # Create new board (Numpy arrays)
+                    new_board = board.Board(new_cars_dict, self.size)
+                    # Create new boardName
+                    new_board_name = tuple(map(tuple, new_board.board))     
                            
-                    if new_board not in new_archive:
-                        # print (f'added to queue {board_name}')
+                    # Check if the board is in the parent string and add to queue
+                    if new_board_name not in car['parent']:
                         new_archive.add(new_board)
+                        new_cars_dict['parent'].add(new_board_name)
                         bf_queue.put(new_state)
-                        # print("added to queue")
-                        if new_state not in state_dict.keys():
-                            state_dict[new_state] = new_cars_dict
-                            # pprint(state_dict)
-                        
+                        state_dict[new_state] = new_cars_dict
 
-                    # if new_board in archive:
-                    #     print (f'this board is in archive {new_board}')
-
-                    new_board = np.array(new_board)
                     moveable = self.is_moveable(car, new_board)
-                    # print(moveable)
                     current_state = new_state
-                    # print(current_state)
-                    # print(list(bf_queue.queue))
                     
-                    if moveable[0] == True:
-                    
-                        new_cars_dict = copy.deepcopy(new_cars_dict)
-                        # new_archive = copy.deepcopy(new_archive)
+                    # if moveable[0] == True: #????
+                    #     new_cars_dict = copy.deepcopy(new_cars_dict)
+                    #     # new_archive = copy.deepcopy(new_archive)
 
                 moveable = self.is_moveable(car, current_board.board)
-                # print(moveable)
                 current_state = state
                         
                 while moveable[1] == True:
                     
+                    # Changes position of car
                     new_position = []
                     for car_tup in car['position']:
                         new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
                         new_position.append(new_pos)
                     car['position']= new_position
                     
-
                     # Create new state
                     new_state = (current_state + str(car_id) + '+' + ' ')
 
-                    # Create new board
-                    new_board = board.Board(new_cars_dict, self.size)
-
+                    # Check to see if red car is on right place
                     if car_id == 88 and car['position'] == end_position:
                         solution_found = True
-                        return new_state  
+                        return new_state 
 
-                    new_board = tuple(map(tuple, new_board.board))
+                    # Create new board
+                    new_board = board.Board(new_cars_dict, self.size)
+                    new_board_name = tuple(map(tuple, new_board.board))
 
-                    if new_board not in new_archive:
-                        # print (f'added to queue')
+                    if new_board_name not in car['parent']:
+                        car['parent'].add(new_board_name)
                         new_archive.add(new_board)
                         bf_queue.put(new_state)
-                        if new_state not in state_dict.keys():
-                            state_dict[new_state] = new_cars_dict
-                        
+                        state_dict[new_state] = new_cars_dict
 
-                    # if board_name in archive:
-                    #     print (f'this board is in archive {board_name}')
-
-                    new_board = np.array(new_board)
+                    new_board = np.array(new_board_name)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
-                    if moveable[1] == True:
-                    
-                        new_cars_dict = copy.deepcopy(new_cars_dict)
-                        # new_archive = copy.deepcopy(new_archive)
-            
-             
+
+            # Remove old states out of the state dict
             del state_dict[state]
-
-
-
-            # if len(bf_queue.queue) == 0:
-            #     break
-
+            
         return new_state
-                # pprint(state_dict)
+
                         
     
 
@@ -275,6 +222,50 @@ class breadth_first_algorithm():
             else:
                 checklist.append(False)
         return checklist
+    
+    def check_moves(moveable, place):
+        if place == 0:
+            side = 'neg'
+            min_plus = '-'
+        elif place == 1:
+            side = 'pos'
+            min_plus = '+'
+
+        while moveable[place] == True: #while moveable[0]
+            new_position = []
+            car = new_cars_dict[car_id]
+            for car_tup in car['position']:
+                new_pos = self.get_new_pos(car_tup, side, car['orientation'])
+                new_position.append(new_pos)
+            car['position']= new_position
+
+            # Create new state
+            new_state = (current_state + str(car_id) + min_plus + ' ')
+
+            # Create new board
+            new_board = board.Board(new_cars_dict, self.size)
+
+            if car_id == 88 and car['position'] == end_position:
+                solution_found = True
+                return new_state            
+            
+            new_board = tuple(map(tuple, new_board.board))
+                    
+            if new_board not in new_archive:
+                new_archive.add(new_board)
+                new_cars_dict['parent'].add(new_board)
+                bf_queue.put(new_state)
+                if new_state not in state_dict.keys():
+                    state_dict[new_state] = new_cars_dict
+
+            new_board = np.array(new_board)
+            moveable = self.is_moveable(car, new_board)
+            current_state = new_state
+
+            if moveable[0] == True:
+                new_cars_dict = copy.deepcopy(new_cars_dict)
+                # new_archive = copy.deepcopy(new_archive)
+
 
 
 
