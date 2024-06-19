@@ -46,7 +46,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
 
             # while the red car is not yet in the right position, the algorithm goes on
             i = 0
-            while cars_dict[ord('X')].position != [(2,4), (2,5)]:
+            while cars_dict[ord('X')].position != [(2,7), (2,8)]:
                 random_exp.random_step(hill_climb)
                 i +=1
 
