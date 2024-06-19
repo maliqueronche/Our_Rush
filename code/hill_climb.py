@@ -1,5 +1,7 @@
 from game import game
 from algorithm_random import Random_algorithm as ra
+import classes
+import board
 import random
 import copy
 import time
@@ -11,7 +13,6 @@ def hill_climb(filepath, slice_size, random_solutions):
 
     # compute board position for every step in random iteration, key is step, value is board position
     iterations, min_iterations_dict = game(filepath, 5, 'random', hill_climb = True)
-    print("min_iterations_dict:", min_iterations_dict) 
     total_steps = len(min_iterations_dict)
 
     # create the slice
@@ -24,7 +25,7 @@ def hill_climb(filepath, slice_size, random_solutions):
 
             if step not in min_iterations_dict:
                 print(f"Step {step} not in min_iterations_dict")
-                continue  # Skip this step if it's not present
+                continue  
 
             current_slice[step] = min_iterations_dict[step]
 
@@ -33,23 +34,22 @@ def hill_climb(filepath, slice_size, random_solutions):
 
             for j in range(random_solutions):
                 random_solution = generate_random_solution(filepath, current_slice, start, end)
-                new_steps = len(new_solution)
+                new_steps = len(random_solution)
 
                 if new_steps < best_slice_steps:
                     best_slice = random_solution
                     best_slice_steps = new_steps
 
             for step in range(start, end):
-                
+
                 if step - start not in best_slice:
                     print(f"Step {step - start} not in best_slice")
-                    continue  # Skip this step if it's not present
 
                 min_iterations_dict[step] = best_slice[step - start]
 
     return min_iterations_dict
 
-def generate_new_solution(filepath, current_slice, start, end):
+def generate_random_solution(filepath, current_slice, start, end):
 
     cars = pd.read_csv(filepath)
     cars_dict = {}
@@ -66,6 +66,7 @@ def generate_new_solution(filepath, current_slice, start, end):
     random_exp = ra(cars_dict, game_board)
 
     # car positions based on current slice
+    # vgm gaat het hier fout
     for step in current_slice:
         for car_id in current_slice[step]:
             car = current_slice[step][car_id]
