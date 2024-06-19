@@ -21,7 +21,7 @@ cell_size = screen_width // grid_size
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Rush Hour')
 
-background_colour = (200, 200, 200)
+background_colour = (100, 100, 100)
 red_car_colour = (255, 0, 0)
 
 class car:
@@ -126,8 +126,8 @@ def load_start_board(file_path):
 
 def main():
     clock = pygame.time.Clock()
-    cars = load_start_board('data/Rushhour6x6_1.csv')
-    steps = load_steps('data/example_steps.csv')
+    cars = load_start_board('data/Rushhour6x6_presentation.csv')
+    steps = load_steps('data/steps_presentation.csv')
 
     step_count = 0
 
@@ -148,8 +148,8 @@ def main():
             car.draw_car(screen)
 
         pygame.display.flip()
-        clock.tick(2)  # Adjust the speed of the animation
-        time.sleep(0.5)
+        clock.tick(2)  
+        time.sleep(10)
     
 if __name__ == '__main__':
     main()

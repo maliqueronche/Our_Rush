@@ -8,9 +8,11 @@ data = pd.read_csv(file_path, header=None)
 numbers = data.values.flatten()
 
 minimum_value = numbers.min()
+maximum_value = numbers.max()
 mean_value = numbers.mean()
 
 print(f"Minimum value: {minimum_value}")
+print(f"Maximum value:{maximum_value}")
 print(f"Mean value: {mean_value}")
 
 # Histogram

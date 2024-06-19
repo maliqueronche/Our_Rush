@@ -2,6 +2,7 @@ import board
 import classes
 import random
 import visualization
+import copy
 
 class Random_algorithm():
     """
@@ -18,8 +19,9 @@ class Random_algorithm():
 
         self.cars = cars_dict
         self.board = game_board
+        self.hill_climb_config = {}
 
-    def random_step(self): #dictionary and board instance
+    def random_step(self, hill_climb): #dictionary and board instance
         """Does a random step for a random moveable vehicle and returns the updated board."""
 
         # Set moveable by default to False
@@ -27,6 +29,7 @@ class Random_algorithm():
 
         # Get dictionary with available cars (i.e. moveable)
         pick = self.get_available_cars(self.cars)
+        
 
         # Get a random car and get moveable directions
         car_id, car = self.get_random_car(pick)
@@ -41,28 +44,45 @@ class Random_algorithm():
         # If backwards, move car left or up, else right or down, 
         if direction == 0: 
             if moveable_list[0] == True:
-                self.board.move_car(self.car_id, 'neg', orientation)
+                self.board.move_car(self.car_id, 'neg')
                 self.car.change_position('neg', orientation)
+                if hill_climb:
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
             else:
-                self.board.move_car(self.car_id, 'pos', orientation)
+                self.board.move_car(self.car_id, 'pos')
                 self.car.change_position('pos', orientation)
+                if hill_climb:
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
 
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
-                self.board.move_car(self.car_id, 'pos', orientation)
+                self.board.move_car(self.car_id, 'pos')
                 self.car.change_position('pos', orientation)
+                if hill_climb:
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
+
             else:
-                self.board.move_car(self.car_id, 'neg', orientation)
+                self.board.move_car(self.car_id, 'neg')
                 self.car.change_position('neg', orientation)
+                if hill_climb:
+                    self.hill_climb_config[len(self.hill_climb_config) + 1] = self.copy_cars_dict()
 
         return self.board
 
+    def copy_cars_dict(self):
+        """Returns a deep copy of cars dictionary"""
+        copied_dict = {}
+        for key, vehicle in self.cars.items():
+            copied_vehicle = classes.Vehicle(vehicle.ID, vehicle.orientation, vehicle.column, vehicle.row, vehicle.length)
+            copied_dict[key] = copied_vehicle
+        return copied_dict
 
     def get_random_car(self, cars_dict):
         """Choose a random car from cars"""
-
+        
         key = random.choice(list(cars_dict.keys()))
+        
         return key, cars_dict[key]
     
     def get_available_cars(self, car_dict):
@@ -72,9 +92,12 @@ class Random_algorithm():
 
         # Loop over cars, check if a car can move and add it to dictionary
         for car in self.cars.keys():
+            
             moveable_list = self.is_moveable(self.cars[car])
+            
             if True in moveable_list:
                 available_cars[car] = self.cars[car]
+                
         return available_cars
 
     def is_moveable(self, car):
@@ -87,11 +110,10 @@ class Random_algorithm():
         checklist = []
 
         # Get positions to check 
-        neg_pos = self.board.get_new_pos(positions_list[0], 'neg', 'orientation')
+        neg_pos = self.board.get_new_pos(positions_list[0], 'neg', orientation)
         positions_to_check.append(neg_pos)
-        pos_pos = self.board.get_new_pos(positions_list[-1], 'pos', 'orientation')
+        pos_pos = self.board.get_new_pos(positions_list[-1], 'pos', orientation)
         positions_to_check.append(pos_pos)
-
         
         # Check if position can be moved to
         for row, col in positions_to_check:
@@ -102,4 +124,9 @@ class Random_algorithm():
                     checklist.append(True)
                 else:
                     checklist.append(False)
+<<<<<<< HEAD
         return checklist
+=======
+
+        return checklist
+>>>>>>> 004a4c3650fe0ac5f8790ca6062b63c6533cebef
