@@ -27,11 +27,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
     min_iterations = float('inf')
     min_iterations_config = {}
     start = time()
-
-    step_counter = 0
-    print(f"Initial step_counter: {step_counter}")
     
-
     for _ in range (rounds):
         
         cars_dict = {}
@@ -50,12 +46,16 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             # Initiate random step
             random_exp = ra(cars_dict, game_board)
 
-            # while the red car is not yet in the right position, the algorithm goes on
+            # track current config
+            current_config = {}
             i = 0
+            step_counter = 0
+
+            # while the red car is not yet in the right position, the algorithm goes on
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
                 random_exp.random_step(hill_climb)
                 if hill_climb:
-                    min_iterations_config[step_counter] = random_exp.copy_cars_dict()
+                    current_config[step_counter] = random_exp.copy_cars_dict()
                 i +=1
                 step_counter += 1
                 if i > min_iterations:
@@ -78,7 +78,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
 
             if hill_climb and i < min_iterations:
                 min_iterations = i
-                min_iterations_config = random_exp.copy_cars_dict()
+                min_iterations_config = current_config
 
         elif algorithm == 'bf':
             bf_alg = bf.breadth_first_algorithm(6)
