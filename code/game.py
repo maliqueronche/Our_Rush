@@ -26,6 +26,11 @@ def game(filepath, rounds, algorithm, hill_climb = False):
     min_iterations = float('inf')
     min_iterations_config = {}
     start = time()
+
+    step_counter = 0
+    print(f"Initial step_counter: {step_counter}")
+    
+
     for _ in range (rounds):
         
         cars_dict = {}
@@ -48,7 +53,17 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             i = 0
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
                 random_exp.random_step(hill_climb)
+                if hill_climb:
+                    min_iterations_config[step_counter] = random_exp.copy_cars_dict()
                 i +=1
+                step_counter += 1
+                if i > min_iterations:
+                    break
+            print(f"Round {round}, Iterations: {i}, Min Iterations: {min_iterations}")
+
+
+                
+
 
             # Save the amount of iterations and use it to calculate the mean
             iterations_list.append(i)
@@ -62,7 +77,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
 
             if hill_climb and i < min_iterations:
                 min_iterations = i
-                min_iterations_config = copy.deepcopy(random_exp.hill_climb_config)
+                min_iterations_config = random_exp.copy_cars_dict()
 
         elif algorithm == 'bf':
             bf_alg = bf.breadth_first_algorithm(6)
@@ -138,7 +153,7 @@ if __name__ == '__main__':
     rounds = 1
     algorithm = 'bf'
 
-    filepath = 'data/Rushhour6x6_2.csv'
+    filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds, algorithm)
     print(results)
 

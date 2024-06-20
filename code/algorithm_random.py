@@ -72,11 +72,12 @@ class Random_algorithm():
 
     def copy_cars_dict(self):
         """Returns a deep copy of cars dictionary"""
-        copied_dict = {}
-        for key, vehicle in self.cars.items():
-            copied_vehicle = classes.Vehicle(vehicle.ID, vehicle.orientation, vehicle.column, vehicle.row, vehicle.length)
-            copied_dict[key] = copied_vehicle
-        return copied_dict
+        # copied_dict = {}
+        # for key, vehicle in self.cars.items():
+        #     copied_vehicle = classes.Vehicle(vehicle.ID, vehicle.orientation, vehicle.column, vehicle.row, vehicle.length)
+        #     copied_dict[key] = copied_vehicle
+        # return copied_dict
+        return copy.deepcopy(self.cars)
 
     def get_random_car(self, cars_dict):
         """Choose a random car from cars"""

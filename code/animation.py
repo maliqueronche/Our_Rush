@@ -149,7 +149,7 @@ def main():
 
         pygame.display.flip()
         clock.tick(2)  
-        time.sleep(10)
+        time.sleep(5)
     
 if __name__ == '__main__':
     main()

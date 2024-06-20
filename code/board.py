@@ -9,7 +9,7 @@ class Board():
   - creates the start positions
 
   """
-  def __init__(self, cars_dict, size=6):
+  def __init__(self, cars_dict, size = 6):
     self.size = size
     self.cars = cars_dict
     self.board = np.zeros((size, size))
@@ -57,7 +57,7 @@ class Board():
 
     for car_tup in positions:
       new_pos = self.get_new_pos(car_tup, direction, orientation)
-      new_positions.append (new_pos)
+      new_positions.append(new_pos)
 
     for old_pos in positions:
       self.board[old_pos] = 0
