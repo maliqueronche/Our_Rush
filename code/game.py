@@ -77,7 +77,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
 
             if hill_climb and i < min_iterations:
                 min_iterations = i
-                min_iterations_config = copy.deepcopy(random_exp.hill_climb_config)
+                min_iterations_config = random_exp.copy_cars_dict()
 
         elif algorithm == 'bf':
             bf_alg = bf.breadth_first_algorithm(6)

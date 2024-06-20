@@ -13,7 +13,9 @@ def hill_climb(filepath, slice_size, random_solutions):
 
     # compute board position for every step in random iteration, key is step, value is board position
     iterations, min_iterations_dict = game(filepath, 5, 'random', hill_climb = True)
-    total_steps = len(min_iterations_dict)
+    total_steps = len(min_iterations_dict.keys())
+    print(list(min_iterations_dict.keys())[0])
+    print("total steps:", total_steps)
 
     # create the slice
     for start in range(0, total_steps, slice_size):
@@ -26,6 +28,7 @@ def hill_climb(filepath, slice_size, random_solutions):
             if step not in min_iterations_dict:
                 print(f"Step {step} not in min_iterations_dict")
                 continue  
+            print(f"Step {step} in min_iterations_dict")
 
             current_slice[step] = min_iterations_dict[step]
 
