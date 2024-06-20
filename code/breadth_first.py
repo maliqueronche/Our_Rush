@@ -27,10 +27,14 @@ class breadth_first_algorithm():
         for car_id, car in car_ins_dict.items():
             position_car = car.position
             orientation_car = car.orientation
-            cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car,'parents' : {}}
+            cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
         
-
-        end_position = [(2,4), (2, 5)]
+        if self.size == 6:
+            end_position = [(2,4), (2, 5)]
+        elif self.size == 9:
+            end_position = [(4, 7), (4, 8)]
+        elif self.size == 12:
+            end_position = [(5, 10), (5, 11)]
 
         # Create queue, starting board and archive to check for duplicate boards
         bf_queue = queue.Queue()
@@ -52,9 +56,11 @@ class breadth_first_algorithm():
         j = 0
         start = time()
         while not solution_found:
-        # for i in range(1):
+        # for i in range(12):
             j += 1
             
+            
+            # Get state from queue
             state = bf_queue.get()
             
             # Get dictionary current cars (id: pos(tup), or(str), par(set))
@@ -66,14 +72,15 @@ class breadth_first_algorithm():
             # Get a dict of available cars (id: pos(tup), or(str), par(set))
             available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
 
+            
+            
+            
 
             if j % 10000 == 0:
                 end = time()
                 
                 print('\niteration:', j)
-                print("a state at this point:", state)
-                print("board", current_board.board)
-                print("available cars", available_cars)
+                print("a state at this iteration:", state)
                 print(f'The time elapsed: {end-start:.2f} seconds.')
                 
                 start = time()
@@ -91,7 +98,7 @@ class breadth_first_algorithm():
                 current_state = state
 
                 # Move car backwards if possible
-                while moveable[0] == True:
+                while moveable[0]:
 
                     # Changes the position of a car
                     new_position = []
@@ -118,18 +125,19 @@ class breadth_first_algorithm():
                         archive.add(new_board)
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
+                    
 
                     new_board = np.array(new_board)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
                     
-                    if moveable[0] == True: #????
+                    if moveable[0]: 
                         new_cars_dict = copy.deepcopy(new_cars_dict)
 
                 moveable = self.is_moveable(car, current_board.board)
                 current_state = state
                         
-                while moveable[1] == True:
+                while moveable[1]:
                     
                     # Changes position of car
                     new_position = []
@@ -156,12 +164,13 @@ class breadth_first_algorithm():
                         archive.add(new_board)
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
+                    
 
                     new_board = np.array(new_board)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
 
-                    if moveable[1] == True:
+                    if moveable[1]:
                         new_cars_dict = copy.deepcopy(new_cars_dict)
 
             # Remove old states out of the state dict

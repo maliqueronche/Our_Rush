@@ -13,7 +13,7 @@ from time import time
 from helpers import export_bfs_to_csv, export_results_to_csv
 
 
-def game(filepath, rounds, algorithm, hill_climb = False):
+def game(filepath, rounds, algorithm, size, hill_climb = False):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -27,7 +27,21 @@ def game(filepath, rounds, algorithm, hill_climb = False):
     min_iterations = float('inf')
     min_iterations_config = {}
     start = time()
+<<<<<<< HEAD
     
+=======
+
+    step_counter = 0
+    print(f"Initial step_counter: {step_counter}")
+
+    if size == 6:
+            end_position = [(2,4), (2, 5)]
+    elif size == 9:
+        end_position = [(4, 7), (4, 8)]
+    elif size == 12:
+        end_position = [(5, 10), (5, 11)]
+
+>>>>>>> 7e82c5cf2cfdd19f07796a9c5f8eca8f2db2fb50
     for _ in range (rounds):
         
         cars_dict = {}
@@ -40,7 +54,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             cars_dict[ID] = vehicle
 
         # Initialise board and add cars in starting positions
-        game_board = board.Board(cars_dict, size=6)
+        game_board = board.Board(cars_dict, size)
 
         if algorithm == 'random':
             # Initiate random step
@@ -49,10 +63,14 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             # track current config
             current_config = {}
             i = 0
+<<<<<<< HEAD
             step_counter = 0
 
             # while the red car is not yet in the right position, the algorithm goes on
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
+=======
+            while cars_dict[ord('X')].position != end_position:
+>>>>>>> 7e82c5cf2cfdd19f07796a9c5f8eca8f2db2fb50
                 random_exp.random_step(hill_climb)
                 if hill_climb:
                     current_config[step_counter] = random_exp.copy_cars_dict()
@@ -80,8 +98,8 @@ def game(filepath, rounds, algorithm, hill_climb = False):
                 min_iterations = i
                 min_iterations_config = current_config
 
-        elif algorithm == 'bf':
-            bf_alg = bf.breadth_first_algorithm(6)
+        elif algorithm == 'bfs':
+            bf_alg = bf.breadth_first_algorithm(size)
             path = bf_alg.search_breadth(cars_dict)
             return path
 
@@ -104,16 +122,49 @@ if __name__ == '__main__':
     if not os.path.exists('results'):
         os.makedirs('results')
     
+    # Set default values
+    game_number = 0
+    algorithm = ''
     rounds = 1
-    algorithm = 'bf'
 
-    filepath = 'data/Rushhour6x6_2.csv'
-    results = game(filepath, rounds, algorithm)
-    print(results)
+    # Keep looping over user prompts while answers are wrong
+    while game_number < 1 or game_number > 7:
+        game_number = int(input("Hi, which game of Rush Hour (1-7) would you like to play? "))
+        
+    while algorithm not in ['random', 'bfs', 'hillclimb']:
+        algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- hillclimb \nAlgorithm: ")
+    
+    if algorithm in ['random', 'hillclimb']:
+        rounds = int(input("How many rounds would you like the algorithm to search? "))
+        
 
-    experiment_name = 'bfs_6x6_2'
-    export_bfs_to_csv(f'results/{experiment_name}.csv', results)
+    if game_number in [1, 2, 3]:
+        filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
+        results = game(filepath, rounds, algorithm, size=6)
+        experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
+
+    elif game_number in [4, 5, 6]:
+        filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
+        results = game(filepath, rounds, algorithm, size=9)
+        experiment_name = f'{algorithm}_9x9_{game_number}_{rounds}'
+    
+    elif game_number == 12:
+        filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
+        results = game(filepath, rounds, algorithm, size=12)
+        experiment_name = f'{algorithm}_12x12_{game_number}_{rounds}'
+
+    if algorithm == 'random':
+        export_results_to_csv(f'results/{experiment_name}.csv', results)
+    elif algorithm == 'bfs':
+        export_bfs_to_csv(f'results/{experiment_name}.csv', results)
+    # elif algorithm == 'hillclimb':
+        # TODO: implement exporting of results
+
+    # export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     # experiment_name = 'random_2'
     # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     
+    
+    
+    #TODO: fix bfs for board 1.
     
