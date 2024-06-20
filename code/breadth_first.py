@@ -36,8 +36,8 @@ class breadth_first_algorithm():
         bf_queue = queue.Queue()
         starting_board = board.Board(cars_dict, self.size)
         print(starting_board.board)
-        starting_board_name = tuple(map(tuple, starting_board.board))
-        new_archive = {starting_board_name}
+        starting_board = tuple(map(tuple, starting_board.board))
+        archive = {starting_board}
 
         # dictionary containing all states
         state_dict = {}
@@ -111,22 +111,20 @@ class breadth_first_algorithm():
 
                     # Create new board (Numpy arrays)
                     new_board = board.Board(new_cars_dict, self.size)
-                    # Create new boardName
-                    new_board_name = tuple(map(tuple, new_board.board))     
+                    new_board = tuple(map(tuple, new_board.board))     
                            
-                    # Check if the board is in the parent string and add to queue
-                    if new_board_name not in car['parent']:
-                        new_archive.add(new_board)
-                        new_cars_dict['parent'].add(new_board_name)
+                    # Check if board is not in archive and add to queue
+                    if new_board not in archive:
+                        archive.add(new_board)
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
 
+                    new_board = np.array(new_board_name)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
                     
-                    # if moveable[0] == True: #????
-                    #     new_cars_dict = copy.deepcopy(new_cars_dict)
-                    #     # new_archive = copy.deepcopy(new_archive)
+                    if moveable[0] == True: #????
+                        new_cars_dict = copy.deepcopy(new_cars_dict)
 
                 moveable = self.is_moveable(car, current_board.board)
                 current_state = state
@@ -135,6 +133,7 @@ class breadth_first_algorithm():
                     
                     # Changes position of car
                     new_position = []
+                    car = new_cars_dict[car_id]
                     for car_tup in car['position']:
                         new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
                         new_position.append(new_pos)
@@ -150,17 +149,20 @@ class breadth_first_algorithm():
 
                     # Create new board
                     new_board = board.Board(new_cars_dict, self.size)
-                    new_board_name = tuple(map(tuple, new_board.board))
+                    new_board = tuple(map(tuple, new_board.board))
 
-                    if new_board_name not in car['parent']:
-                        car['parent'].add(new_board_name)
-                        new_archive.add(new_board)
+                    # Check if board is not in archive and add to queue
+                    if new_board not in archive:
+                        archive.add(new_board)
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
 
                     new_board = np.array(new_board_name)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
+
+                    if moveable[1] == True:
+                        new_cars_dict = copy.deepcopy(new_cars_dict)
 
             # Remove old states out of the state dict
             del state_dict[state]
