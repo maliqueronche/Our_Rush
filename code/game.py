@@ -10,6 +10,7 @@ import csv
 import os
 import copy
 from time import time
+from helpers import export_bfs_to_csv
 
 
 def game(filepath, rounds, algorithm, hill_climb = False):
@@ -106,45 +107,7 @@ def export_results_to_csv(experiment_path, results):
         csv_writer = csv.writer(output_file)
         csv_writer.writerow(results)
 
-def export_bfs_to_csv(experiment_path, results):
 
-    results = results.split(' ')
-    print(results)
-
-    ids = []
-    directions = []
-    for move in results:
-        id = ''
-        direction = ''
-        for character in move:
-            
-            if character in  ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] and character != '':
-                id += character
-            elif character in ['-', '+'] and character != '':
-                direction += character
-        
-        directions.append(direction)
-        ids.append(id)
-                
-    
-    
-    new_ids = [ids[0]]
-    for i in range(1, len(ids)):
-        if ids[i] != ids[i - 1]:
-            new_ids.append(ids[i])
-            
-
-    
-        
-    print(new_ids)
-    print(directions)
-
-    
-        
-
-    # with open(experiment_path, 'w') as output_file:
-    #     csv_writer = csv_writer(output_file)
-    #     csv_writer.writerw(results)
 
 if __name__ == '__main__':
     if not os.path.exists('results'):
@@ -153,12 +116,12 @@ if __name__ == '__main__':
     rounds = 1
     algorithm = 'bf'
 
-    filepath = 'data/Rushhour6x6_1.csv'
+    filepath = 'data/Rushhour6x6_2.csv'
     results = game(filepath, rounds, algorithm)
     print(results)
 
-    # experiment_name = 'bfs_6x6_2'
-    # export_bfs_to_csv(f'results/{experiment_name}.csv', results)
+    experiment_name = 'bfs_6x6_2'
+    export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     # experiment_name = 'random_2'
     # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     

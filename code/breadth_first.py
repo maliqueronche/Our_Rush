@@ -102,7 +102,7 @@ class breadth_first_algorithm():
                     car['position']= new_position
 
                     # Create new statename
-                    new_state = (current_state + str(car_id) + '-' + ' ')
+                    new_state = (current_state + str(car_id) + ',' + '-' + ',')
 
                     # Check if the red car is on the right position
                     if car_id == 88 and car['position'] == end_position:
@@ -119,7 +119,7 @@ class breadth_first_algorithm():
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
 
-                    new_board = np.array(new_board_name)
+                    new_board = np.array(new_board)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
                     
@@ -140,7 +140,7 @@ class breadth_first_algorithm():
                     car['position']= new_position
                     
                     # Create new state
-                    new_state = (current_state + str(car_id) + '+' + ' ')
+                    new_state = (current_state + str(car_id) + ',' + '+' + ',')
 
                     # Check to see if red car is on right place
                     if car_id == 88 and car['position'] == end_position:
@@ -157,7 +157,7 @@ class breadth_first_algorithm():
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
 
-                    new_board = np.array(new_board_name)
+                    new_board = np.array(new_board)
                     moveable = self.is_moveable(car, new_board)
                     current_state = new_state
 
