@@ -26,7 +26,7 @@ def export_bfs_to_csv(export_path, results):
             move = '1'
         elif move == '-':
             move = '-1'
-        move_caracter.append(move)
+        moves_caracter.append(move)
 
     # Convert ids from ord to chr
     converted_ids = []

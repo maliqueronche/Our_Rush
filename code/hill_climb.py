@@ -12,9 +12,9 @@ import pandas as pd
 def hill_climb(filepath, slice_size, random_solutions):
 
     # compute board position for every step in random iteration, key is step, value is board position
-    iterations, min_iterations_dict = game(filepath, 5, 'random', hill_climb = True)
+    iterations, min_iterations_dict = game(filepath, 5, 'random', 6,  hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
-    print(list(min_iterations_dict.keys())[0])
+    # print(list(min_iterations_dict.keys())[0])
     print("total steps:", total_steps)
 
     # create the slice
