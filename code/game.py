@@ -54,7 +54,7 @@ def game(filepath, rounds, algorithm, hill_climb = False):
             while cars_dict[ord('X')].position != [(2,4), (2,5)]:
                 random_exp.random_step(hill_climb)
                 if hill_climb:
-                    min_iterations_config[step_counter] = copy.deepcopy(random_exp.copy_cars_dict())
+                    min_iterations_config[step_counter] = random_exp.copy_cars_dict()
                 i +=1
                 step_counter += 1
                 if i > min_iterations:
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     rounds = 1
     algorithm = 'bf'
 
-    filepath = 'data/Rushhour6x6_2.csv'
+    filepath = 'data/Rushhour6x6_1.csv'
     results = game(filepath, rounds, algorithm)
     print(results)
 
