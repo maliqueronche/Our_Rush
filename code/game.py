@@ -10,7 +10,7 @@ import csv
 import os
 import copy
 from time import time
-from helpers import export_bfs_to_csv
+from helpers import export_bfs_to_csv, export_results_to_csv
 
 
 def game(filepath, rounds, algorithm, hill_climb = False):
@@ -97,15 +97,6 @@ def game(filepath, rounds, algorithm, hill_climb = False):
         return iterations_list, min_iterations_config
     else:
         return iterations_list
-
-
-def export_results_to_csv(experiment_path, results):
-    
-    
-    
-    with open(experiment_path, 'w') as output_file:
-        csv_writer = csv.writer(output_file)
-        csv_writer.writerow(results)
 
 
 

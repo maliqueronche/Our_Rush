@@ -1,53 +1,34 @@
 import pandas as pd
 import csv
 
+def export_results_to_csv(export_path, results):
+    '''Takes export path and results and writes results to csv.'''
+    
+    with open(export_path, 'w') as output_file:
+        csv_writer = csv.writer(output_file)
+        csv_writer.writerow(results)
 
-def export_bfs_to_csv(experiment_path, results):
 
+def export_bfs_to_csv(export_path, results):
+    '''Takes export path and results and writes results to csv.'''
+
+    # Split results by comma and remove last element if empty string
     results = results.split(',')
-    print(results)
-
-    results.pop()
-    print(results)
-
-
-    # Split the list into two lists by alternating elements
+    if results[-1] == '':
+        results.pop()
+    
+    # Split list into two lists by alternating elements
     ids = results[::2]
-    directions = results[1::2]
+    moves = results[1::2]
 
-    # Output the results
-    print("ids", ids)
-    print("directions", directions)
-
+    # Convert ids from ord to chr
     converted_ids = []
     for id in ids:
         converted_id = chr(int(id))
         converted_ids.append(converted_id)
 
-    print(converted_ids)
-    
+    # Create dataframe, add ids, moves and export to csv
     df = pd.DataFrame()
     df['car'] = converted_ids
-    df['move'] = directions
-    print(df)
-
-    df.to_csv(experiment_path, sep=',', columns=['car', 'move'], index=False)
-    
-    
-    # new_ids = [ids[0]]
-    # for i in range(1, len(ids)):
-    #     if ids[i] != ids[i - 1]:
-    #         new_ids.append(ids[i])
-            
-
-    
-        
-    # print(new_ids)
-    # print(directions)
-
-    
-        
-
-    # with open(experiment_path, 'w') as output_file:
-    #     csv_writer = csv_writer(output_file)
-    #     csv_writer.writerw(results)
+    df['move'] = moves
+    df.to_csv(export_path, sep=',', columns=['car', 'move'], index=False)
