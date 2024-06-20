@@ -104,10 +104,12 @@ if __name__ == '__main__':
     if not os.path.exists('results'):
         os.makedirs('results')
     
+    # Set default values
     game_number = 0
     algorithm = ''
     rounds = 1
 
+    # Keep looping over user prompts while answers are wrong
     while game_number < 1 or game_number > 7:
         game_number = int(input("Hi, which game of Rush Hour (1-7) would you like to play? "))
         
@@ -115,7 +117,8 @@ if __name__ == '__main__':
         algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- hillclimb \nAlgorithm: ")
     
     if algorithm in ['random', 'hillclimb']:
-        rounds = int(input("How many rounds would you like the algorithm to search?"))
+        rounds = int(input("How many rounds would you like the algorithm to search? "))
+        
 
     if game_number in [1, 2, 3]:
         filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
