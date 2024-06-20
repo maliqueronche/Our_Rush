@@ -30,7 +30,13 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
 
     step_counter = 0
     print(f"Initial step_counter: {step_counter}")
-    
+
+    if size == 6:
+            end_position = [(2,4), (2, 5)]
+    elif size == 9:
+        end_position = [(4, 7), (4, 8)]
+    elif size == 12:
+        end_position = [(5, 10), (5, 11)]
 
     for _ in range (rounds):
         
@@ -52,7 +58,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
 
             # while the red car is not yet in the right position, the algorithm goes on
             i = 0
-            while cars_dict[ord('X')].position != [(2,4), (2,5)]:
+            while cars_dict[ord('X')].position != end_position:
                 random_exp.random_step(hill_climb)
                 if hill_climb:
                     min_iterations_config[step_counter] = random_exp.copy_cars_dict()

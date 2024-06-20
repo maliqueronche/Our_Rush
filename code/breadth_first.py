@@ -29,8 +29,12 @@ class breadth_first_algorithm():
             orientation_car = car.orientation
             cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
         
-
-        end_position = [(2,4), (2, 5)]
+        if self.size == 6:
+            end_position = [(2,4), (2, 5)]
+        elif self.size == 9:
+            end_position = [(4, 7), (4, 8)]
+        elif self.size == 12:
+            end_position = [(5, 10), (5, 11)]
 
         # Create queue, starting board and archive to check for duplicate boards
         bf_queue = queue.Queue()
@@ -76,9 +80,7 @@ class breadth_first_algorithm():
                 end = time()
                 
                 print('\niteration:', j)
-                print("a state at this point:", state)
-                print("board", current_board.board)
-                print("available cars", available_cars)
+                print("a state at this iteration:", state)
                 print(f'The time elapsed: {end-start:.2f} seconds.')
                 
                 start = time()
