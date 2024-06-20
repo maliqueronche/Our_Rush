@@ -124,9 +124,4 @@ class Random_algorithm():
                     checklist.append(True)
                 else:
                     checklist.append(False)
-<<<<<<< HEAD
         return checklist
-=======
-
-        return checklist
->>>>>>> 004a4c3650fe0ac5f8790ca6062b63c6533cebef
