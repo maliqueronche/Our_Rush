@@ -126,8 +126,8 @@ def load_start_board(file_path):
 
 def main():
     clock = pygame.time.Clock()
-    cars = load_start_board('data/Rushhour6x6_presentation.csv')
-    steps = load_steps('data/steps_presentation.csv')
+    cars = load_start_board('data/Rushhour6x6_2.csv')
+    steps = load_steps('results/bfs_6x6_2.csv')
 
     step_count = 0
 
@@ -149,7 +149,7 @@ def main():
 
         pygame.display.flip()
         clock.tick(2)  
-        time.sleep(5)
+        time.sleep(0.5)
     
 if __name__ == '__main__':
     main()
