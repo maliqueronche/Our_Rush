@@ -14,7 +14,7 @@ def hill_climb(filepath, slice_size, random_solutions):
     # compute board position for every step in random iteration, key is step, value is board position
     iterations, min_iterations_dict = game(filepath, 5, 'random', 6,  hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
-    # print(list(min_iterations_dict.keys())[0])
+    print([elem[0] for elem in min_iterations_dict.values()])
     print("total steps:", total_steps)
 
     # create the slice
@@ -26,9 +26,9 @@ def hill_climb(filepath, slice_size, random_solutions):
         for step in range(start, end):
 
             if step not in min_iterations_dict:
-                print(f"Step {step} not in min_iterations_dict")
+                # print(f"Step {step} not in min_iterations_dict")
                 continue  
-            print(f"Step {step} in min_iterations_dict")
+            # print(f"Step {step} in min_iterations_dict")
 
             current_slice[step] = min_iterations_dict[step]
 
@@ -45,8 +45,8 @@ def hill_climb(filepath, slice_size, random_solutions):
 
             for step in range(start, end):
 
-                if step - start not in best_slice:
-                    print(f"Step {step - start} not in best_slice")
+                # if step - start not in best_slice:
+                #     # print(f"Step {step - start} not in best_slice")
 
                 min_iterations_dict[step] = best_slice[step - start]
 
@@ -88,5 +88,5 @@ def generate_random_solution(filepath, current_slice, start, end):
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
     optimized_solution = hill_climb(filepath, 100, 2000 )
-    print("solution:", optimized_solution)
+    print("solution:", len(optimized_solution.keys()))
 
