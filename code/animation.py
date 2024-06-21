@@ -120,32 +120,22 @@ class car:
         else:
             pygame.draw.rect(screen, roof_colour, (x * cell_size + cell_size // 4, y * cell_size + cell_size // 4, cell_size // 2, self.length * cell_size - cell_size // 2))
 
+        # Add front window
+        window_colour = (200, 200, 255)  # light blue for window
+        if self.orientation == 'H':
+            pygame.draw.rect(screen, window_colour, (x * cell_size + self.length * cell_size - cell_size // 2, y * cell_size + cell_size // 4, cell_size // 2, cell_size // 2))
+        else:
+            pygame.draw.rect(screen, window_colour, (x * cell_size + cell_size // 4, y * cell_size + self.length * cell_size - cell_size // 2, cell_size // 2, cell_size // 2))
 
-        # windshield_color = (0, 0, 0)  # Black color for windshield
-        # if self.orientation == 'H':
-        #     points = [
-        #         (x * cell_size + cell_size // 8, y * cell_size + cell_size // 8),
-        #         (x * cell_size + cell_size // 8, y * cell_size + 7 * cell_size // 8),
-        #         (x * cell_size + cell_size // 2, y * cell_size + 3 * cell_size // 8),
-        #         (x * cell_size + cell_size // 2, y * cell_size + 5 * cell_size // 8)
-        #     ]
-        # else:
-        #     points = [
-        #         (x * cell_size + cell_size // 8, y * cell_size + cell_size // 8),
-        #         (x * cell_size + 7 * cell_size // 8, y * cell_size + cell_size // 8),
-        #         (x * cell_size + 3 * cell_size // 8, y * cell_size + cell_size // 2),
-        #         (x * cell_size + 5 * cell_size // 8, y * cell_size + cell_size // 2)
-        #     ]
-        # pygame.draw.polygon(screen, windshield_color, points)
-
-        # headlight_colour = (255, 255, 255)  
-        # if self.orientation == 'H':
-        #     pygame.draw.circle(screen, headlight_colour, (x * cell_size + cell_size // 10, y * cell_size + cell_size // 2), cell_size // 10)
-        #     pygame.draw.circle(screen, headlight_colour, ((x + self.length) * cell_size - cell_size // 10, y * cell_size + cell_size // 2), cell_size // 10)
-        # else:
-        #     pygame.draw.circle(screen, headlight_colour, (x * cell_size + cell_size // 2, y * cell_size + cell_size // 10), cell_size // 10)
-        #     pygame.draw.circle(screen, headlight_colour, (x * cell_size + cell_size // 2, (y + self.length) * cell_size - cell_size // 10), cell_size // 10)
-
+        # Add headlights
+        headlight_colour = (255, 255, 100)  # yellow for headlights
+        headlight_radius = cell_size // 8
+        if self.orientation == 'H':
+            pygame.draw.circle(screen, headlight_colour, (x * cell_size + self.length * cell_size - headlight_radius, y * cell_size + headlight_radius), headlight_radius)
+            pygame.draw.circle(screen, headlight_colour, (x * cell_size + self.length * cell_size - headlight_radius, y * cell_size + cell_size - headlight_radius), headlight_radius)
+        else:
+            pygame.draw.circle(screen, headlight_colour, (x * cell_size + headlight_radius, y * cell_size + headlight_radius), headlight_radius)
+            pygame.draw.circle(screen, headlight_colour, (x * cell_size + cell_size - headlight_radius, y * cell_size + headlight_radius), headlight_radius)
 
 
     def move_car(self, steps):

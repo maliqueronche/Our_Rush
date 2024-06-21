@@ -20,7 +20,7 @@ class Board():
           for tup in location:
               self.board[tup] = vehicle.ID
     
-        if type(vehicle) == dict:
+        elif type(vehicle) == dict:
           # print ('this is a dict')
           location = cars_dict[id]['position']
           for tup in location:
@@ -36,7 +36,7 @@ class Board():
 
     if orientation == 'H':
       if direction == 'pos':
-        col +=1
+        col += 1
       elif direction == 'neg':
         col -= 1
     elif orientation == 'V':
@@ -44,6 +44,9 @@ class Board():
         row +=1
       elif direction == 'neg':
         row -= 1
+
+    # if row < 0 or row > self.size or col < 0 or col > self.size:
+    #       return None
 
     return row, col
 

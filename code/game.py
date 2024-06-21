@@ -24,7 +24,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     iterations_list = []
     mean_i = 0
     round = 1
-    min_iterations = 10000
+    min_iterations = 4000
     min_iterations_config = {}
     start = time()
 
@@ -53,6 +53,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         game_board = board.Board(cars_dict, size)
 
         if algorithm == 'random':
+
             # Initiate random step
             random_exp = ra(cars_dict, game_board)
 
@@ -62,19 +63,22 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
             step_counter = 0
 
             while cars_dict[ord('X')].position != end_position:
-                random_exp.random_step(hill_climb)
+
+                # for hill climb, save new board, every step
                 if hill_climb:
-                    current_config[step_counter] = random_exp.copy_cars_dict()
+                    random_exp.random_step(hill_climb = True)
+                    cars_dict = random_exp.cars
+                    current_config[step_counter] = random_exp.copy_cars_dict(cars_dict)
+                
+                else:
+                    random_exp.random_step()
+                
                 i +=1
                 step_counter += 1
                 if i > min_iterations:
                     step_counter = 0
                     break
             print(f"Round {round}, Iterations: {i}, Min Iterations: {min_iterations}")
-
-
-                
-
 
             # Save the amount of iterations and use it to calculate the mean
             iterations_list.append(i)
@@ -88,7 +92,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
 
             if hill_climb and i < min_iterations:
                 min_iterations = i
-                min_iterations_config = copy.deepcopy(current_config)
+                min_iterations_config = random_exp.copy_cars_dict(current_config)
 
         elif algorithm == 'bfs':
             bf_alg = bf.breadth_first_algorithm(size)
