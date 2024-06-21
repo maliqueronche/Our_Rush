@@ -39,3 +39,4 @@ def export_bfs_to_csv(export_path, results):
     df['car'] = converted_ids
     df['move'] = moves_caracter
     df.to_csv(export_path, sep=',', columns=['car', 'move'], index=False)
+    print("Solution:\n ", df)

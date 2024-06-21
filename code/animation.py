@@ -4,7 +4,7 @@ import time
 import pandas as pd
 import random
 
-def main(size):
+def animate(size):
 
     # initialize pygame
     pygame.init()
@@ -27,8 +27,8 @@ def main(size):
     background_colour = (100, 100, 100) 
     clock = pygame.time.Clock()
 
-    cars = load_start_board('data/Rushhour6x6_3.csv')
-    steps = load_steps('results/bfs_6x6_3_1.csv')
+    cars = load_start_board('data/Rushhour9x9_4.csv')
+    steps = load_steps('results/bfs_9x9_4_1.csv')
 
     step_count = 0
 

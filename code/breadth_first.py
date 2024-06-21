@@ -15,7 +15,7 @@ class breadth_first_algorithm():
 
 
     def __init__(self, size):
-        print ('initializing')
+        print ('initializing...')
         self.size = size
 
 
@@ -39,7 +39,6 @@ class breadth_first_algorithm():
         # Create queue, starting board and archive to check for duplicate boards
         bf_queue = queue.Queue()
         starting_board = board.Board(cars_dict, self.size)
-        print(starting_board.board)
         starting_board = tuple(map(tuple, starting_board.board))
         archive = {starting_board}
 
@@ -58,27 +57,8 @@ class breadth_first_algorithm():
         while not solution_found:
         # for i in range(12):
             j += 1
-            
-            
-            # Get state from queue
-            state = bf_queue.get()
-            if j == 256:
-                return state
-                pass
-            
-            # Get dictionary current cars (id: pos(tup), or(str), par(set))
-            current_cars_dict = state_dict[state] 
 
-            # Create current board (Numpy arrays)
-            current_board = board.Board(current_cars_dict, self.size)
-            
-            # Get a dict of available cars (id: pos(tup), or(str), par(set))
-            available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
-
-            
-            
-            
-
+            # Print duration over iteration length
             if j % 10000 == 0:
                 end = time()
                 
@@ -88,6 +68,18 @@ class breadth_first_algorithm():
                 
                 start = time()
             
+            # Get state from queue
+            state = bf_queue.get()
+            
+            # Get dictionary current cars (id: pos(tup), or(str), par(set))
+            current_cars_dict = state_dict[state] 
+            
+            # Create current board (Numpy arrays)
+            current_board = board.Board(current_cars_dict, self.size)
+            
+            # Get a dict of available cars (id: pos(tup), or(str), par(set))
+            available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
+        
             # Loop over available cars, move them, add new states to queue
             for car_id, car in available_cars.items():
 
@@ -97,11 +89,8 @@ class breadth_first_algorithm():
                 # Get's a tuple for every side if it is moveable
                 moveable = self.is_moveable(car, current_board.board)
                 
-                # Copies the state of the parent
-                current_state = state
-
                 # Move car backwards if possible
-                while moveable[0]:
+                if moveable[0]:
 
                     # Changes the position of a car
                     new_position = []
@@ -112,8 +101,8 @@ class breadth_first_algorithm():
                     car['position']= new_position
 
                     # Create new statename
-                    new_state = (current_state + str(car_id) + ',' + '-' + ',')
-
+                    new_state = (state + str(car_id) + ',' + '-' + ',')
+                    
                     # Check if the red car is on the right position
                     if car_id == 88 and car['position'] == end_position:
                         solution_found = True
@@ -128,19 +117,11 @@ class breadth_first_algorithm():
                         archive.add(new_board)
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
-                    
-
-                    new_board = np.array(new_board)
-                    moveable = self.is_moveable(car, new_board)
-                    current_state = new_state
-                    
-                    if moveable[0]: 
-                        new_cars_dict = copy.deepcopy(new_cars_dict)
-
-                moveable = self.is_moveable(car, current_board.board)
-                current_state = state
-                        
-                while moveable[1]:
+                
+                new_cars_dict = copy.deepcopy(current_cars_dict)
+                
+                # Move car forwards if possible
+                if moveable[1]:
                     
                     # Changes position of car
                     new_position = []
@@ -151,8 +132,8 @@ class breadth_first_algorithm():
                     car['position']= new_position
                     
                     # Create new state
-                    new_state = (current_state + str(car_id) + ',' + '+' + ',')
-
+                    new_state = (state + str(car_id) + ',' + '+' + ',')
+                    
                     # Check to see if red car is on right place
                     if car_id == 88 and car['position'] == end_position:
                         solution_found = True
@@ -167,22 +148,12 @@ class breadth_first_algorithm():
                         archive.add(new_board)
                         bf_queue.put(new_state)
                         state_dict[new_state] = new_cars_dict
-                    
-
-                    new_board = np.array(new_board)
-                    moveable = self.is_moveable(car, new_board)
-                    current_state = new_state
-
-                    if moveable[1]:
-                        new_cars_dict = copy.deepcopy(new_cars_dict)
-
+                
             # Remove old states out of the state dict
             del state_dict[state]
-            
+        
         return new_state
 
-                        
-    
 
     def get_available_cars(self, cars_dict, board):
         available_cars = {}
@@ -192,7 +163,6 @@ class breadth_first_algorithm():
             if True in moveable_list:
                 available_cars[car_id] = car
         return available_cars
-
 
 
     def get_new_pos(self, car_tup, direction, orientation):
@@ -214,7 +184,6 @@ class breadth_first_algorithm():
         
     
     def is_moveable(self, car, board):
-        # print (board)
 
         position = car['position']
         orientation = car['orientation']
@@ -236,6 +205,7 @@ class breadth_first_algorithm():
             else:
                 checklist.append(False)
         return checklist
+    
     
     def check_moves(moveable, place):
         if place == 0:

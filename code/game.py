@@ -11,7 +11,7 @@ import os
 import copy
 from time import time
 from helpers import export_bfs_to_csv, export_results_to_csv
-
+from animation import animate
 
 def game(filepath, rounds, algorithm, size, hill_climb = False):
     """
@@ -131,20 +131,24 @@ if __name__ == '__main__':
         
 
     if game_number in [1, 2, 3]:
+        size = 6
         filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
-        results = game(filepath, rounds, algorithm, size=6)
+        results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
 
     elif game_number in [4, 5, 6]:
+        size = 9
         filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
-        results = game(filepath, rounds, algorithm, size=9)
+        results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_9x9_{game_number}_{rounds}'
     
     elif game_number == 12:
+        size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
-        results = game(filepath, rounds, algorithm, size=12)
+        results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_12x12_{game_number}_{rounds}'
 
+    
     if algorithm == 'random':
         export_results_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm == 'bfs':
@@ -152,11 +156,13 @@ if __name__ == '__main__':
     # elif algorithm == 'hillclimb':
         # TODO: implement exporting of results
 
+    
+    
+    
     # export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     # experiment_name = 'random_2'
     # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
     
     
-    
-    #TODO: fix bfs for board 1.
+
     
