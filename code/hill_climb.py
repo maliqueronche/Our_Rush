@@ -24,33 +24,27 @@ def hill_climb(filepath, slice_size, random_solutions):
         end = min(start + slice_size, total_steps)
         current_slice = {}
 
-        # go in the slice
+        # loop over steps in slices
         for step in range(start, end):
-
-            # if step not in min_iterations_dict:
-            #     # print(f"Step {step} not in min_iterations_dict")
-            #     continue  
-            # print(f"Step {step} in min_iterations_dict")
-
             current_slice[step] = min_iterations_dict[step]
 
-            best_slice = current_slice
-            best_slice_steps = end - step
+        best_slice = current_slice
+        best_slice_steps = end - start
 
-            for j in range(random_solutions):
-                random_solution = generate_random_solution(filepath, current_slice, start, end)
-                new_steps = len(random_solution)
+        for j in range(random_solutions):
+            random_solution = generate_random_solution(filepath, current_slice, start, end)
+            new_steps = len(random_solution)
 
-                if new_steps < best_slice_steps:
-                    best_slice = random_solution
-                    best_slice_steps = new_steps
+            if new_steps < best_slice_steps:
+                best_slice = random_solution
+                best_slice_steps = new_steps
 
-            for step in range(start, end):
+        for step in range(start, end):
 
-                # if step - start not in best_slice:
-                #     # print(f"Step {step - start} not in best_slice")
+            # if step - start not in best_slice:
+            #     # print(f"Step {step - start} not in best_slice")
 
-                min_iterations_dict[step] = best_slice[step - start]
+            min_iterations_dict[step] = best_slice[step - start]
 
     return min_iterations_dict
 
@@ -72,10 +66,14 @@ def generate_random_solution(filepath, current_slice, start, end):
 
     # car positions based on current slice
     # vgm gaat het hier fout
-    for step, value in current_slice.iterrows():
-        for car_id in value:
-            car = current_slice[step][car_id]
+    for step in current_slice:
+        for car_id, car in current_slice[step].items():
             cars_dict[car_id] = classes.Vehicle(car.ID, car.orientation, car.column, car.row, car.length)
+
+
+        # for car_id in value:
+        #     car = current_slice[step][car_id]
+        #     cars_dict[car_id] = classes.Vehicle(car.ID, car.orientation, car.column, car.row, car.length)
 
     new_solution = {}
     i = 0

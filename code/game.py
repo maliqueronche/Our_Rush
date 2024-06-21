@@ -24,7 +24,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     iterations_list = []
     mean_i = 0
     round = 1
-    min_iterations = 4000
+    min_iterations = 6000
     min_iterations_config = {}
     start = time()
 
