@@ -62,6 +62,9 @@ class breadth_first_algorithm():
             
             # Get state from queue
             state = bf_queue.get()
+            if j == 256:
+                return state
+                pass
             
             # Get dictionary current cars (id: pos(tup), or(str), par(set))
             current_cars_dict = state_dict[state] 

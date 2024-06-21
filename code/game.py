@@ -66,7 +66,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
                 step_counter += 1
                 if i > min_iterations:
                     break
-            print(f"Round {round}, Iterations: {i}, Min Iterations: {min_iterations}")
+            # print(f"Round {round}, Iterations: {i}, Min Iterations: {min_iterations}")
 
 
                 
