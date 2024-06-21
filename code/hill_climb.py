@@ -14,10 +14,12 @@ def hill_climb(filepath, slice_size, random_solutions):
     # compute board position for every step in random iteration, key is step, value is board position
     iterations, min_iterations_dict = game(filepath, 5, 'random', 6,  hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
-    print([elem[0] for elem in min_iterations_dict.values()])
+    print(min_iterations_dict)
     print("total steps:", total_steps)
+    # print([elem[0] for elem in min_iterations_dict.values()])
+    
 
-    # create the slice
+    # loop over slices
     for start in range(0, total_steps, slice_size):
         end = min(start + slice_size, total_steps)
         current_slice = {}
@@ -25,9 +27,9 @@ def hill_climb(filepath, slice_size, random_solutions):
         # go in the slice
         for step in range(start, end):
 
-            if step not in min_iterations_dict:
-                # print(f"Step {step} not in min_iterations_dict")
-                continue  
+            # if step not in min_iterations_dict:
+            #     # print(f"Step {step} not in min_iterations_dict")
+            #     continue  
             # print(f"Step {step} in min_iterations_dict")
 
             current_slice[step] = min_iterations_dict[step]
@@ -70,8 +72,8 @@ def generate_random_solution(filepath, current_slice, start, end):
 
     # car positions based on current slice
     # vgm gaat het hier fout
-    for step in current_slice:
-        for car_id in current_slice[step]:
+    for step, value in current_slice.iterrows():
+        for car_id in value:
             car = current_slice[step][car_id]
             cars_dict[car_id] = classes.Vehicle(car.ID, car.orientation, car.column, car.row, car.length)
 
@@ -79,7 +81,7 @@ def generate_random_solution(filepath, current_slice, start, end):
     i = 0
     while i < (end - start) and cars_dict[ord('X')].position != [(2, 4), (2, 5)]:
         random_exp.random_step(hill_climb = True)
-        new_solution[i] = random_exp.copy_cars_dict()
+        new_solution[i] = random_exp.copy_cars_dict(cars_dict)
         i += 1
     
     return new_solution
