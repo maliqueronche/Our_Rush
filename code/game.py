@@ -3,6 +3,7 @@ import pandas as pd
 import classes
 import board
 import breadth_first as bf
+import depth_first as df
 from visualization import visualize
 from user_input import user_input
 from algorithm_random import Random_algorithm as ra
@@ -98,6 +99,10 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
             bf_alg = bf.breadth_first_algorithm(size)
             path = bf_alg.search_breadth(cars_dict)
             return path
+        elif algorithm == 'dfs':
+            df_alg = df.depth_first_algorithm(size)
+            path = df_alg.search_depth(cars_dict)
+            return path
 
         
         
@@ -127,8 +132,8 @@ if __name__ == '__main__':
     while game_number < 1 or game_number > 7:
         game_number = int(input("Hi, which game of Rush Hour (1-7) would you like to play? "))
         
-    while algorithm not in ['random', 'bfs', 'hillclimb']:
-        algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- hillclimb \nAlgorithm: ")
+    while algorithm not in ['random', 'bfs', 'dfs', 'hillclimb']:
+        algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- dfs \n- hillclimb \nAlgorithm: ")
     
     if algorithm in ['random', 'hillclimb']:
         rounds = int(input("How many rounds would you like the algorithm to search? "))
@@ -156,7 +161,7 @@ if __name__ == '__main__':
     
     if algorithm == 'random':
         export_results_to_csv(f'results/{experiment_name}.csv', results)
-    elif algorithm == 'bfs':
+    elif algorithm in ['bfs', 'dfs']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     # elif algorithm == 'hillclimb':
 
