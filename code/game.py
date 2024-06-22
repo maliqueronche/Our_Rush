@@ -24,7 +24,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     iterations_list = []
     mean_i = 0
     round = 1
-    min_iterations = 6000
+    min_iterations = 10000
     min_iterations_config = {}
     start = time()
 
@@ -138,6 +138,7 @@ if __name__ == '__main__':
         size = 6
         filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
         results = game(filepath, rounds, algorithm, size)
+        print(results)
         experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
 
     elif game_number in [4, 5, 6]:
@@ -158,6 +159,7 @@ if __name__ == '__main__':
     elif algorithm == 'bfs':
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     # elif algorithm == 'hillclimb':
+
         # TODO: implement exporting of results
 
     

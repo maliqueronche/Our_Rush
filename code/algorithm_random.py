@@ -43,25 +43,39 @@ class Random_algorithm():
         if direction == 0: 
             if moveable_list[0] == True:
                 self.board.move_car(self.car_id, 'neg')
+                if hill_climb:
+                    car_move = (car_id, '-1')
+                    board = self.board
                 self.car.change_position('neg', orientation)
             else:
                 self.board.move_car(self.car_id, 'pos')
+                if hill_climb:
+                    car_move = (car_id, '1')
+                    board = self.board
                 self.car.change_position('pos', orientation)
                 
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
                 self.board.move_car(self.car_id, 'pos')
+                if hill_climb:
+                    car_move = (car_id, '1')
+                    board = self.board
                 self.car.change_position('pos', orientation)
                
             else:
                 self.board.move_car(self.car_id, 'neg')
+                if hill_climb:
+                    car_move = (car_id, '-1')
+                    board = self.board
                 self.car.change_position('neg', orientation)
-                
-        # if hill_climb:
-        #     return self.copy_cars_dict(self.cars)
-        # else:
-        return self.board
+        
+        updated_cars_dict = self.cars
+
+        if hill_climb:
+            return board, car_move, updated_cars_dict
+        else:
+            return self.board
 
     def copy_cars_dict(self, cars_dict):
         """Returns a deep copy of cars dictionary"""
