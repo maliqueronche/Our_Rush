@@ -152,7 +152,7 @@ class breadth_first_algorithm():
             # Remove old states out of the state dict
             del state_dict[state]
         
-        return new_state
+        return best_solution if solution_found else "No solution found within depth limit"
 
 
     def get_available_cars(self, cars_dict, board):
@@ -206,7 +206,7 @@ class breadth_first_algorithm():
                 checklist.append(False)
         return checklist
     
-    
+
     def check_moves(moveable, place):
         if place == 0:
             side = 'neg'
