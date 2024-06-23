@@ -146,5 +146,5 @@ class car:
             self.position = (x, y + steps)
  
 if __name__ == '__main__':
-    size = 6
-    main(size)
+    
+    animate(9)
