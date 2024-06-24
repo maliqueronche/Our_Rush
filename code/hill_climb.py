@@ -1,4 +1,4 @@
-from game import game
+from run_random_algorithm import run_random
 from algorithm_random import Random_algorithm as ra
 import classes
 import board
@@ -10,10 +10,10 @@ import pandas as pd
 
 
 # step one: 5 random outputs
-def hc_alg(filepath, size):
+def hc_alg(filepath, end_position, size):
 
     # compute board position for every step in random iteration, key is step, value is board position
-    min_iterations_dict = game(filepath, 10, 'random', size,  hill_climb = True)
+    min_iterations_dict = run_random(filepath, 10, 'random', size, end_position, hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
     slice_size = 200
     random_solutions = 1000
@@ -98,8 +98,8 @@ def generate_random_solution(current_slice, start, end, size):
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
-    optimized_solution, car_moves = hill_climb(filepath, 200, 100, 6)
+    car_moves = hc_alg(filepath, 200, 100, 6)
     print("solution:", len(optimized_solution.keys()))
-
+    
     
    

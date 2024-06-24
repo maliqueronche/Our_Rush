@@ -201,7 +201,7 @@ class car:
             self.position = (x, y + steps)
  
 if __name__ == '__main__':
-    size = 9
-    board_file = 'data/Rushhour9x9_4.csv'
-    result_file = 'results/bfs_9x9_4_1.csv'
+    size = 6
+    board_file = 'data/Rushhour6x6_1.csv'
+    result_file = 'results/hillclimb_6x6_1_1.csv'
     animate(board_file, result_file, size)
