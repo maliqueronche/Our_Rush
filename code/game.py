@@ -60,7 +60,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
             # track current config
             current_config = {}
             i = 0
-            step_counter = 0
 
             while cars_dict[ord('X')].position != end_position:
 
@@ -68,16 +67,17 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
                 if hill_climb:
                     random_exp.random_step(hill_climb = True)
                     cars_dict = random_exp.cars
-                    current_config[step_counter] = random_exp.copy_cars_dict(cars_dict)
-                
+                    current_config[i] = random_exp.copy_cars_dict(cars_dict)
+
+                    if i > min_iterations:
+                        break
+
                 else:
                     random_exp.random_step()
                 
                 i +=1
-                step_counter += 1
-                if i > min_iterations:
-                    step_counter = 0
-                    break
+                
+                
             # print(f"Round {round}, Iterations: {i}, Min Iterations: {min_iterations}")
 
             # Save the amount of iterations and use it to calculate the mean

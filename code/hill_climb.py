@@ -12,32 +12,39 @@ import pandas as pd
 def hill_climb(filepath, slice_size, random_solutions, size):
 
     # compute board position for every step in random iteration, key is step, value is board position
-    iterations, min_iterations_dict = game(filepath, 5, 'random', 6,  hill_climb = True)
+    iterations, min_iterations_dict = game(filepath, 5, 'random', size,  hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
-    # print(min_iterations_dict)
+    print("first key and value:", min_iterations_dict.get(1, 'Key 1 not found'))
+    print("200th key and value:", min_iterations_dict.get(200, 'Key 200 not found'))
     print("total steps:", total_steps)
-    # print([elem[0] for elem in min_iterations_dict.values()])
+    
     
 
     # loop over slices
     for start in range(0, total_steps, slice_size):
+        print("begin of the slice:", start, "steps:", len(min_iterations_dict.keys()))
         end = min(start + slice_size, total_steps)
-        current_slice = {}
+        current_slice = {step: min_iterations_dict[step] for step in range(start, end)}
 
         # loop over steps in slices and index step
-        for step in range(start, end):
-            current_slice[step] = min_iterations_dict[step]
+        # for step in range(start, end):
+        #     if step in min_iterations_dict.keys():  # Check if the key exists
+        #         current_slice[step] = min_iterations_dict[step]
+        #     else:
+        #         print("no")
+        if not current_slice:
+            print(f"No steps found in range {start}-{end}. Skipping this slice.")
+            continue
 
         best_slice = current_slice
         best_slice_steps = end - start
 
-        for j in range(random_solutions):
-            car_moves, cars_dict  = generate_random_solution(current_slice, start, end, size)
-            new_steps = len(car_moves)
-
-            if new_steps < best_slice_steps:
-                best_slice = cars_dict
-                best_slice_steps = new_steps
+        for _ in range(random_solutions):
+            car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
+            
+            if len(car_moves) < best_slice_steps:
+                best_slice = new_solution
+                best_slice_steps = len(car_moves)
         
         keys_to_remove = list(min_iterations_dict.keys())[start:end]
         for key in keys_to_remove:
@@ -45,50 +52,33 @@ def hill_climb(filepath, slice_size, random_solutions, size):
 
         # Step 4: Insert the new 300 keys into the original dictionary
         # We need to shift the original keys to make room for the new ones
-        shifted_original_dict = {key + new_steps: value for key, value in min_iterations_dict.items()}
+        shifted_original_dict = {key + best_slice_steps: value for key, value in min_iterations_dict.items()}
 
         # Merge the new dictionary with the shifted original dictionary
-        final_dict = {**cars_dict, **shifted_original_dict}
+        # final_dict = {**best_slice, **shifted_original_dict}
+        min_iterations_dict = {**best_slice, **shifted_original_dict}
 
-        # Print the first 10 items to verify
-        for key in list(final_dict.keys())[:10]:
-            print(f"{key}: {final_dict[key]}")
-
-        # for step in range(start, end):
-
-        #     # if step - start not in best_slice:
-        #     #     # print(f"Step {step - start} not in best_slice")
-
-        #     min_iterations_dict[step] = best_slice[step - start]
-
+        print("end of the slice steps:", len(min_iterations_dict.keys()))
     return min_iterations_dict
 
 def generate_random_solution(current_slice, start, end, size):
+    if start not in current_slice or end - 1 not in current_slice:
+        print(f"Error: Missing start ({start}) or end-1 ({end-1}) key in current_slice")
+        return [], current_slice
 
-    cars_dict_start = current_slice[0]
-    cars_dict_end = current_slice[end]
+    cars_dict_start = current_slice[start]
+    cars_dict_end = current_slice[end-1]
 
     # create board and random instance
-    game_board = board.Board(cars_dict_start, size)
-    random_exp = ra(cars_dict_start, game_board)
-
+    game_board_start = board.Board(cars_dict_start, size)
     game_board_end = board.Board(cars_dict_end, size)
+    random_exp = ra(cars_dict_start, game_board_start)
 
-    # car positions based on current slice
-    # vgm gaat het hier fout
-    # for step in current_slice:
-    #     for car_id, car in current_slice[step].items():
-    #         cars_dict[car_id] = classes.Vehicle(car.ID, car.orientation, car.column, car.row, car.length)
-
-
-        # for car_id in value:
-        #     car = current_slice[step][car_id]
-        #     cars_dict[car_id] = classes.Vehicle(car.ID, car.orientation, car.column, car.row, car.length)
-
-    new_solution = {cars_dict_start}
+    new_solution = {}
     car_moves = []
-    
+    new_board_end = game_board_start
     i = 0
+
     while i < (end - start) and new_board_end != game_board_end:
         new_board_end, car_move, cars_dict = random_exp.random_step(hill_climb = True)
         car_moves.append(car_move)
@@ -98,11 +88,13 @@ def generate_random_solution(current_slice, start, end, size):
     
 
     new_solution[i] = cars_dict_end
-    return car_moves
+
+    # print("amount of steps:", len(new_solution.keys()))
+    return car_moves, new_solution
 
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
-    optimized_solution = hill_climb(filepath, 100, 2000, 6)
+    optimized_solution = hill_climb(filepath, 200, 1000, 6)
     print("solution:", len(optimized_solution.keys()))
 

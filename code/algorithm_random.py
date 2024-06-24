@@ -70,6 +70,7 @@ class Random_algorithm():
                     board = self.board
                 self.car.change_position('neg', orientation)
         
+        self.cars[car_id] = car
         updated_cars_dict = self.cars
 
         if hill_climb:
