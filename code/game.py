@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
     
     if algorithm == 'random':
-        export_results_to_csv(f'results/{experiment_name}.csv', results)
+        export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm in ['bfs', 'dfs']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm == 'hillclimb':

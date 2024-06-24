@@ -43,31 +43,31 @@ class Random_algorithm():
         if direction == 0: 
             if moveable_list[0] == True:
                 self.board.move_car(self.car_id, 'neg')
-                if hill_climb:
-                    car_move = (car_id, '-1')
-                    board = self.board
+                # if hill_climb:   
+                car_move = (car_id, '-1')
+                    # board = self.board
                 self.car.change_position('neg', orientation)
             else:
                 self.board.move_car(self.car_id, 'pos')
-                if hill_climb:
-                    car_move = (car_id, '1')
-                    board = self.board
+                # if hill_climb:
+                car_move = (car_id, '1')
+                    # board = self.board
                 self.car.change_position('pos', orientation)
                 
         # Elif forwards, move car right or down, else left or up
         elif direction == 1:
             if moveable_list[1] == True:
                 self.board.move_car(self.car_id, 'pos')
-                if hill_climb:
-                    car_move = (car_id, '1')
-                    board = self.board
+                # if hill_climb:
+                car_move = (car_id, '1')
+                    # board = self.board
                 self.car.change_position('pos', orientation)
                
             else:
                 self.board.move_car(self.car_id, 'neg')
-                if hill_climb:
-                    car_move = (car_id, '-1')
-                    board = self.board
+                # if hill_climb:
+                car_move = (car_id, '-1')
+                    # board = self.board
                 self.car.change_position('neg', orientation)
         
         self.cars[car_id] = car
@@ -76,7 +76,7 @@ class Random_algorithm():
         if hill_climb:
             return board, car_move, updated_cars_dict
         else:
-            return self.board
+            return car_move
 
     def copy_cars_dict(self, cars_dict):
         """Returns a deep copy of cars dictionary"""
