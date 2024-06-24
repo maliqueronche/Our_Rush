@@ -113,7 +113,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     print ("iteration list:", iterations_list)
 
     if hill_climb:
-        return iterations_list, min_iterations_config
+        return min_iterations_config
     else:
         return iterations_list
 

@@ -8,10 +8,6 @@ def animate(board_file, result_file, size):
     """Animate takes three files, one this the original board, one with the 
     results to solve the board and the size of the board. It then makes an 
     animation based on the received information."""
-def animate(board_file, result_file, size):
-    """Animate takes three files, one this the original board, one with the 
-    results to solve the board and the size of the board. It then makes an 
-    animation based on the received information."""
 
     # initialize pygame
     pygame.init()
@@ -89,7 +85,7 @@ def animate(board_file, result_file, size):
         # display moves
         counter_text = font.render(f'Moves: {step_count}', True, (255, 255, 255))
         screen.blit(counter_text, (10, 10))
-            car.draw_car(screen, cell_size, border_size)
+        car.draw_car(screen, cell_size, border_size)
 
         # display moves
         counter_text = font.render(f'Moves: {step_count}', True, (255, 255, 255))
