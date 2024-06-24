@@ -54,7 +54,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         # Initialise board and add cars in starting positions
         game_board = board.Board(cars_dict, size)
 
-        if algorithm in ['random', 'hillclimb']:
+        if algorithm in ['random']:
 
             # Initiate random step
             random_exp = ra(cars_dict, game_board)
@@ -104,6 +104,9 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
             df_alg = df.depth_first_algorithm(size)
             path = df_alg.search_depth(cars_dict)
             return path
+        elif algorithm == 'hillclimb':
+            results = hc_alg(filepath, size)
+            return results
         
 
 

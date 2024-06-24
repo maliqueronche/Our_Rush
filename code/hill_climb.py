@@ -10,7 +10,7 @@ import pandas as pd
 
 
 # step one: 5 random outputs
-def hc_alg(filepath, slice_size, random_solutions, size):
+def hc_alg(filepath, size):
 
     # compute board position for every step in random iteration, key is step, value is board position
     min_iterations_dict = game(filepath, 10, 'random', size,  hill_climb = True)
