@@ -11,7 +11,7 @@ import csv
 import os
 import copy
 from time import time
-# from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
+from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
 from animation import animate
 from hill_climb import hc_alg
 from run_random_algorithm import run_random
