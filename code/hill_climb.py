@@ -19,9 +19,9 @@ def hc_alg(filepath, end_position, size):
     random_solutions = 1000
     loop_rounds = 10
     hill_climb_solution = {}
-    print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
-    print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
-    print("total steps:", total_steps)
+    # print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
+    # print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
+    # print("total steps:", total_steps)
     
         
     # loop over slices
@@ -29,6 +29,7 @@ def hc_alg(filepath, end_position, size):
         print("begin of the slice:", start, "steps:", len(min_iterations_dict.keys()))
         end = min(start + slice_size, total_steps)
         current_slice = {step: min_iterations_dict[step] for step in range(start, end)}
+        car_moves = []
 
         if not current_slice:
             print(f"No steps found in range {start}-{end}. Skipping this slice.")
@@ -36,12 +37,10 @@ def hc_alg(filepath, end_position, size):
 
         best_slice = current_slice
         best_slice_steps = end - start
-        
 
         for _ in range(random_solutions):
             
             car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
-            # print(len(car_moves))
             if len(car_moves) < best_slice_steps:
                 print("created best slice")
                 best_slice = new_solution
@@ -74,10 +73,7 @@ def generate_random_solution(current_slice, start, end, size):
     new_board_end = game_board_start
     i = 0
 
-    
-        
-    
- 
+
     while i < (end - start) and (new_board_end.board != game_board_end.board).any():
     # while (new_board_end.board != game_board_end.board).any():
         new_board_end, car_move, cars_dict = random_exp.random_step(hill_climb = True)

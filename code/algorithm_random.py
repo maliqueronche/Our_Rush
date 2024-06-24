@@ -45,13 +45,13 @@ class Random_algorithm():
                 self.board.move_car(self.car_id, 'neg')
                 # if hill_climb:   
                 car_move = (car_id, '-1')
-                    # board = self.board
+                board = self.board
                 self.car.change_position('neg', orientation)
             else:
                 self.board.move_car(self.car_id, 'pos')
                 # if hill_climb:
                 car_move = (car_id, '1')
-                    # board = self.board
+                board = self.board
                 self.car.change_position('pos', orientation)
                 
         # Elif forwards, move car right or down, else left or up
@@ -60,14 +60,14 @@ class Random_algorithm():
                 self.board.move_car(self.car_id, 'pos')
                 # if hill_climb:
                 car_move = (car_id, '1')
-                    # board = self.board
+                board = self.board
                 self.car.change_position('pos', orientation)
                
             else:
                 self.board.move_car(self.car_id, 'neg')
                 # if hill_climb:
                 car_move = (car_id, '-1')
-                    # board = self.board
+                board = self.board
                 self.car.change_position('neg', orientation)
         
         self.cars[car_id] = car
