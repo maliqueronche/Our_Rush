@@ -25,7 +25,6 @@ def hc_alg(filepath, end_position, size):
     print("total steps:", total_steps)
     
     # loop over rounds
-    car_moves = []
     # print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
     # print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
     # print("total steps:", total_steps)
@@ -36,7 +35,7 @@ def hc_alg(filepath, end_position, size):
         print("begin of the slice:", start, "steps:", len(min_iterations_dict.keys()))
         end = min(start + slice_size, total_steps)
         current_slice = {step: min_iterations_dict[step] for step in range(start, end)}
-        car_moves = []
+        
 
         if not current_slice:
             print(f"No steps found in range {start}-{end}. Skipping this slice.")
@@ -57,13 +56,16 @@ def hc_alg(filepath, end_position, size):
                 best_slice = new_solution
                 best_slice_steps = len(car_moves)
             
-            
-        hill_climb_solution.update(best_slice)
+        max_key = max(hill_climb_solution.keys(), default=-1) + 1
+        for i, (k, v) in enumerate(best_slice.items()):
+            hill_climb_solution[max_key + i] = v
+
+        # hill_climb_solution.update(best_slice)
         print("length hillclimb solution", len(hill_climb_solution.keys()))
         
                     
         
-        print(len(hill_climb_solution.keys()))
+        # print(len(hill_climb_solution.keys()))
         pprint(hill_climb_solution)
     return car_moves
 
