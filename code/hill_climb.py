@@ -15,11 +15,17 @@ def hc_alg(filepath, size):
     # compute board position for every step in random iteration, key is step, value is board position
     min_iterations_dict = game(filepath, 10, 'random', size,  hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
+    slice_size = 200
+    random_solutions = 1000
+    loop_rounds = 10
+    hill_climb_solution = {}
     print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
     print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
     print("total steps:", total_steps)
-    hill_climb_solution = {}
     
+    # loop over rounds
+    
+        
     # loop over slices
     for start in range(0, total_steps, slice_size):
         print("begin of the slice:", start, "steps:", len(min_iterations_dict.keys()))
@@ -44,7 +50,7 @@ def hc_alg(filepath, size):
                 best_slice_steps = len(car_moves)
 
         hill_climb_solution.update(best_slice)
-
+        
         
         
         
