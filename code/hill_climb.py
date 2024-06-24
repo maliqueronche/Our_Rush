@@ -6,6 +6,7 @@ import random
 import copy
 import time
 import pandas as pd
+from pprint import pprint
 
 
 
@@ -16,9 +17,15 @@ def hc_alg(filepath, end_position, size):
     min_iterations_dict = run_random(filepath, 10, 'random', size, end_position, hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
     slice_size = 200
-    random_solutions = 1000
+    random_solutions = 100
     loop_rounds = 10
     hill_climb_solution = {}
+    print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
+    print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
+    print("total steps:", total_steps)
+    
+    # loop over rounds
+    car_moves = []
     # print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
     # print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
     # print("total steps:", total_steps)
@@ -40,16 +47,24 @@ def hc_alg(filepath, end_position, size):
 
         for _ in range(random_solutions):
             
+            car_moves, new_solution = generate_random_solution(current_slice, start, end, size)
+            
             car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
             if len(car_moves) < best_slice_steps:
+                
+                print(len(new_solution.keys()))
                 print("created best slice")
                 best_slice = new_solution
                 best_slice_steps = len(car_moves)
-
+            
+            
         hill_climb_solution.update(best_slice)
+        print("length hillclimb solution", len(hill_climb_solution.keys()))
+        
                     
         
         print(len(hill_climb_solution.keys()))
+        pprint(hill_climb_solution)
     return car_moves
 
 def generate_random_solution(current_slice, start, end, size):
@@ -72,6 +87,8 @@ def generate_random_solution(current_slice, start, end, size):
     car_moves = []
     new_board_end = game_board_start
     i = 0
+    
+ 
 
 
     while i < (end - start) and (new_board_end.board != game_board_end.board).any():
@@ -82,9 +99,10 @@ def generate_random_solution(current_slice, start, end, size):
         # TODO: fix updated slice/cars dictionary for new slices
         new_solution[i] = cars_dict
         i += 1
+
         # print("i", i)
     
-
+    
     
 
     
@@ -96,6 +114,6 @@ if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
     car_moves = hc_alg(filepath, 200, 100, 6)
     print("solution:", len(optimized_solution.keys()))
-    
+
     
    
