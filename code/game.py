@@ -11,8 +11,9 @@ import csv
 import os
 import copy
 from time import time
-from helpers import export_bfs_to_csv, export_results_to_csv
+from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
 from animation import animate
+from hill_climb import hc_alg
 
 def game(filepath, rounds, algorithm, size, hill_climb = False):
     """
@@ -53,7 +54,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         # Initialise board and add cars in starting positions
         game_board = board.Board(cars_dict, size)
 
-        if algorithm == 'random':
+        if algorithm in ['random', 'hillclimb']:
 
             # Initiate random step
             random_exp = ra(cars_dict, game_board)
@@ -103,6 +104,9 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
             df_alg = df.depth_first_algorithm(size)
             path = df_alg.search_depth(cars_dict)
             return path
+        
+
+
 
         
         
@@ -163,8 +167,8 @@ if __name__ == '__main__':
         export_results_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm in ['bfs', 'dfs']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
-    # elif algorithm == 'hillclimb':
-
+    elif algorithm == 'hillclimb':
+        export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
         # TODO: implement exporting of results
 
     
