@@ -203,5 +203,5 @@ class car:
 if __name__ == '__main__':
     size = 6
     board_file = 'data/Rushhour6x6_1.csv'
-    result_file = 'results/hillclimb_6x6_1_1.csv'
+    result_file = 'results/random_6x6_1_1.csv'
     animate(board_file, result_file, size)

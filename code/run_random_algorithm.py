@@ -12,7 +12,7 @@ def run_random(filepath, rounds, algorithm, size, end_position, hill_climb=False
     round = 1
     min_iterations = 10000
     min_iterations_config = {}
-
+    car_moves = []
     for _ in range(rounds):
         
         cars_dict = {}
@@ -47,7 +47,7 @@ def run_random(filepath, rounds, algorithm, size, end_position, hill_climb=False
                         break
 
                 else:
-                    random_exp.random_step()
+                    car_moves.append(random_exp.random_step())
                 
                 i +=1
                 
@@ -73,6 +73,6 @@ def run_random(filepath, rounds, algorithm, size, end_position, hill_climb=False
 
         return min_iterations_config
     else:
-        return iterations_list
+        return car_moves
 
 
