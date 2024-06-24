@@ -8,8 +8,9 @@ import time
 import pandas as pd
 
 
+
 # step one: 5 random outputs
-def hill_climb(filepath, slice_size, random_solutions, size):
+def hc_alg(filepath, slice_size, random_solutions, size):
 
     # compute board position for every step in random iteration, key is step, value is board position
     min_iterations_dict = game(filepath, 10, 'random', size,  hill_climb = True)
@@ -48,7 +49,7 @@ def hill_climb(filepath, slice_size, random_solutions, size):
         
         
         print(len(hill_climb_solution.keys()))
-    return hill_climb_solution, car_moves
+    return car_moves
 
 def generate_random_solution(current_slice, start, end, size):
     if start not in current_slice or end - 1 not in current_slice:
@@ -99,4 +100,4 @@ if __name__ == '__main__':
     print("solution:", len(optimized_solution.keys()))
 
     
-
+   

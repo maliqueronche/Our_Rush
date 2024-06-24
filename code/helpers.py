@@ -40,3 +40,24 @@ def export_bfs_to_csv(export_path, results):
     df['move'] = moves_caracter
     df.to_csv(export_path, sep=',', columns=['car', 'move'], index=False)
     print("Solution:\n ", df)
+
+
+    def export_hillclimber_to_csv(export_path, results):
+
+        ids = [result[0] for result in results]
+        moves = [result[1] for result in results]
+
+        converted_ids = []
+        for id in ids:
+            converted_id = chr(int(id))
+            converted_ids.append(converted_id)
+
+        df = pd.DataFrame()
+        df['car'] = converted_ids
+        df['move'] = moves
+        df.to_csv(export_path, sep=',', columns=['car', 'move'], index=False)
+        print("Solution:\n ", df)
+
+
+
+
