@@ -23,8 +23,6 @@ def hc_alg(filepath, size):
     print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
     print("total steps:", total_steps)
     
-    # loop over rounds
-    
         
     # loop over slices
     for start in range(0, total_steps, slice_size):
@@ -50,9 +48,7 @@ def hc_alg(filepath, size):
                 best_slice_steps = len(car_moves)
 
         hill_climb_solution.update(best_slice)
-        
-        
-        
+                    
         
         print(len(hill_climb_solution.keys()))
     return car_moves
