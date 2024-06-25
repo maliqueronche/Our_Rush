@@ -17,20 +17,20 @@ class hill_climber():
         self.list_of_cars = pd.read_csv(filepath, index_col = 'car') 
         self.size = size
         self.end_position = end_position
-
+        
         # Loop over cars dataframe, create vehicles and store them in dictionary
         cars_dict = self.list_to_cars_dict(self.list_of_cars)
 
         #self.cars_pos_and_ori = cars_pos_and_ori
         self.start_cars_dict = cars_dict
         self.start_board = board.Board(cars_dict, size)
-
+        
     def run_hc(self):
         best_steps = []
         random_steps = {}
         while len(random_steps) == 0:
             random_steps = self.get_random_steps(self.start_board,self.start_cars_dict)
-
+            
         shortest_moves = {}
 
         current_cars_dict = copy.deepcopy(self.start_cars_dict)
@@ -41,7 +41,7 @@ class hill_climber():
             start_position_shortest_moves = len(shortest_moves)
             print (end_pos)
             if end_pos != 0:
-
+                print(end_pos)
                 difference = end_pos - start_pos
             
                 board1 = copy.deepcopy(random_steps[start_pos]['car_move'])
