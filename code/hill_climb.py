@@ -69,7 +69,6 @@ class hill_climber():
         print (best_steps)
         return best_steps
 
-
     def list_to_cars_dict(self, list_of_cars):
         cars_dict = {}
         cars_pos_and_ori = {}
@@ -115,9 +114,6 @@ class hill_climber():
 
         sorted_list = sorted(top_10_rounds.items())
         return sorted_list[0]
-
-        
-
 
     def one_path_round(self, current_steps, fastest_path, current_board, cars_dict, list_of_cars):
 
