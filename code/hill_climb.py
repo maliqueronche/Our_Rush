@@ -47,17 +47,17 @@ class hill_climber():
                 board1 = copy.deepcopy(random_steps[start_pos]['car_move'])
                 board2 = copy.deepcopy(random_steps[end_pos]['car_move'])
                 shortest_path, car_moves = self.find_shortest_path(board1, board2,current_cars_dict, current_list_of_cars, difference)
-                print ('shortest path:')
-                print (shortest_path)
+                # print ('shortest path:')
+                # print (shortest_path)
 
-                print ('car_moves')
-                print (car_moves)
+                # print ('car_moves')
+                # print (car_moves)
 
                 for idx, game_board in car_moves['moves'].items():
-                    print (start_position_shortest_moves, idx)
+                    # print (start_position_shortest_moves, idx)
                     shortest_moves[start_position_shortest_moves + idx] = game_board
 
-                print (car_moves['steps'])
+                # print (car_moves['steps'])
                 for car_step in car_moves['steps']:
                     best_steps.append(car_step)
 
@@ -229,7 +229,7 @@ class hill_climber():
             car.change_position('pos', car.orientation)
             current_board = copy.deepcopy(board.board)
             list_of_cars = self.get_new_list_of_cars(list_of_cars, direction, car_id)
-            step = car_id, '+1'
+            step = car_id, '1'
         return current_board, list_of_cars, step
 
     def get_new_list_of_cars(self, list_of_cars, direction, car_id):
@@ -515,11 +515,11 @@ class hill_climber():
             
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour6x6_1.csv'
-    hc = hillclimb(6)
-    car_moves = hc.hc_alg(filepath, [(2, 4), (2, 5)])
+    filepath = 'data/Rushhour6x6_1_test_red_only.csv'
+    hc = hill_climber(filepath, [(2, 4), (2, 5)], 6)
+    car_moves = hc.run_hc()
     print("solution:", car_moves)
-    export_hillclimber_to_csv('results/hillclimb_6x6_1_1.csv', car_moves)
-    animate('data/Rushhour6x6_1.csv', 'results/hillclimb_6x6_1_1.csv', 6)
+    export_hillclimber_to_csv('results/test_hillclimb.csv', car_moves)
+    animate('data/Rushhour6x6_1_test_red_only.csv', 'results/test_hillclimb.csv', 6)
     
    
