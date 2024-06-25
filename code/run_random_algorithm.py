@@ -39,10 +39,10 @@ def run_random(filepath, rounds, algorithm, size, end_position, hill_climb=False
 
                 # for hill climb, save new board, every step
                 if hill_climb:
-                    random_exp.random_step(hill_climb = True)
+                    car_move = random_exp.random_step(hill_climb=True)
                     cars_dict = random_exp.cars
                     current_config[i] = random_exp.copy_cars_dict(cars_dict)
-
+                    car_moves.append(car_move)
                     if i > min_iterations:
                         break
 
@@ -71,7 +71,7 @@ def run_random(filepath, rounds, algorithm, size, end_position, hill_climb=False
 
     if hill_climb:
 
-        return min_iterations_config
+        return min_iterations_config, car_moves
     else:
         return car_moves
 

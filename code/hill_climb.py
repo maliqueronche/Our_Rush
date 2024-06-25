@@ -1,12 +1,14 @@
 from run_random_algorithm import run_random
 from algorithm_random import Random_algorithm as ra
 import classes
-import board
+import board as brd
 import random
 import copy
 import time
 import pandas as pd
 from pprint import pprint
+from helpers import export_hillclimber_to_csv
+from animation import animate
 
 
 
@@ -20,10 +22,11 @@ class hillclimb():
     def hc_alg(self, filepath, end_position):
 
         # compute board position for every step in random iteration, key is step, value is board position
-        min_iterations_dict = run_random(filepath, 10, 'random', self.size, end_position, hill_climb = True)
+        min_iterations_dict, car_moves = run_random(filepath, 10, 'random', self.size, end_position, hill_climb = True)
+        print(car_moves)
         total_steps = len(min_iterations_dict.keys())
         slice_size = 200
-        random_solutions = 100
+        random_solutions = 10
         loop_rounds = 10
         hill_climb_solution = {}
         print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
@@ -34,7 +37,7 @@ class hillclimb():
         # print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
         # print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
         # print("total steps:", total_steps)
-        
+        hillclimb_car_moves = []
             
         # loop over slices
         for start in range(0, total_steps, slice_size):
@@ -42,7 +45,8 @@ class hillclimb():
             end = min(start + slice_size, total_steps)
             # print("end", end)
             current_slice = {step: min_iterations_dict[step] for step in range(start, end)}
-            
+            current_moves_slice = car_moves[start:end]
+            print(current_moves_slice)
             # before_slice_start = current_slice[start]
             # game_board_before_start = board.Board(before_slice_start, size)
 
@@ -62,16 +66,16 @@ class hillclimb():
 
             for _ in range(random_solutions):
                 
-                car_moves, new_solution  = self.generate_random_solution(current_slice, start, end)
-                if len(car_moves) < best_slice_steps and len(car_moves) != 0:
+                in_between_car_moves, new_solution  = self.generate_random_solution(current_slice, start, end, hillclimb_car_moves, current_moves_slice)
+                if len(in_between_car_moves) < best_slice_steps and len(in_between_car_moves) != 0:
                     
                     # print(len(new_solution.keys()))
                     # print("created best slice")
-                    
+                    hillclimb_car_moves = in_between_car_moves
                     best_slice = copy.deepcopy(new_solution)
                     
                     
-                    best_slice_steps = len(car_moves)
+                    best_slice_steps = len(hillclimb_car_moves)
             
             # print("start", start)
             # after_slice_start = best_slice[start]
@@ -92,9 +96,9 @@ class hillclimb():
             # print(len(hill_climb_solution.keys()))
             # pprint(hill_climb_solution)
             
-        return car_moves
+        return hillclimb_car_moves
 
-    def generate_random_solution(self, current_slice, start, end):
+    def generate_random_solution(self, current_slice, start, end, car_moves, current_moves_slice):
         if start not in current_slice or end - 1 not in current_slice:
             print(f"Error: Missing start ({start}) or end-1 ({end-1}) key in current_slice")
             return [], current_slice
@@ -112,9 +116,9 @@ class hillclimb():
             new_cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
 
         # create board and random instance
-        game_board_start = board.Board(new_cars_dict, self.size)
+        game_board_start = brd.Board(new_cars_dict, self.size)
         # print("game_board_Start_intermediate", game_board_start.board)
-        game_board_end = board.Board(cars_dict_end, self.size)
+        game_board_end = brd.Board(cars_dict_end, self.size)
         # print(game_board_start.board, game_board_end.board)
         # random_exp = ra(cars_dict_start, game_board_start)
         
@@ -122,7 +126,7 @@ class hillclimb():
         new_solution = {}
         new_solution[start] = new_cars_dict
         intermediate_start = start
-        car_moves = []
+        
         new_board_end = game_board_start
         start += 1
         
@@ -136,20 +140,22 @@ class hillclimb():
             # print(f"Attempting move {car_move} at step {i}")
             # print(f"Board state after move {i}:\n{new_board_end.board}")
             car_moves.append(car_move)
-            new_solution[start] = new_cars_dict
+            new_solution[start] = cars_dict
             start += 1
             new_cars_dict = copy.deepcopy(cars_dict)
         
 
             # print("i", i)
-        game_board_before_return = board.Board(new_solution[intermediate_start], size)
+        # game_board_before_return = board.Board(new_solution[intermediate_start], size)
         # print("game_board_Start_intermediatafter", game_board_before_return.board)
 
-        if start < end and (new_board_end.board != game_board_end.board).any():
+        if start < end and (new_board_end.board == game_board_end.board).any():
+            print(True)
             return car_moves, new_solution
         else:
-            empty_car_moves = []
-            return empty_car_moves, current_slice
+            print(f'\nFalse')
+            
+            return current_moves_slice, current_slice
         
 
     def get_available_cars(self, cars_dict, board):
@@ -180,7 +186,7 @@ class hillclimb():
         return row, col
         
 
-    def is_moveable(self, car, board):
+    def is_moveable(self, car, check_board):
 
         position = car['position']
         orientation = car['orientation']
@@ -197,7 +203,7 @@ class hillclimb():
             position = row, col
             if row > self.size -1 or row <0 or col > self.size -1 or col <0:
                 checklist.append(False)
-            elif board.board[position] == 0:
+            elif check_board.board[position] == 0:
                 checklist.append(True)
             else:
                 checklist.append(False)
@@ -222,7 +228,7 @@ class hillclimb():
             # self.car_id = car_id
             
             moveable_list = self.is_moveable(car, board)
-            
+            print(car, moveable_list)
 
             # Pick a random direction (backwards (0) or forwards(1)) and move the car
             direction = random.randint(0,1)
@@ -236,7 +242,7 @@ class hillclimb():
                     car['position'] = new_position
                     # if hill_climb:   
                     car_move = (car_id, '-1')
-                    new_board = board.Board(new_cars_dict, self.size)
+                    new_board = brd.Board(new_cars_dict, self.size)
                 else:
                     for car_tup in car['position']:
                         new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
@@ -244,7 +250,7 @@ class hillclimb():
                     car['position'] = new_position
                     # if hill_climb:
                     car_move = (car_id, '1')
-                    new_board = board.Board(new_cars_dict, self.size)
+                    new_board = brd.Board(new_cars_dict, self.size)
                     
             # Elif forwards, move car right or down, else left or up
             elif direction == 1:
@@ -254,24 +260,26 @@ class hillclimb():
                         new_position.append(new_pos)
                     car['position'] = new_position
                     car_move = (car_id, '1')
-                    new_board = board.Board(new_cars_dict, self.size)
+                    new_board = brd.Board(new_cars_dict, self.size)
                 else:
                     for car_tup in car['position']:
                         new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
                         new_position.append(new_pos)
                     car['position'] = new_position
                     car_move = (car_id, '-1')
-                    new_board = board.Board(new_cars_dict, self.size)
+                    new_board = brd.Board(new_cars_dict, self.size)
             
 
-            
-            return new_board, car_move, cars_dict
+            print("car after move", car)
+            return new_board, car_move, new_cars_dict
             
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour6x6_1.csv'
-    car_moves = hc_alg(filepath, 200, 100, 6)
-    print("solution:", len(optimized_solution.keys()))
-
+    filepath = 'data/Rushhour6x6_1_test_red_only.csv'
+    hc = hillclimb(6)
+    car_moves = hc.hc_alg(filepath, [(2, 4), (2, 5)])
+    print("solution:", car_moves)
+    export_hillclimber_to_csv('results/test_hillclimb.csv', car_moves)
+    animate('data/Rushhour6x6_1_test_red_only.csv', 'results/test_hillclimb.csv', 6)
     
    

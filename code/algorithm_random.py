@@ -74,7 +74,7 @@ class Random_algorithm():
         updated_cars_dict = self.cars
 
         if hill_climb:
-            return board, car_move, updated_cars_dict
+            return car_move
         else:
             return car_move
 
