@@ -7,6 +7,7 @@ import copy
 import time
 import pandas as pd
 from pprint import pprint
+from helpers import export_hillclimber_to_csv
 
 
 
@@ -14,16 +15,16 @@ from pprint import pprint
 def hc_alg(filepath, end_position, size):
 
     # compute board position for every step in random iteration, key is step, value is board position
-    min_iterations_dict = run_random(filepath, 10, 'random', size, end_position, hill_climb = True)
+    min_iterations_dict = run_random(filepath, 5, 'random', size, end_position, hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
     slice_size = 200
-    random_solutions = 100
+    random_solutions = 10
     loop_rounds = 10
     hill_climb_solution = {}
     print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
     print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
     print("total steps:", total_steps)
-    
+    car_moves = []
     # loop over rounds
     # print("first key and value:", min_iterations_dict.get(0, 'Key 1 not found'))
     # print("200th key and value:", min_iterations_dict.get(199, 'Key 200 not found'))
@@ -46,7 +47,7 @@ def hc_alg(filepath, end_position, size):
 
         for _ in range(random_solutions):
             
-            car_moves, new_solution = generate_random_solution(current_slice, start, end, size)
+            # car_moves, new_solution = generate_random_solution(current_slice, start, end, size)
             
             car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
             if len(car_moves) < best_slice_steps:
@@ -96,26 +97,29 @@ def generate_random_solution(current_slice, start, end, size):
     while i < (end - start) and (new_board_end.board != game_board_end.board).any():
     # while (new_board_end.board != game_board_end.board).any():
         new_board_end, car_move, cars_dict = random_exp.random_step(hill_climb = True)
-        car_moves.append(car_move)
         
-        # TODO: fix updated slice/cars dictionary for new slices
-        new_solution[i] = cars_dict
+        
+        # print(f"Attempting move {car_move} at step {i}")
+        # print(f"Board state after move {i}:\n{new_board_end.board}")
+       
+        new_cars_dict = copy.deepcopy(cars_dict)
+        car_moves.append(car_move)
+        new_solution[i] = new_cars_dict
         i += 1
 
         # print("i", i)
     
-    
-    
-
-    
     return car_moves, new_solution
-    
 
+    
+    
+    
 
 if __name__ == '__main__':
-    filepath = 'data/Rushhour6x6_1.csv'
-    car_moves = hc_alg(filepath, 200, 100, 6)
-    print("solution:", len(optimized_solution.keys()))
-
+    filepath = 'data/Rushhour6x6_1_test_red_only.csv'
+    car_moves = hc_alg('data/Rushhour6x6_1_test_red_only.csv', [(2, 4), (2, 5)], 6)
+    print("solution:", car_moves)
+    experiment_name = "test_hillclimb"
+    export_hillclimber_to_csv(f'results/{experiment_name}.csv', car_moves)
     
    

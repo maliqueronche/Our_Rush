@@ -35,6 +35,7 @@ class Random_algorithm():
         self.car_id = car_id
         orientation = self.car.orientation
         moveable_list = self.is_moveable(car)
+        
 
         # Pick a random direction (backwards (0) or forwards(1)) and move the car
         direction = random.randint(0,1)
