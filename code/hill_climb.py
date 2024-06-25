@@ -101,7 +101,7 @@ def generate_random_solution(current_slice, start, end, size):
 
     # create board and random instance
     game_board_start = board.Board(cars_dict_start, size)
-    print("game_board_Start_intermediate", game_board_start.board)
+    # print("game_board_Start_intermediate", game_board_start.board)
     game_board_end = board.Board(cars_dict_end, size)
     # print(game_board_start.board, game_board_end.board)
     random_exp = ra(cars_dict_start, game_board_start)
@@ -117,7 +117,6 @@ def generate_random_solution(current_slice, start, end, size):
 
 
     while start < end and (new_board_end.board != game_board_end.board).any():
-    # while (new_board_end.board != game_board_end.board).any():
         new_board_end, car_move, cars_dict = random_exp.random_step(hill_climb = True)
         # print(new_board_end.board)
         
@@ -128,11 +127,17 @@ def generate_random_solution(current_slice, start, end, size):
         car_moves.append(car_move)
         new_solution[start] = new_cars_dict
         start += 1
+    
 
         # print("i", i)
     game_board_before_return = board.Board(new_solution[intermediate_start], size)
-    print("game_board_Start_intermediatafter", game_board_before_return.board)
-    return car_moves, new_solution
+    # print("game_board_Start_intermediatafter", game_board_before_return.board)
+
+    if start < end and (new_board_end.board != game_board_end.board).any():
+        return car_moves, new_solution
+    else:
+        empty_car_moves = []
+        return empty_car_moves, current_slice
     
 
     

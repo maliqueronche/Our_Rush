@@ -22,7 +22,6 @@ class Random_algorithm():
 
     def random_step(self, hill_climb = False): #dictionary and board instance
         """Does a random step for a random moveable vehicle and returns the updated board."""
-
         # Set moveable by default to False
         moveable = False
 
