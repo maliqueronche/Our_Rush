@@ -34,8 +34,18 @@ def hc_alg(filepath, end_position, size):
     for start in range(0, total_steps, slice_size):
         print("begin of the slice:", start, "steps:", len(min_iterations_dict.keys()))
         end = min(start + slice_size, total_steps)
+        print("end", end)
         current_slice = {step: min_iterations_dict[step] for step in range(start, end)}
         
+        before_slice_start = current_slice[start]
+        game_board_before_start = board.Board(before_slice_start, size)
+
+        print("before slice slice")
+        print(game_board_before_start.board)
+        before_slice_end = current_slice[(len(current_slice)+start-1)]
+        game_board_before_end = board.Board(before_slice_end, size)
+        print(game_board_before_end.board)
+
 
         if not current_slice:
             print(f"No steps found in range {start}-{end}. Skipping this slice.")
@@ -47,12 +57,12 @@ def hc_alg(filepath, end_position, size):
         for _ in range(random_solutions):
             
             car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
-            if len(car_moves) < best_slice_steps:
+            if len(car_moves) < best_slice_steps and len(car_moves) != 0:
                 
                 # print(len(new_solution.keys()))
                 # print("created best slice")
                 
-                best_slice = new_solution
+                best_slice = copy.deepcopy(new_solution)
                 
                 
                 best_slice_steps = len(car_moves)
@@ -61,7 +71,8 @@ def hc_alg(filepath, end_position, size):
         after_slice_start = best_slice[start]
         game_board_after_start = board.Board(after_slice_start, size)
 
-        print("\nafter slice", game_board_after_start.board)
+        print("\nafter slice")
+        print(game_board_after_start.board)
         after_slice_end = best_slice[(len(best_slice)+start-1)]
         game_board_after_end = board.Board(after_slice_end, size)
 
@@ -74,6 +85,7 @@ def hc_alg(filepath, end_position, size):
         
         # print(len(hill_climb_solution.keys()))
         # pprint(hill_climb_solution)
+        
     return car_moves
 
 def generate_random_solution(current_slice, start, end, size):
@@ -89,16 +101,18 @@ def generate_random_solution(current_slice, start, end, size):
 
     # create board and random instance
     game_board_start = board.Board(cars_dict_start, size)
+    print("game_board_Start_intermediate", game_board_start.board)
     game_board_end = board.Board(cars_dict_end, size)
     # print(game_board_start.board, game_board_end.board)
     random_exp = ra(cars_dict_start, game_board_start)
-    print("game board start", game_board_start)
-    print("game board end", game_board_end)
+    
 
     new_solution = {}
+    new_solution[start] = cars_dict_start
+    intermediate_start = start
     car_moves = []
     new_board_end = game_board_start
-    
+    start += 1
  
 
 
@@ -116,18 +130,8 @@ def generate_random_solution(current_slice, start, end, size):
         start += 1
 
         # print("i", i)
-    
-    new_solution_start = new_solution[start]
-    new_game_board_start = board.Board(new_solution_start, size)
-
-    new_solution_end = new_solution[end-1]
-    new_game_board_end = board.Board(new_solution_end, size)
-
-    print("new solution game board start", new_game_board_start)
-    print("new solution game board end", new_game_board_end)
-    
-
-    
+    game_board_before_return = board.Board(new_solution[intermediate_start], size)
+    print("game_board_Start_intermediatafter", game_board_before_return.board)
     return car_moves, new_solution
     
 
