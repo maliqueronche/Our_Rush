@@ -53,8 +53,10 @@ def hc_alg(filepath, end_position, size):
 
         best_slice = current_slice
         best_slice_steps = end - start
+        noah = 300
 
-        for _ in range(random_solutions):
+        # for _ in range(random_solutions):
+        while noah > best_slice_steps:
             
             car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
             if len(car_moves) < best_slice_steps and len(car_moves) != 0:
@@ -67,6 +69,7 @@ def hc_alg(filepath, end_position, size):
                 
                 best_slice_steps = len(car_moves)
         
+        print("length car_moves", best_slice_steps)
         print("start", start)
         after_slice_start = best_slice[start]
         game_board_after_start = board.Board(after_slice_start, size)
@@ -75,9 +78,8 @@ def hc_alg(filepath, end_position, size):
         print(game_board_after_start.board)
         after_slice_end = best_slice[(len(best_slice)+start-1)]
         game_board_after_end = board.Board(after_slice_end, size)
-
-        
         print(game_board_after_end.board)
+
         hill_climb_solution.update(best_slice)
         # print("length hillclimb solution", len(hill_climb_solution.keys()))
         
