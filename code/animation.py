@@ -15,14 +15,7 @@ def animate(board_file, result_file, size):
     # create grid
     screen_width, screen_height = 600, 600
 
-    # initiate grid, cell and border size
-    # initiate grid, cell and border size
-    if size == 6:
-        grid_size = 6 
-    elif size == 9:
-        grid_size = 9
-    elif size == 12:
-        grid_size = 12
+    grid_size = size
     
     cell_size = screen_width // grid_size
 

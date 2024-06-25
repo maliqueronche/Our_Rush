@@ -52,53 +52,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
         cars_dict[ID] = vehicle
 
-    #     # Initialise board and add cars in starting positions
-    #     game_board = board.Board(cars_dict, size)
-
-    #     if algorithm in ['random']:
-
-            
-
-    #     #     # Initiate random step
-    #     #     random_exp = ra(cars_dict, game_board)
-
-    #     #     # track current config
-    #     #     current_config = {}
-    #     #     i = 0
-
-    #     #     while cars_dict[ord('X')].position != end_position:
-
-    #     #         # for hill climb, save new board, every step
-    #     #         if hill_climb:
-    #     #             random_exp.random_step(hill_climb = True)
-    #     #             cars_dict = random_exp.cars
-    #     #             current_config[i] = random_exp.copy_cars_dict(cars_dict)
-
-    #     #             if i > min_iterations:
-    #     #                 break
-
-    #     #         else:
-    #     #             random_exp.random_step()
-                
-    #     #         i +=1
-                
-                
-    #     #     # print(f"Round {round}, Iterations: {i}, Min Iterations: {min_iterations}")
-
-    #     #     # Save the amount of iterations and use it to calculate the mean
-    #     #     iterations_list.append(i)
-    #     #     mean_i += i
-    #     #     if round % 100 == 0:
-    #     #         end = time()
-    #     #         print(f'The time elapsed: {end-start:.2f} seconds.')
-    #     #         print(f"progress:{(round/rounds) * 100}")
-    #     #         start = time()
-    #     #     round += 1
-
-    #     #     if hill_climb and i < min_iterations:
-    #     #         min_iterations = i
-    #     #         min_iterations_config = random_exp.copy_cars_dict(current_config)
-
+ 
     if algorithm == 'random':
         print(rounds)
         results = run_random(filepath, rounds, algorithm, size, end_position, hill_climb)
@@ -114,11 +68,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     elif algorithm == 'hillclimb':
         results = hc_alg(filepath, end_position, size)
         return results
-        
-
-
-
-        
         
 
     # Calculate the mean iterations and return the list of iterations
@@ -159,21 +108,22 @@ if __name__ == '__main__':
         results = game(filepath, rounds, algorithm, size)
         print(results)
         experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
-        animate(filepath, f'results/{algorithm}_6x6_{game_number}_{rounds}.csv', size)
+        
+        
 
     elif game_number in [4, 5, 6]:
         size = 9
         filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
         results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_9x9_{game_number}_{rounds}'
-        animate(filepath, f'results/{algorithm}_9x9_{game_number}_{rounds}.csv', size)
+        
     
     elif game_number == 12:
         size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
         results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_12x12_{game_number}_{rounds}'
-        animate(filepath, f'results/{algorithm}__{game_number}_{rounds}.csv', size)
+        
 
     
     if algorithm == 'random':
@@ -182,6 +132,8 @@ if __name__ == '__main__':
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm == 'hillclimb':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
+    
+    animate(filepath, f'results/{experiment_name}.csv', size)
         # TODO: implement exporting of results
 
     
