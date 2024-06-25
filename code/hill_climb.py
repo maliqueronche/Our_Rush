@@ -15,7 +15,7 @@ from helpers import export_hillclimber_to_csv
 def hc_alg(filepath, end_position, size):
 
     # compute board position for every step in random iteration, key is step, value is board position
-    min_iterations_dict = run_random(filepath, 5, 'random', size, end_position, hill_climb = True)
+    min_iterations_dict = run_random(filepath, 10, 'random', size, end_position, hill_climb = True)
     total_steps = len(min_iterations_dict.keys())
     slice_size = 200
     random_solutions = 10
@@ -52,22 +52,31 @@ def hc_alg(filepath, end_position, size):
             car_moves, new_solution  = generate_random_solution(current_slice, start, end, size)
             if len(car_moves) < best_slice_steps:
                 
-                print(len(new_solution.keys()))
-                print("created best slice")
+                # print(len(new_solution.keys()))
+                # print("created best slice")
+                
                 best_slice = new_solution
+                
+                
                 best_slice_steps = len(car_moves)
-            
-        max_key = max(hill_climb_solution.keys(), default=-1) + 1
-        for i, (k, v) in enumerate(best_slice.items()):
-            hill_climb_solution[max_key + i] = v
+        
+        print("start", start)
+        after_slice_start = best_slice[start]
+        game_board_after_start = board.Board(after_slice_start, size)
 
-        # hill_climb_solution.update(best_slice)
-        print("length hillclimb solution", len(hill_climb_solution.keys()))
+        print("\nafter slice", game_board_after_start.board)
+        after_slice_end = best_slice[(len(best_slice)+start-1)]
+        game_board_after_end = board.Board(after_slice_end, size)
+
+        
+        print(game_board_after_end.board)
+        hill_climb_solution.update(best_slice)
+        # print("length hillclimb solution", len(hill_climb_solution.keys()))
         
                     
         
         # print(len(hill_climb_solution.keys()))
-        pprint(hill_climb_solution)
+        # pprint(hill_climb_solution)
     return car_moves
 
 def generate_random_solution(current_slice, start, end, size):
@@ -84,35 +93,34 @@ def generate_random_solution(current_slice, start, end, size):
     # create board and random instance
     game_board_start = board.Board(cars_dict_start, size)
     game_board_end = board.Board(cars_dict_end, size)
+    # print(game_board_start.board, game_board_end.board)
     random_exp = ra(cars_dict_start, game_board_start)
 
     new_solution = {}
     car_moves = []
     new_board_end = game_board_start
-    i = 0
     
  
 
 
-    while i < (end - start) and (new_board_end.board != game_board_end.board).any():
+    while start < end and (new_board_end.board != game_board_end.board).any():
     # while (new_board_end.board != game_board_end.board).any():
         new_board_end, car_move, cars_dict = random_exp.random_step(hill_climb = True)
-        
+        # print(new_board_end.board)
         
         # print(f"Attempting move {car_move} at step {i}")
         # print(f"Board state after move {i}:\n{new_board_end.board}")
-       
+        
         new_cars_dict = copy.deepcopy(cars_dict)
         car_moves.append(car_move)
-        new_solution[i] = new_cars_dict
-        i += 1
+        new_solution[start] = new_cars_dict
+        start += 1
 
         # print("i", i)
     
     return car_moves, new_solution
+    
 
-    
-    
     
 
 if __name__ == '__main__':
