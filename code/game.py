@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 import pandas as pd
 import classes
 import board
@@ -13,7 +14,7 @@ import copy
 from time import time
 from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
 from animation import animate
-from hill_climb import hill_climber as hc
+from hill_climb import hillclimb as hc
 from run_random_algorithm import run_random
 
 def game(filepath, rounds, algorithm, size, hill_climb = False):
@@ -93,39 +94,46 @@ if __name__ == '__main__':
     rounds = 1
 
     # Keep looping over user prompts while answers are wrong
-    while game_number < 1 or game_number > 7:
-        game_number = int(input("Hi, which game of Rush Hour (1-7) would you like to play? "))
+    # while game_number < 1 or game_number > 7:
+    #     game_number = int(input("Hi, which game of Rush Hour (1-7) would you like to play? "))
         
-    while algorithm not in ['random', 'bfs', 'dfs', 'hillclimb']:
-        algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- dfs \n- hillclimb \nAlgorithm: ")
+    # while algorithm not in ['random', 'bfs', 'dfs', 'hillclimb']:
+    #     algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- dfs \n- hillclimb \nAlgorithm: ")
     
-    if algorithm in ['random']:
-        rounds = int(input("How many rounds would you like the algorithm to search? "))
-        
+    # if algorithm in ['random']:
+    #     rounds = int(input("How many rounds would you like the algorithm to search? "))
+    
+    if len(sys.argv) < 3:
+        print("Usage: python script.py <game_number> <algorithm> [<rounds>]")
+        sys.exit(1)
+    
+    game_number = int(sys.argv[1])
+    algorithm = sys.argv[2]
+    rounds = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 
     if game_number in [1, 2, 3]:
         size = 6
         filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
-        results = game(filepath, rounds, algorithm, size)
-        print(results)
-        experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
+        # results = game(filepath, rounds, algorithm, size)
+        # print(results)
+        # experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
         
-        
-
     elif game_number in [4, 5, 6]:
         size = 9
         filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
-        results = game(filepath, rounds, algorithm, size)
-        experiment_name = f'{algorithm}_9x9_{game_number}_{rounds}'
+        # results = game(filepath, rounds, algorithm, size)
+        # experiment_name = f'{algorithm}_9x9_{game_number}_{rounds}'
         
-    
     elif game_number == 12:
         size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
-        results = game(filepath, rounds, algorithm, size)
-        experiment_name = f'{algorithm}_12x12_{game_number}_{rounds}'
-        
+        # results = game(filepath, rounds, algorithm, size)
+        # experiment_name = f'{algorithm}_12x12_{game_number}_{rounds}'
 
+    results = game(filepath, rounds, algorithm, size)
+    print(results)
+    experiment_name = f'{algorithm}_{size}x{size}_{game_number}_{rounds}'
+    
     
     if algorithm == 'random':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
@@ -137,9 +145,6 @@ if __name__ == '__main__':
     animate(filepath, f'results/{experiment_name}.csv', size)
         # TODO: implement exporting of results
 
-    
-    
-    
     # export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     # experiment_name = 'random_2'
     # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
