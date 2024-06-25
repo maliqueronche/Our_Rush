@@ -13,7 +13,12 @@ import copy
 from time import time
 from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
 from animation import animate
+<<<<<<< HEAD
+from hill_climb import hc_alg
+from hill_climb import hill_climber as hc
+=======
 import hill_climb as hc
+>>>>>>> a45a3cd4daf16f10f98bf2e75365e4b240398581
 from run_random_algorithm import run_random
 
 def game(filepath, rounds, algorithm, size, hill_climb = False):
@@ -112,8 +117,15 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         path = df_alg.search_depth(cars_dict)
         return path
     elif algorithm == 'hillclimb':
+<<<<<<< HEAD
+        hc_alg = hc(filepath, end_position, size)
+        results = hc_alg.run_hc()
+        return results
+        results = hc_alg(filepath, end_position, size)
+=======
         hc_algorithm = hc.hillclimb(size)
         results = hc_algorithm.hc_alg(filepath, end_position)
+>>>>>>> a45a3cd4daf16f10f98bf2e75365e4b240398581
         return results
         
 
