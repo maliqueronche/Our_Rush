@@ -159,18 +159,21 @@ if __name__ == '__main__':
         results = game(filepath, rounds, algorithm, size)
         print(results)
         experiment_name = f'{algorithm}_6x6_{game_number}_{rounds}'
+        animate(filepath, f'results/{algorithm}_6x6_{game_number}_{rounds}.csv', size)
 
     elif game_number in [4, 5, 6]:
         size = 9
         filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
         results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_9x9_{game_number}_{rounds}'
+        animate(filepath, f'results/{algorithm}_9x9_{game_number}_{rounds}.csv', size)
     
     elif game_number == 12:
         size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
         results = game(filepath, rounds, algorithm, size)
         experiment_name = f'{algorithm}_12x12_{game_number}_{rounds}'
+        animate(filepath, f'results/{algorithm}_12x12_{game_number}_{rounds}.csv', size)
 
     
     if algorithm == 'random':
