@@ -294,7 +294,7 @@ class hillclimb():
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
-    hc = hillclimb(6)
+    hc = hillclimb(filepath, [(3, 5),(3,6)], 6)
     car_moves = hc.run_hc(filepath, 200, 100, 6)
     print("solution:", len(optimized_solution.keys()))
 
