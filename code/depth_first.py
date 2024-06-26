@@ -45,7 +45,7 @@ class depth_first_algorithm():
         df_stack = [("", 0)]
         starting_board = board.Board(cars_dict, self.size)
         starting_board = tuple(map(tuple, starting_board.board))
-        archive = {starting_board}
+        # archive = {starting_board}
 
         # dictionary containing all states
         state_dict = {}
@@ -58,16 +58,21 @@ class depth_first_algorithm():
         j = 0
         # start = time()
         t_end = time.time() + 15
+        
 
         while time.time() < t_end:
 
             df_stack = [("", 0)]
+            print("new_round")
             state_dict = {}
             state_dict[""] = cars_dict
+            if time.time() % 30 == 0:
+                print("time_remaining:", round(t_end - time.time(), 2), "seconds")
+            archive = {starting_board}
+            print(depth_limit)
 
-            
-
-            while df_stack:
+            while len(df_stack) > 0:
+                # print(len(df_stack))
             # for i in range(12):
                 j += 1
 
@@ -80,7 +85,9 @@ class depth_first_algorithm():
                 
                 # Get state from queue
                 state, depth = df_stack.pop()
+                
                 if bb and depth >= depth_limit:
+                    
                     continue
                 # Get dictionary current cars (id: pos(tup), or(str), par(set))
                 current_cars_dict = state_dict[state]
@@ -96,12 +103,14 @@ class depth_first_algorithm():
                     if car_id == 88 and car['position'] == end_position:
                         if bb:
                             best_solution = state
+                            
+                            break
                         else: 
                             return state
 
                     # Copy current dictionary
                     new_cars_dict = copy.deepcopy(current_cars_dict)
-
+                    
                     # Get's a tuple for every side if it is moveable
                     moveable = self.is_moveable(car, current_board.board)
                     
@@ -123,6 +132,9 @@ class depth_first_algorithm():
                         if car_id == 88 and car['position'] == end_position:
                             if bb:
                                 best_solution = new_state
+                                depth_limit = depth
+                                
+                                break
                             else: 
                                 return new_state
 
@@ -156,6 +168,9 @@ class depth_first_algorithm():
                         if car_id == 88 and car['position'] == end_position:
                             if bb:
                                 best_solution = new_state
+                                depth_limit = depth
+                                
+                                break
                             else: 
                                 return new_state
 
@@ -174,8 +189,10 @@ class depth_first_algorithm():
                 # del state_dict[state]
             
             
-            depth_limit = depth
-            # print(depth_limit)
+                
+         
+            
+            # print("depth_limit", depth_limit)
 
         return best_solution if best_solution else "No solution found within depth limit"
 
@@ -232,50 +249,4 @@ class depth_first_algorithm():
         return checklist
     
     
-    def check_moves(moveable, place):
-        if place == 0:
-            side = 'neg'
-            min_plus = '-'
-        elif place == 1:
-            side = 'pos'
-            min_plus = '+'
-
-        while moveable[place] == True: #while moveable[0]
-            new_position = []
-            car = new_cars_dict[car_id]
-            for car_tup in car['position']:
-                new_pos = self.get_new_pos(car_tup, side, car['orientation'])
-                new_position.append(new_pos)
-            car['position']= new_position
-
-            # Create new state
-            new_state = (current_state + str(car_id) + min_plus + ' ')
-
-            # Create new board
-            new_board = board.Board(new_cars_dict, self.size)
-
-            if car_id == 88 and car['position'] == end_position:
-                solution_found = True
-                return new_state            
-            
-            new_board = tuple(map(tuple, new_board.board))
-                    
-            if new_board not in new_archive:
-                new_archive.add(new_board)
-                new_cars_dict['parent'].add(new_board)
-                bf_queue.put(new_state)
-                if new_state not in state_dict.keys():
-                    state_dict[new_state] = new_cars_dict
-
-            new_board = np.array(new_board)
-            moveable = self.is_moveable(car, new_board)
-            current_state = new_state
-
-            if moveable[0] == True:
-                new_cars_dict = copy.deepcopy(new_cars_dict)
-                
-
-
-
-
     

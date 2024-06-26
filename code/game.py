@@ -14,7 +14,7 @@ import copy
 from time import time
 from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
 from animation import animate
-from hill_climb import hillclimb as hc
+from hill_climb import hill_climber as hc
 from run_random_algorithm import run_random
 import iterative_deepening as it
 
