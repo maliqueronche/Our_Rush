@@ -82,7 +82,7 @@ def run_experiments():
         # BFS for boards 1, 2, and 3
         {"algorithm": "bfs", "boards": [1, 2, 3], "size": 6, "max_time": None},
         # BFS for boards 4, 5, and 6 with 1-hour time limit
-        {"algorithm": "bfs", "boards": [4, 5, 6], "size": 9, "max_time": 3600},
+        {"algorithm": "bfs", "boards": [4, 5, 6], "size": 9, "max_time": 1800},
         # ITDP for every experiment with 30-minute time limit
         {"algorithm": "itdp", "boards": [1, 2, 3, 4, 5, 6], "size": [6, 9], "max_time": 1800},
         # DFS for every experiment with 30-minute time limit
