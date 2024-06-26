@@ -19,7 +19,7 @@ from hill_climb import hillclimb as hc
 from run_random_algorithm import run_random
 import iterative_deepening as it
 
-def game(filepath, rounds, algorithm, size, hill_climb = False, heuristic):
+def game(filepath, rounds, algorithm, size, heuristic):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -43,7 +43,10 @@ def game(filepath, rounds, algorithm, size, hill_climb = False, heuristic):
         end_position = [(5, 10), (5, 11)]
 
     if heuristic == 'bb':
-        bb = True
+        
+        bb_ = True
+    else:
+        bb_ = False
 
     cars_dict = {}
     # Loop over cars dataframe, create vehicles and store them in dictionary
@@ -64,11 +67,11 @@ def game(filepath, rounds, algorithm, size, hill_climb = False, heuristic):
         return path
     elif algorithm == 'dfs':
         df_alg = df.depth_first_algorithm(size)
-        path = df_alg.search_depth(cars_dict)
+        path = df_alg.search_depth(cars_dict, bb=bb_)
         return path
     elif algorithm == 'itdp':
         itdp_alg = it.iterative_deepening_algorithm(size)
-        results = itdp_alg.search_depth_iteratively(cars_dict, bb=bb)
+        results = itdp_alg.search_depth_iteratively(cars_dict)
         return results
     elif algorithm == 'hillclimb':
         hc_alg = hc(filepath, end_position, size)
@@ -99,14 +102,14 @@ if __name__ == '__main__':
     parser.add_argument('-g', '--game', required=True, type=int, help='Het spelnummer')
     parser.add_argument('-a', '--algorithm', required=True, type=str, help='Het te gebruiken algoritme')
     parser.add_argument('-r', '--rounds', type=int, default=1, help='Aantal rondes (standaard 1)')
-    parser.add_argument('-e', '--heuristiek', type=str, default=False, help='De te gebruiken heuristiek (standaard False)')
+    parser.add_argument('-e', '--heuristic', type=str, default=False, help='De te gebruiken heuristiek (standaard False)')
 
     args = parser.parse_args()
 
     game_number = args.game
     algorithm = args.algorithm
     rounds = args.rounds
-    heuristiek = args.heuristiek
+    heuristic = args.heuristic
 
 
     if game_number in [1, 2, 3]:
@@ -122,7 +125,7 @@ if __name__ == '__main__':
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
 
     start_time = time()
-    results = game(filepath, rounds, algorithm, size)
+    results = game(filepath, rounds, algorithm, size, heuristic)
     end_time = time()
     duration = end_time - start_time
     print("Experiment results: \n", results)
