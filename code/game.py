@@ -1,5 +1,5 @@
 import numpy as np
-import sys
+# import sys
 import argparse
 import pandas as pd
 import classes
@@ -7,7 +7,6 @@ import board
 import breadth_first as bf
 import depth_first as df
 from visualization import visualize
-
 from algorithm_random import Random_algorithm as ra
 import csv
 import os
@@ -29,11 +28,6 @@ def game(filepath, rounds, algorithm, size, heuristic):
     
     cars = pd.read_csv(filepath)
     iterations_list = []
-    mean_i = 0
-    
-    min_iterations = 10000
-    min_iterations_config = {}
-    start = time()
 
     if size == 6:
         end_position = [(2,4), (2, 5)]
@@ -43,12 +37,12 @@ def game(filepath, rounds, algorithm, size, heuristic):
         end_position = [(5, 10), (5, 11)]
 
     if heuristic == 'bb':
-        
         bb_ = True
     else:
         bb_ = False
 
     cars_dict = {}
+    
     # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
         ID = 0
@@ -58,8 +52,7 @@ def game(filepath, rounds, algorithm, size, heuristic):
         cars_dict[ID] = vehicle
 
     if algorithm == 'random':
-        print(rounds)
-        results = run_random(filepath, rounds, algorithm, size, end_position, hill_climb)
+        results = run_random(filepath, rounds, algorithm, size, end_position, hill_climb = False)
         return results
     elif algorithm == 'bfs':
         bf_alg = bf.breadth_first_algorithm(size)
@@ -77,12 +70,6 @@ def game(filepath, rounds, algorithm, size, heuristic):
         hc_alg = hc(filepath, end_position, size)
         results = hc_alg.run_hc()
         return results
-
-        
-    # Calculate the mean iterations and return the list of iterations
-    mean_i = mean_i/rounds
-    # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
-    print ("iteration list:", iterations_list)
 
     if hill_climb:
         return min_iterations_config
@@ -112,7 +99,6 @@ if __name__ == '__main__':
     rounds = args.rounds
     heuristic = args.heuristic
 
-
     if game_number in [1, 2, 3]:
         size = 6
         filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
@@ -129,10 +115,8 @@ if __name__ == '__main__':
     results = game(filepath, rounds, algorithm, size, heuristic)
     end_time = time()
     duration = end_time - start_time
-    print("Experiment results: \n", results)
     print(f"Experiment duration: {duration:.2f} seconds")
     experiment_name = f'{algorithm}_{size}x{size}_{game_number}_{rounds}'
-    
     
     if algorithm == 'random':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
