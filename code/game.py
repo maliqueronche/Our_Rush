@@ -105,8 +105,12 @@ if __name__ == '__main__':
         size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
 
+    start_time = time()
     results = game(filepath, rounds, algorithm, size)
-    print(results)
+    end_time = time()
+    duration = end_time - start_time
+    print("Experiment results: \n", results)
+    print(f"Experiment duration: {duration:.2f} seconds")
     experiment_name = f'{algorithm}_{size}x{size}_{game_number}_{rounds}'
     
     
