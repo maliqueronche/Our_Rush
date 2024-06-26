@@ -11,190 +11,128 @@ from pprint import pprint
 import time
 
 class depth_first_algorithm():
-    """Contains functions to run the breadth first algorithm"""
-
+    """Contains functions to run the depth-first algorithm"""
 
     def __init__(self, size):
-        print ('initializing...')
+        print('initializing...')
         self.size = size
-
 
     def search_depth(self, car_ins_dict, bb=False):
         """Search algorithm that searches a complete layer for a solution, before moving on to the next layer."""
         
-            
         # Create copy of instances of cars with only relevant data
         cars_dict = {}
         for car_id, car in car_ins_dict.items():
             position_car = car.position
             orientation_car = car.orientation
-            cars_dict[car_id] = {'id' : car_id, 'position' : position_car, 'orientation': orientation_car}
+            cars_dict[car_id] = {'id': car_id, 'position': position_car, 'orientation': orientation_car}
         
         if self.size == 6:
-            end_position = [(2,4), (2, 5)]
-            depth_limit = 1000
+            end_position = [(2, 4), (2, 5)]
+            initial_depth_limit = 1000
         elif self.size == 9:
             end_position = [(4, 7), (4, 8)]
-            depth_limit = 5000
+            initial_depth_limit = 5000
         elif self.size == 12:
             end_position = [(5, 10), (5, 11)]
-            depth_limit = 10000
+            initial_depth_limit = 10000
 
-
-        # Create queue, starting board and archive to check for duplicate boards
-        df_stack = [("", 0)]
+        # Create stack, starting board and archive to check for duplicate boards
         starting_board = board.Board(cars_dict, self.size)
-        starting_board = tuple(map(tuple, starting_board.board))
-        # archive = {starting_board}
+        starting_board_tuple = tuple(map(tuple, starting_board.board))
 
-        # dictionary containing all states
+        # Dictionary containing all states
         state_dict = {}
         state_dict[""] = cars_dict
         
         # Solution by default not found 
-        solution_found = False
+        best_solution = None
+        best_solution_depth = initial_depth_limit
         
-
-        j = 0
-        # start = time()
         t_end = time.time() + 15
-        
 
         while time.time() < t_end:
-
             df_stack = [("", 0)]
-            print("new_round")
-            state_dict = {}
-            state_dict[""] = cars_dict
-            if time.time() % 30 == 0:
-                print("time_remaining:", round(t_end - time.time(), 2), "seconds")
-            archive = {starting_board}
-            print(depth_limit)
+            state_dict = {"": cars_dict}
+            archive = {starting_board_tuple}
+            print("New round, current depth limit:", best_solution_depth)
 
             while len(df_stack) > 0:
-                # print(len(df_stack))
-            # for i in range(12):
-                j += 1
-
-                # Print duration over iteration length
-                # if j % 10000 == 0:
-                #     end = time()
-                #     print('\niteration:', j)
-                #     print(f'The time elapsed: {end-start:.2f} seconds.')
-                #     start = time()
-                
-                # Get state from queue
                 state, depth = df_stack.pop()
                 
-                if bb and depth >= depth_limit:
-                    
+                if depth >= best_solution_depth:
                     continue
-                # Get dictionary current cars (id: pos(tup), or(str), par(set))
+
                 current_cars_dict = state_dict[state]
-                
-                # Create current board (Numpy arrays)
                 current_board = board.Board(current_cars_dict, self.size)
-                
-                # Get a dict of available cars (id: pos(tup), or(str), par(set))
-                available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
-            
-                # Loop over available cars, move them, add new states to queue
+                available_cars = self.get_available_cars(current_cars_dict, current_board.board)
+
                 for car_id, car in available_cars.items():
                     if car_id == 88 and car['position'] == end_position:
-                        if bb:
-                            best_solution = state
-                            
-                            break
-                        else: 
-                            return state
+                        best_solution = state + str(car_id) + ',' + '+' + ','
+                        best_solution_depth = depth
+                        break
 
-                    # Copy current dictionary
                     new_cars_dict = copy.deepcopy(current_cars_dict)
-                    
-                    # Get's a tuple for every side if it is moveable
                     moveable = self.is_moveable(car, current_board.board)
                     
-                    # Move car backwards if possible
                     if moveable[0]:
-
-                        # Changes the position of a car
                         new_position = []
                         car = new_cars_dict[car_id]
                         for car_tup in car['position']:
                             new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
                             new_position.append(new_pos)
-                        car['position']= new_position
+                        car['position'] = new_position
 
-                        # Create new statename
-                        new_state = (state + str(car_id) + ',' + '-' + ',')
-                        
-                        # Check if the red car is on the right position
+                        new_state = state + str(car_id) + ',' + '-' + ','
                         if car_id == 88 and car['position'] == end_position:
-                            if bb:
-                                best_solution = new_state
-                                depth_limit = depth
-                                
-                                break
-                            else: 
-                                return new_state
-
-                        # Create new board (Numpy arrays)
+                            best_solution = new_state
+                            best_solution_depth = depth
+                            break
+                        
                         new_board = board.Board(new_cars_dict, self.size)
-                        new_board = tuple(map(tuple, new_board.board))     
-                            
-                        # Check if board is not in archive and add to queue
-                        if new_board not in archive:
-                            archive.add(new_board)
+                        new_board_tuple = tuple(map(tuple, new_board.board))
+                        if new_board_tuple not in archive:
+                            archive.add(new_board_tuple)
                             df_stack.append((new_state, depth + 1))
                             state_dict[new_state] = new_cars_dict
                     
                     new_cars_dict = copy.deepcopy(current_cars_dict)
                     
-                    # Move car forwards if possible
                     if moveable[1]:
-                        
-                        # Changes position of car
                         new_position = []
                         car = new_cars_dict[car_id]
                         for car_tup in car['position']:
                             new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
                             new_position.append(new_pos)
-                        car['position']= new_position
+                        car['position'] = new_position
                         
-                        # Create new state
-                        new_state = (state + str(car_id) + ',' + '+' + ',')
-                        
-                        # Check to see if red car is on right place
+                        new_state = state + str(car_id) + ',' + '+' + ','
                         if car_id == 88 and car['position'] == end_position:
-                            if bb:
-                                best_solution = new_state
-                                depth_limit = depth
-                                
-                                break
-                            else: 
-                                return new_state
+                            best_solution = new_state
+                            best_solution_depth = depth
+                            break
 
-
-                        # Create new board
                         new_board = board.Board(new_cars_dict, self.size)
-                        new_board = tuple(map(tuple, new_board.board))
-
-                        # Check if board is not in archive and add to queue
-                        if new_board not in archive:
-                            archive.add(new_board)
+                        new_board_tuple = tuple(map(tuple, new_board.board))
+                        if new_board_tuple not in archive:
+                            archive.add(new_board_tuple)
                             df_stack.append((new_state, depth + 1))
                             state_dict[new_state] = new_cars_dict
-                
-                # Remove old states out of the state dict
-                # del state_dict[state]
+
+                if best_solution_depth == depth:
+                    break
             
-            
-                
-         
-            
-            # print("depth_limit", depth_limit)
+            if best_solution_depth == depth:
+                best_solution_depth -= 1  # Decrease depth limit for next iteration
+                print("New depth limit:", best_solution_depth)
+                if best_solution_depth < 0:
+                    break  # Ensure depth limit does not go negative
 
         return best_solution if best_solution else "No solution found within depth limit"
+
+
+
 
 
     def get_available_cars(self, cars_dict, board):
