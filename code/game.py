@@ -119,8 +119,6 @@ if __name__ == '__main__':
     experiment_name = f'{algorithm}_{size}x{size}_{game_number}_{rounds}'
     
     # export results based on algorithm
-    # if algorithm == 'random':
-    #     export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     if algorithm in ['bfs', 'dfs', 'itdp']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     
