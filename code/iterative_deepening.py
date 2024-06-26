@@ -10,7 +10,7 @@ import copy
 from pprint import pprint
 from time import time
 
-class depth_first_algorithm():
+class iterative_deepening_algorithm():
     """Contains functions to run the breadth first algorithm"""
 
 
@@ -19,7 +19,7 @@ class depth_first_algorithm():
         self.size = size
 
 
-    def search_depth(self, car_ins_dict):
+    def search_depth_iteratively(self, car_ins_dict):
         """Search algorithm that searches a complete layer for a solution, before moving on to the next layer."""
 
         # Create copy of instances of cars with only relevant data

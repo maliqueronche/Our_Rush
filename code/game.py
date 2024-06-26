@@ -16,6 +16,7 @@ from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber
 from animation import animate
 from hill_climb import hillclimb as hc
 from run_random_algorithm import run_random
+import iterative_deepening as it
 
 def game(filepath, rounds, algorithm, size, hill_climb = False):
     """
@@ -60,6 +61,10 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         df_alg = df.depth_first_algorithm(size)
         path = df_alg.search_depth(cars_dict)
         return path
+    elif algorithm == 'itdp':
+        itdp_alg = it.iterative_deepening_algorithm(size)
+        results = itdp_alg.search_depth_iteratively(cars_dict)
+        return results
     elif algorithm == 'hillclimb':
         hc_alg = hc(filepath, end_position, size)
         results = hc_alg.run_hc()
@@ -116,7 +121,7 @@ if __name__ == '__main__':
     
     if algorithm == 'random':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
-    elif algorithm in ['bfs', 'dfs']:
+    elif algorithm in ['bfs', 'dfs', 'itdp']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm == 'hillclimb':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
