@@ -18,7 +18,7 @@ from hill_climb import hillclimb as hc
 from run_random_algorithm import run_random
 import iterative_deepening as it
 
-def game(filepath, rounds, algorithm, size, hill_climb = False):
+def game(filepath, rounds, algorithm, size, hill_climb = False, heuristic):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
@@ -39,6 +39,9 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         end_position = [(4, 7), (4, 8)]
     elif size == 12:
         end_position = [(5, 10), (5, 11)]
+
+    if heuristic == 'bb':
+        bb = True
 
     cars_dict = {}
     # Loop over cars dataframe, create vehicles and store them in dictionary
@@ -63,7 +66,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         return path
     elif algorithm == 'itdp':
         itdp_alg = it.iterative_deepening_algorithm(size)
-        results = itdp_alg.search_depth_iteratively(cars_dict)
+        results = itdp_alg.search_depth_iteratively(cars_dict, bb=bb)
         return results
     elif algorithm == 'hillclimb':
         hc_alg = hc(filepath, end_position, size)
