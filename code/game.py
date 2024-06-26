@@ -60,7 +60,8 @@ def game(filepath, rounds, algorithm, size, heuristic):
         cars_dict[ID] = vehicle
 
     if algorithm == 'random':
-        results = run_random(filepath, rounds, algorithm, size, end_position)
+        results, iterations = run_random(filepath, rounds, algorithm, size, end_position)
+        print(iterations)
         return results
     elif algorithm == 'bfs':
         bf_alg = bf.breadth_first_algorithm(size)
@@ -118,12 +119,10 @@ if __name__ == '__main__':
     experiment_name = f'{algorithm}_{size}x{size}_{game_number}_{rounds}'
     
     # export results based on algorithm
-    if algorithm == 'random':
-        export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
-    elif algorithm in ['bfs', 'dfs', 'itdp']:
+    # if algorithm == 'random':
+    #     export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
+    if algorithm in ['bfs', 'dfs', 'itdp']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
-    elif algorithm == 'hillclimb':
-        export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     
     # optionally create an animation
     if algorithm != 'random' and visualization == True:

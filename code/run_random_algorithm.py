@@ -54,6 +54,6 @@ def run_random(filepath, rounds, algorithm, size, end_position):
                 print(f"progress:{(round/rounds) * 100}")
                 start = time()
             
-    return car_moves
+    return car_moves, i
 
 

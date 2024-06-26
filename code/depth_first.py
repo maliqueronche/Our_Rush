@@ -129,7 +129,6 @@ class depth_first_algorithm():
             
             if best_solution_depth == depth:
                 best_solution_depth -= 1  # Decrease depth limit for next iteration
-                print("New depth limit:", best_solution_depth)
                 if best_solution_depth < 0:
                     break  # Ensure depth limit does not go negative
 

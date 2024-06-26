@@ -8,9 +8,16 @@ import imageio
 import shutil
 
 def animate(board_file, result_file, size):
-    """Animate takes three files, one this the original board, one with the 
+    """
+    Animate takes three files, one this the original board, one with the 
     results to solve the board and the size of the board. It then makes an 
-    animation based on the received information."""
+    animation based on the received information.
+
+    Args:
+        board_file (str): Path to the CSV file containing the initial board configuration.
+        result_file (str): Path to the CSV file containing the solution steps.
+        size (int): Size of the board.
+    """
 
     # initialize pygame
     pygame.init()
@@ -39,8 +46,8 @@ def animate(board_file, result_file, size):
     step_count = 0
     font = pygame.font.SysFont(None, 36)
 
-    if not os.path.exists('frames'):
-        os.makedirs('frames')
+    if not os.path.exists('results/frames'):
+        os.makedirs('results/frames')
     
     frames = []
 
@@ -73,8 +80,7 @@ def animate(board_file, result_file, size):
         
         pygame.display.flip()
         clock.tick(8)  
-        # time.sleep(0.005)
-        frame_filename = f'frames/frame_{step_count:04d}.png'
+        frame_filename = f'results/frames/frame_{step_count:04d}.png'
         pygame.image.save(screen, frame_filename)
         frames.append(frame_filename)
 
@@ -90,10 +96,12 @@ def animate(board_file, result_file, size):
     for frame_filename in frames:
         os.remove(frame_filename)
     
-    # shutil.rmtree(frames)
 
 def load_start_board(file_path):
-    """Imports initial start board from csv and turns it into dictionary"""
+    """
+    Imports initial start board from csv and turns it into dictionary.  
+    Returns a dictionary containing car instances.
+    """
 
     start_data = pd.read_csv(file_path)
     cars = {}
@@ -122,7 +130,10 @@ def load_start_board(file_path):
     return cars
 
 def get_unique_colours(taken_colours):
-    """Makes sure there are only unique colours on the board"""
+    """
+    Makes sure there are only unique colours on the board.
+    Returns a tuple with unique RGB colour.
+    """
 
     while True:
         colour = tuple(random.randint(0, 255) for _ in range(3))
@@ -130,7 +141,10 @@ def get_unique_colours(taken_colours):
             return colour
 
 def load_steps(file_path):
-    """Loads steps from csv"""
+    """
+    Loads steps from csv.
+    Returns a list of tuples containing car ID and move distance.
+    """
     
     steps_df = pd.read_csv(file_path)
     steps = []
@@ -149,6 +163,9 @@ class car:
     move_car actually moves car instance given steps.
     '''
     def __init__(self, id, colour, position, orientation, length):
+        """
+        Initializes the car with given properties.
+        """
         self.id = id
         self.colour = colour
         self. position = position
@@ -156,7 +173,9 @@ class car:
         self.length = length
 
     def draw_car(self, screen, cell_size, border_size):
-        """Draws car based in screen, cell size and border size"""
+        """
+        Draws car based in screen, cell size and border size
+        """
 
         x, y = self.position
 
@@ -174,7 +193,9 @@ class car:
             pygame.draw.rect(screen, roof_colour, (x * cell_size + border_size + cell_size // 4, y * cell_size + border_size + cell_size // 4, cell_size // 2, self.length * cell_size - cell_size // 2))
 
     def move_car(self, steps):
-        """Moves car based on steps"""
+        """
+        Moves car based on steps
+        """
         
         x, y = self.position
         if self.orientation == 'H':
@@ -182,8 +203,3 @@ class car:
         else:
             self.position = (x, y + steps)
  
-# if __name__ == '__main__':
-#     size = 6
-#     board_file = 'data/Rushhour6x6_1_test_red_only.csv'
-#     result_file = 'results/test_hillclimb.csv'
-#     animate(board_file, result_file, size)
