@@ -61,14 +61,14 @@ def game(filepath, algorithm, size, heuristic=False, max_time=None):
     elif algorithm == 'random':
         best_result = None
         best_results = None
-        while time() - start_time < max_time:
+        while max_time is None or time() - start_time < max_time:
             results = ra(filepath, 1, algorithm, size, end_position)
             iterations = len(results)
             if best_result is None or iterations < best_result:
                 best_result = iterations
                 best_results = results
             # Check every five minutes
-            if (time() - start_time) % 300 < 1:
+            if max_time is not None and (time() - start_time) % 300 < 1:
                 elapsed_time = time() - start_time
                 remaining_time = max_time - elapsed_time
                 print(f"[{strftime('%Y-%m-%d %H:%M:%S', gmtime())}] Remaining time for {algorithm} on board {size}: {remaining_time / 60:.2f} minutes")
@@ -115,14 +115,14 @@ def run_experiments():
                 print(f"Results exported to results/{experiment_name}.csv")
 
             # Check every five minutes how much time is remaining
-            while True:
-                if (time() - start_time) % 300 < 1:
-                    elapsed_time = time() - start_time
-                    remaining_time = max_time - elapsed_time
-                    print(f"[{strftime('%Y-%m-%d %H:%M:%S', gmtime())}] Remaining time for {algorithm} on board {board}: {remaining_time / 60:.2f} minutes")
-                if max_time and duration >= max_time:
-                    print(f"Experiment {algorithm} for board {board} timed out.")
-                    break
+            if max_time is not None:
+                while time() - start_time < max_time:
+                    if (time() - start_time) % 300 < 1:
+                        elapsed_time = time() - start_time
+                        remaining_time = max_time - elapsed_time
+                        print(f"[{strftime('%Y-%m-%d %H:%M:%S', gmtime())}] Remaining time for {algorithm} on board {board}: {remaining_time / 60:.2f} minutes")
+                        sleep(1)
+                print(f"Experiment {algorithm} for board {board} timed out.")
 
 if __name__ == '__main__':
     # Ensure the results directory exists
