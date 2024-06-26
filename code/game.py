@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import argparse
 import pandas as pd
 import classes
 import board
@@ -25,6 +26,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False, heuristic):
     Generates board with cars in their starting position.
     Takes input from user and makes moves based on this input.
     """
+    
     cars = pd.read_csv(filepath)
     iterations_list = []
     mean_i = 0
@@ -93,13 +95,19 @@ if __name__ == '__main__':
     algorithm = ''
     rounds = 1
 
-    if len(sys.argv) < 3:
-        print("Usage: python game.py <game_number> <algorithm> [<rounds>]")
-        sys.exit(1)
-    
-    game_number = int(sys.argv[1])
-    algorithm = sys.argv[2]
-    rounds = int(sys.argv[3]) if len(sys.argv) > 3 else 1
+    parser = argparse.ArgumentParser(description="Speel een spel met een bepaald algoritme en optionele parameters.")
+    parser.add_argument('-g', '--game', required=True, type=int, help='Het spelnummer')
+    parser.add_argument('-a', '--algorithm', required=True, type=str, help='Het te gebruiken algoritme')
+    parser.add_argument('-r', '--rounds', type=int, default=1, help='Aantal rondes (standaard 1)')
+    parser.add_argument('-e', '--heuristiek', type=str, default=False, help='De te gebruiken heuristiek (standaard False)')
+
+    args = parser.parse_args()
+
+    game_number = args.game
+    algorithm = args.algorithm
+    rounds = args.rounds
+    heuristiek = args.heuristiek
+
 
     if game_number in [1, 2, 3]:
         size = 6
