@@ -1,17 +1,14 @@
-from run_random_algorithm import run_random
-from algorithm_random import Random_algorithm as ra
-import classes
-import board
-import random
 import copy
 import time
 import pandas as pd
+import numpy as np
 from pprint import pprint
+from helpers import export_hillclimber_to_csv
+import board
+import classes
+import random
 
-
-
-class hillclimb():
-    # step one: 5 random outputs
+class hill_climber():
 
     def __init__(self, filepath, end_position, size):
         self.list_of_cars = pd.read_csv(filepath, index_col = 'car') 
@@ -24,28 +21,31 @@ class hillclimb():
         #self.cars_pos_and_ori = cars_pos_and_ori
         self.start_cars_dict = cars_dict
         self.start_board = board.Board(cars_dict, size)
-        
+
     def run_hc(self):
         best_steps = []
         random_steps = {}
         while len(random_steps) == 0:
+            print ('get_random steps')
             random_steps = self.get_random_steps(self.start_board,self.start_cars_dict)
-            
+
         shortest_moves = {}
 
         current_cars_dict = copy.deepcopy(self.start_cars_dict)
         current_list_of_cars = copy.deepcopy(self.list_of_cars)
-    
+
         start_pos = 0
         for end_pos in range(0, len(random_steps), 500):
             start_position_shortest_moves = len(shortest_moves)
             print (end_pos)
             if end_pos != 0:
-                print(end_pos)
+
                 difference = end_pos - start_pos
-            
+
                 board1 = copy.deepcopy(random_steps[start_pos]['car_move'])
+                print (f'board1{board1}')
                 board2 = copy.deepcopy(random_steps[end_pos]['car_move'])
+                print (f'board2{board2}')
                 shortest_path, car_moves = self.find_shortest_path(board1, board2,current_cars_dict, current_list_of_cars, difference)
                 # print ('shortest path:')
                 # print (shortest_path)
@@ -57,8 +57,10 @@ class hillclimb():
                     # print (start_position_shortest_moves, idx)
                     shortest_moves[start_position_shortest_moves + idx] = game_board
 
-                # print (car_moves['steps'])
+                print ('car_moves["steps"]')
+                print (car_moves['steps'])
                 for car_step in car_moves['steps']:
+                    print (car_step)
                     best_steps.append(car_step)
 
             start_pos = end_pos
@@ -68,7 +70,18 @@ class hillclimb():
 
         print ('steps')
         print (best_steps)
+
+        letter_list = []
+        for step in best_steps:
+            id, move = step
+            id = chr(id)
+            step = id, move
+            letter_list.append(step)
+
+        print (letter_list)
+
         return best_steps
+
 
     def list_to_cars_dict(self, list_of_cars):
         cars_dict = {}
@@ -82,12 +95,12 @@ class hillclimb():
             cars_dict[ID] = vehicle
         return cars_dict
 
-    def find_shortest_path(self, board1, board2, cars_dict, list_of_cars, difference):
+    def find_shortest_path(self, board1, board2, given_cars_dict, list_of_cars, difference):
         fastest_path = difference
         top_10_rounds = {}
         current_board = copy.deepcopy(board1)
         end_board = copy.deepcopy(board2)
-        cars_dict = copy.deepcopy(cars_dict)
+        cars_dict = copy.deepcopy(given_cars_dict)
 
         print (current_board)
 
@@ -100,7 +113,7 @@ class hillclimb():
                 info = self.one_path_round(current_steps, fastest_path, current_board, cars_dict, list_of_cars)
 
                 car_move, list_of_cars, step = info
-                
+
 
                 shorter_random_steps[len(current_steps)] = car_move
                 current_steps.append(step)
@@ -114,11 +127,15 @@ class hillclimb():
                 top_10_rounds[len(current_steps)] = {'moves':shorter_random_steps, 'steps':current_steps}
 
         sorted_list = sorted(top_10_rounds.items())
+        print (sorted_list)
         return sorted_list[0]
 
-    def one_path_round(self, current_steps, fastest_path, current_board, cars_dict, list_of_cars):
 
-        list_of_cars = copy.deepcopy(list_of_cars)
+
+
+    def one_path_round(self, current_steps, fastest_path, current_board, cars_dict, given_list_of_cars):
+
+        list_of_cars = copy.deepcopy(given_list_of_cars)
         current_board = board.Board(cars_dict, self.size)
         car_move, list_of_cars, step = self.one_random_step(current_board, cars_dict, list_of_cars)
 
@@ -137,16 +154,17 @@ class hillclimb():
         list_of_cars = self.list_of_cars
 
         while red_car_position != self.end_position:
-            
+
             car_move, list_of_cars, step = self.one_random_step(board, cars_dict, list_of_cars)
 
             steps_dict[step_count] = {'car_move':car_move, 'list_of_cars':list_of_cars}
             red_car_position = cars_dict[ord('X')].position
             step_count +=1
+
             if step_count >= 5000:
                 return {}
         return steps_dict
-            
+
     def one_random_step(self, board, cars_dict, list_of_cars):
         available_cars = self.get_available_cars(cars_dict, board)
         car_id, car = self.get_random_car(available_cars)
@@ -166,136 +184,102 @@ class hillclimb():
             else:
                 direction = 0
                 car_move, list_of_cars, step = self.move_car(direction, board, car_id, car, list_of_cars)
-        
+
         return car_move, list_of_cars, step
 
     def get_random_car(self, cars_dict):
         """Choose a random car from cars"""
-        
+
         key = random.choice(list(cars_dict.keys()))
-        
+
         return key, cars_dict[key]
-    
+
     def get_available_cars(self, cars_dict, board):
+        """"For every car in cars, if it is moveable, add the car to available cars and return that dictionary."""
+
         available_cars = {}
 
-        for car_id, car in cars_dict.items():
-            moveable_list = self.is_moveable(car, board)
+        # Loop over cars, check if a car can move and add it to dictionary
+        for car_id in cars_dict.keys():
+
+            moveable_list = self.is_moveable(cars_dict[car_id], board)
+
             if True in moveable_list:
-                available_cars[car_id] = car
+                available_cars[car_id] = cars_dict[car_id]
+
         return available_cars
 
-
-    def get_new_pos(self, car_tup, direction, orientation):
-        '''recieves a tuple for location and a direction and moves the tuple one place'''
-        row, col = car_tup
-
-        if orientation == 'H':
-            if direction == 'pos':
-                col +=1
-            elif direction == 'neg':
-                col -= 1
-        elif orientation == 'V':
-            if direction == 'pos':
-                row +=1
-            elif direction == 'neg':
-                row -= 1
-
-        return row, col
-        
-
     def is_moveable(self, car, board):
+        """Takes a car, checks if it can move and returns list with tuples containing True or False."""
 
-        position = car['position']
-        orientation = car['orientation']
+        positions_list = car.position
+        orientation = car.orientation
+        self.orientation = orientation
         positions_to_check = []
         checklist = []
 
-        neg_pos = self.get_new_pos(position[0], 'neg', orientation)
+        # Get positions to check 
+        neg_pos = board.get_new_pos(positions_list[0], 'neg', orientation)
         positions_to_check.append(neg_pos)
-
-        pos_pos = self.get_new_pos(position[-1], 'pos', orientation)
+        pos_pos = board.get_new_pos(positions_list[-1], 'pos', orientation)
         positions_to_check.append(pos_pos)
 
+        # Check if position can be moved to
         for row, col in positions_to_check:
-            position = row, col
-            if row > self.size -1 or row <0 or col > self.size -1 or col <0:
-                checklist.append(False)
-            elif board.board[position] == 0:
-                checklist.append(True)
-            else:
-                checklist.append(False)
+                position = row, col
+                if row > board.size -1 or row <0 or col > board.size -1 or col <0:
+                    checklist.append(False)
+                elif board.board[position] == 0:
+                    checklist.append(True)
+                else:
+                    checklist.append(False)
         return checklist
-    
-    def get_random_car(self, cars_dict):
-        """Choose a random car from cars"""
-        
-        key = random.choice(list(cars_dict.keys()))
-        
-        return key, cars_dict[key]
 
-    def random_step_hc(self, new_cars_dict, board): #dictionary and board instance
-            """Does a random step for a random moveable vehicle and returns the updated board."""
+    def move_car(self, direction, board, car_id, car, list_of_cars):
+        if direction == 0:
+            print (board)
+            print (car_id, direction)
+            board.move_car(car_id, 'neg')
+            new_board = copy.deepcopy(board)
+            car.change_position('neg', car.orientation)
+            current_board = copy.deepcopy(new_board.board)
+            print (current_board)
+            return
+            new_list_of_cars = self.get_new_list_of_cars(list_of_cars, direction, car_id)
+            step = car_id, '-1'
+        if direction == 1:
+            board.move_car(car_id, 'pos')
+            new_board = copy.deepcopy(new_board)
+            car.change_position('pos', car.orientation)
+            current_board = copy.deepcopy(new_board.board)
+            new_list_of_cars = self.get_new_list_of_cars(list_of_cars, direction, car_id)
+            step = car_id, '+1'
+        return current_board, new_list_of_cars, step
 
-            # Get dictionary with available cars (i.e. moveable)
-            pick = self.get_available_cars(new_cars_dict, board)
-            
-            # Get a random car and get moveable directions
-            car_id, car = self.get_random_car(pick)
-            # self.car = car
-            # self.car_id = car_id
-            
-            moveable_list = self.is_moveable(car, board)
-            
+    def get_new_list_of_cars(self, old_list_of_cars, direction, car_id):
+        list_of_cars = copy.deepcopy(old_list_of_cars)
+        if direction == 0:
+            if list_of_cars.loc[chr(car_id), 'orientation'] == 'H':
+                list_of_cars.loc[chr(car_id), 'col'] -= 1
+            else:
+                list_of_cars.loc[chr(car_id), 'row'] -= 1
+        elif direction == 1:
+            if list_of_cars.loc[chr(car_id), 'orientation'] == 'H':
+                list_of_cars.loc[chr(car_id), 'col'] += 1
+            else:
+                list_of_cars.loc[chr(car_id), 'row'] += 1
 
-            # Pick a random direction (backwards (0) or forwards(1)) and move the car
-            direction = random.randint(0,1)
-            new_position = []
-            # If backwards, move car left or up, else right or down, 
-            if direction == 0: 
-                if moveable_list[0] == True:
-                    for car_tup in car['position']:
-                        new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
-                        new_position.append(new_pos)
-                    car['position'] = new_position
-                    # if hill_climb:   
-                    car_move = (car_id, '-1')
-                    new_board = board.Board(new_cars_dict, self.size)
-                else:
-                    for car_tup in car['position']:
-                        new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
-                        new_position.append(new_pos)
-                    car['position'] = new_position
-                    # if hill_climb:
-                    car_move = (car_id, '1')
-                    new_board = board.Board(new_cars_dict, self.size)
-                    
-            # Elif forwards, move car right or down, else left or up
-            elif direction == 1:
-                if moveable_list[1] == True:
-                    for car_tup in car['position']:
-                        new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
-                        new_position.append(new_pos)
-                    car['position'] = new_position
-                    car_move = (car_id, '1')
-                    new_board = board.Board(new_cars_dict, self.size)
-                else:
-                    for car_tup in car['position']:
-                        new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
-                        new_position.append(new_pos)
-                    car['position'] = new_position
-                    car_move = (car_id, '-1')
-                    new_board = board.Board(new_cars_dict, self.size)
-            
+        return list_of_cars
 
-            
-            return new_board, car_move, cars_dict
-            
+
+
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
-    hc = hillclimb(filepath, [(3, 5),(3,6)], 6)
-    car_moves = hc.run_hc(filepath, 200, 100, 6)
+    end_position = [(2,4), (2, 5)]
+    size = 6
+    hc_alg = hill_climber(filepath, end_position, size)
+    results = hc_alg.run_hc()
     print("solution:", len(optimized_solution.keys()))
 
     
