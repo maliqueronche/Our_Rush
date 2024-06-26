@@ -5,15 +5,13 @@ import classes
 import board
 import breadth_first as bf
 import depth_first as df
-from visualization import visualize
 from algorithm_random import Random_algorithm as ra
 import csv
 import os
 import copy
 from time import time
-from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber_to_csv
+from helpers import export_bfs_to_csv, export_results_to_csv
 from animation import animate
-from hill_climb import hill_climber as hc
 from run_random_algorithm import run_random
 import iterative_deepening as it
 
@@ -23,6 +21,16 @@ def game(filepath, rounds, algorithm, size, heuristic):
     Creates dictionary containing all car instances in game.
     Generates board with cars in their starting position.
     Takes input from user and makes moves based on this input.
+
+    Args:
+        filepath (str): Path to the CSV file containing car information.
+        rounds (int): Number of rounds to run the algorithm.
+        algorithm (str): The algorithm to use ('random', 'bfs', 'dfs', 'itdp').
+        size (int): The size of the board (6, 9, or 12).
+        heuristic (str): The heuristic to use for dfs algorithm.
+
+    Returns:
+        results (list or path): The result of the algorithm, either the solution path or list of iterations.
     """
     
     cars = pd.read_csv(filepath)
@@ -52,7 +60,7 @@ def game(filepath, rounds, algorithm, size, heuristic):
         cars_dict[ID] = vehicle
 
     if algorithm == 'random':
-        results = run_random(filepath, rounds, algorithm, size, end_position, hill_climb = False)
+        results = run_random(filepath, rounds, algorithm, size, end_position)
         return results
     elif algorithm == 'bfs':
         bf_alg = bf.breadth_first_algorithm(size)

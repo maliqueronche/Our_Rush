@@ -2,31 +2,36 @@
 import queue
 import copy
 import numpy as np
-#from algorithm_random import get_available_cars, is_moveable
-#from board import move_car
 import board
-#from classes import change_position
 import copy
 from pprint import pprint
 import time
 
 class depth_first_algorithm():
-    """Contains functions to run the depth-first algorithm"""
-
+    """
+    Executes the depth-first search (DFS) algorithm with optional heuristic controls.
+    """
     def __init__(self, size):
+        """
+        Initializes the algorithm with a specified board size.
+        """
         print('initializing...')
         self.size = size
 
     def search_depth(self, car_ins_dict, bb=False):
-        """Search algorithm that searches a complete layer for a solution, before moving on to the next layer."""
-        
-        # Create copy of instances of cars with only relevant data
+        """
+        Iteratively searches with increasing depth limits to find the optimal solution. 
+        Uses heuristic if enabled.
+        """
+
+        # create copy of instances of cars with only relevant data
         cars_dict = {}
         for car_id, car in car_ins_dict.items():
             position_car = car.position
             orientation_car = car.orientation
             cars_dict[car_id] = {'id': car_id, 'position': position_car, 'orientation': orientation_car}
         
+        # set the end position and initial depth limit based on the board size
         if self.size == 6:
             end_position = [(2, 4), (2, 5)]
             initial_depth_limit = 1000
@@ -37,25 +42,24 @@ class depth_first_algorithm():
             end_position = [(5, 10), (5, 11)]
             initial_depth_limit = 10000
 
-        # Create stack, starting board and archive to check for duplicate boards
+        # initialize the starting board and data structures for the search
         starting_board = board.Board(cars_dict, self.size)
         starting_board_tuple = tuple(map(tuple, starting_board.board))
+        archive = {starting_board}
+        state_dict = {"": cars_dict}
 
-        # Dictionary containing all states
-        state_dict = {}
-        state_dict[""] = cars_dict
-        
-        # Solution by default not found 
+        # solution by default not found 
         best_solution = None
         best_solution_depth = initial_depth_limit
         
-        t_end = time.time() + 15
+        # set the time limit for the search
+        t_end = time.time() + 5
 
+         # begin iterative deepening search
         while time.time() < t_end:
             df_stack = [("", 0)]
             state_dict = {"": cars_dict}
             archive = {starting_board_tuple}
-            print("New round, current depth limit:", best_solution_depth)
 
             while len(df_stack) > 0:
                 state, depth = df_stack.pop()
@@ -136,6 +140,9 @@ class depth_first_algorithm():
 
 
     def get_available_cars(self, cars_dict, board):
+        """
+        Returns a dictionary of cars that are moveable based on the current board state.
+        """
         available_cars = {}
 
         for car_id, car in cars_dict.items():
@@ -146,7 +153,9 @@ class depth_first_algorithm():
 
 
     def get_new_pos(self, car_tup, direction, orientation):
-        '''recieves a tuple for location and a direction and moves the tuple one place'''
+        """
+        Recieves a tuple for location and a direction and moves the tuple one place
+        """
         row, col = car_tup
 
         if orientation == 'H':
@@ -164,6 +173,9 @@ class depth_first_algorithm():
         
     
     def is_moveable(self, car, board):
+        """
+        Determines if the car is moveable in its current orientation within the board constraints.
+        """
 
         position = car['position']
         orientation = car['orientation']

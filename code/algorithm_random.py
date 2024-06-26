@@ -1,7 +1,7 @@
 import board
 import classes
 import random
-import visualization
+# import visualization
 import copy
 
 class Random_algorithm():

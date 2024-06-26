@@ -10,6 +10,13 @@ class Board():
 
   """
   def __init__(self, cars_dict, size = 6):
+    """
+    Initializes the Board with cars and size.
+      
+    Args:
+        cars_dict (dict): Dictionary containing car instances.
+        size (int): The size of the board (default is 6).
+    """
     self.size = size
     self.cars = cars_dict
     self.board = np.zeros((size, size))
@@ -21,17 +28,24 @@ class Board():
               self.board[tup] = vehicle.ID
     
         elif type(vehicle) == dict:
-          # print ('this is a dict')
           location = cars_dict[id]['position']
           for tup in location:
               self.board[tup] = id
     
 
-
-    # print (self.board)
-
   def get_new_pos(self, car_tup, direction, orientation):
-    '''recieves a tuple for location and a direction and moves the tuple one place'''
+    """
+    Receives a tuple for location and a direction, then moves the tuple one place.
+    
+    Args:
+        car_tup (tuple): Current position of the car.
+        direction (str): Direction to move ('pos' or 'neg').
+        orientation (str): Orientation of the car ('H' or 'V').
+    
+    Returns:
+        tuple: New position of the car.
+    """    
+    
     row, col = car_tup
 
     if orientation == 'H':
@@ -45,18 +59,20 @@ class Board():
       elif direction == 'neg':
         row -= 1
 
-    # if row < 0 or row > self.size or col < 0 or col > self.size:
-    #       return None
-
     return row, col
 
   def move_car(self, car_id, direction):
-    '''recieves a car_id with direction and moves this car across the board'''
+    """
+    Receives a car_id with direction and moves this car across the board.
+    
+    Args:
+        car_id (int): The ID of the car to move.
+        direction (str): The direction to move ('pos' or 'neg').
+    """    
     new_positions = []
     car = self.cars[car_id]
     positions = car.position
     orientation = car.orientation
-    # print (car_id)
 
     for car_tup in positions:
       new_pos = self.get_new_pos(car_tup, direction, orientation)
@@ -68,7 +84,6 @@ class Board():
     for new_pos in new_positions:
       self.board[new_pos] = car.ID
 
-    # print (self.board)
       
 
      
