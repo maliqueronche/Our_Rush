@@ -28,10 +28,6 @@ def game(filepath, rounds, algorithm, size, heuristic):
     
     cars = pd.read_csv(filepath)
     iterations_list = []
-    
-    # min_iterations = 10000
-    # min_iterations_config = {}
-    # start = time()
 
     if size == 6:
         end_position = [(2,4), (2, 5)]
@@ -46,6 +42,7 @@ def game(filepath, rounds, algorithm, size, heuristic):
         bb_ = False
 
     cars_dict = {}
+    
     # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
         ID = 0
