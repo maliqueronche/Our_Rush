@@ -44,7 +44,7 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     for idx, row in cars.iterrows():
         ID = 0
         for letter in row['car']:
-            ID += ord(row['car'])
+            ID += ord(letter)
         vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
         cars_dict[ID] = vehicle
 
@@ -101,7 +101,7 @@ if __name__ == '__main__':
         size = 9
         filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
         
-    elif game_number == 12:
+    elif game_number == 7:
         size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
 

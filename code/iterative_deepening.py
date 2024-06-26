@@ -40,7 +40,7 @@ class depth_first_algorithm():
             depth_limit = 1000
 
         # Create queue, starting board and archive to check for duplicate boards
-        df_stack = [""]
+        df_stack = [("", 0)]
         starting_board = board.Board(cars_dict, self.size)
         starting_board = tuple(map(tuple, starting_board.board))
         archive = {starting_board}
@@ -56,104 +56,115 @@ class depth_first_algorithm():
         j = 0
         start = time()
 
-        
+        while solution_found == False:
 
-        while df_stack:
-        # for i in range(12):
-            j += 1
+            depth_limit += 1
 
-            # Print duration over iteration length
-            if j % 10000 == 0:
-                end = time()
-                print('\niteration:', j)
-                print(f'The time elapsed: {end-start:.2f} seconds.')
-                start = time()
-            
-            # Get state from queue
-            state = df_stack.pop()
-            
-            # Get dictionary current cars (id: pos(tup), or(str), par(set))
-            current_cars_dict = state_dict[state]
-            
-            # Create current board (Numpy arrays)
-            current_board = board.Board(current_cars_dict, self.size)
-            
-            # Get a dict of available cars (id: pos(tup), or(str), par(set))
-            available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
-        
-            # Loop over available cars, move them, add new states to queue
-            for car_id, car in available_cars.items():
-                if car_id == 88 and car['position'] == end_position:
-                    return state
+            df_stack = [("", 0)]
+            archive = {starting_board}
 
-                # Copy current dictionary
-                new_cars_dict = copy.deepcopy(current_cars_dict)
+            # dictionary containing all states
+            state_dict = {}
+            state_dict[""] = cars_dict
 
-                # Get's a tuple for every side if it is moveable
-                moveable = self.is_moveable(car, current_board.board)
+            while df_stack:
+            # for i in range(12):
+                j += 1
+
+                # Print duration over iteration length
+                if j % 10000 == 0:
+                    end = time()
+                    print('\niteration:', j)
+                    print(f'The time elapsed: {end-start:.2f} seconds.')
+                    start = time()
                 
-                # Move car backwards if possible
-                if moveable[0]:
-
-                    # Changes the position of a car
-                    new_position = []
-                    car = new_cars_dict[car_id]
-                    for car_tup in car['position']:
-                        new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
-                        new_position.append(new_pos)
-                    car['position']= new_position
-
-                    # Create new statename
-                    new_state = (state + str(car_id) + ',' + '-' + ',')
-                    
-                    # Check if the red car is on the right position
+                # Get state from queue
+                state, depth = df_stack.pop()
+                if depth > depth_limit:
+                    continue
+                
+                # Get dictionary current cars (id: pos(tup), or(str), par(set))
+                current_cars_dict = state_dict[state]
+                
+                # Create current board (Numpy arrays)
+                current_board = board.Board(current_cars_dict, self.size)
+                
+                # Get a dict of available cars (id: pos(tup), or(str), par(set))
+                available_cars = self.get_available_cars(current_cars_dict, current_board.board) # shorter dictionary with available vehicles
+            
+                # Loop over available cars, move them, add new states to queue
+                for car_id, car in available_cars.items():
                     if car_id == 88 and car['position'] == end_position:
-                        return new_state
+                        return state
 
-                    # Create new board (Numpy arrays)
-                    new_board = board.Board(new_cars_dict, self.size)
-                    new_board = tuple(map(tuple, new_board.board))     
+                    # Copy current dictionary
+                    new_cars_dict = copy.deepcopy(current_cars_dict)
+
+                    # Get's a tuple for every side if it is moveable
+                    moveable = self.is_moveable(car, current_board.board)
+                    
+                    # Move car backwards if possible
+                    if moveable[0]:
+
+                        # Changes the position of a car
+                        new_position = []
+                        car = new_cars_dict[car_id]
+                        for car_tup in car['position']:
+                            new_pos = self.get_new_pos(car_tup, 'neg', car['orientation'])
+                            new_position.append(new_pos)
+                        car['position']= new_position
+
+                        # Create new statename
+                        new_state = (state + str(car_id) + ',' + '-' + ',')
                         
-                    # Check if board is not in archive and add to queue
-                    if new_board not in archive:
-                        archive.add(new_board)
-                        df_stack.append(new_state)
-                        state_dict[new_state] = new_cars_dict
+                        # Check if the red car is on the right position
+                        if car_id == 88 and car['position'] == end_position:
+                            return new_state
+
+                        # Create new board (Numpy arrays)
+                        new_board = board.Board(new_cars_dict, self.size)
+                        new_board = tuple(map(tuple, new_board.board))     
+                            
+                        # Check if board is not in archive and add to queue
+                        if new_board not in archive:
+                            archive.add(new_board)
+                            df_stack.append((new_state, depth + 1))
+                            state_dict[new_state] = new_cars_dict
+                    
+                    new_cars_dict = copy.deepcopy(current_cars_dict)
+                    
+                    # Move car forwards if possible
+                    if moveable[1]:
+                        
+                        # Changes position of car
+                        new_position = []
+                        car = new_cars_dict[car_id]
+                        for car_tup in car['position']:
+                            new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
+                            new_position.append(new_pos)
+                        car['position']= new_position
+                        
+                        # Create new state
+                        new_state = (state + str(car_id) + ',' + '+' + ',')
+                        
+                        # Check to see if red car is on right place
+                        if car_id == 88 and car['position'] == end_position:
+                            return new_state
+
+
+                        # Create new board
+                        new_board = board.Board(new_cars_dict, self.size)
+                        new_board = tuple(map(tuple, new_board.board))
+
+                        # Check if board is not in archive and add to queue
+                        if new_board not in archive:
+                            archive.add(new_board)
+                            df_stack.append((new_state, depth + 1))
+                            state_dict[new_state] = new_cars_dict
                 
-                new_cars_dict = copy.deepcopy(current_cars_dict)
-                
-                # Move car forwards if possible
-                if moveable[1]:
-                    
-                    # Changes position of car
-                    new_position = []
-                    car = new_cars_dict[car_id]
-                    for car_tup in car['position']:
-                        new_pos = self.get_new_pos(car_tup, 'pos', car['orientation'])
-                        new_position.append(new_pos)
-                    car['position']= new_position
-                    
-                    # Create new state
-                    new_state = (state + str(car_id) + ',' + '+' + ',')
-                    
-                    # Check to see if red car is on right place
-                    if car_id == 88 and car['position'] == end_position:
-                        return new_state
-
-
-                    # Create new board
-                    new_board = board.Board(new_cars_dict, self.size)
-                    new_board = tuple(map(tuple, new_board.board))
-
-                    # Check if board is not in archive and add to queue
-                    if new_board not in archive:
-                        archive.add(new_board)
-                        df_stack.append(new_state)
-                        state_dict[new_state] = new_cars_dict
-            
-            # Remove old states out of the state dict
-            del state_dict[state]
-    
+                # Remove old states out of the state dict
+                del state_dict[state]
+        
 
         return best_solution if best_solution else "No solution found within depth limit"
 
