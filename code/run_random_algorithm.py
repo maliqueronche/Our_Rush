@@ -20,7 +20,7 @@ def run_random(filepath, rounds, algorithm, size, end_position, hill_climb=False
         for idx, row in cars.iterrows():
             ID = 0
             for letter in row['car']:
-                ID += ord(row['car'])
+                ID += ord(letter)
             vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
             cars_dict[ID] = vehicle
 
