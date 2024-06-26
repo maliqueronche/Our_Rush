@@ -21,7 +21,8 @@ class depth_first_algorithm():
 
     def search_depth(self, car_ins_dict, bb=False):
         """Search algorithm that searches a complete layer for a solution, before moving on to the next layer."""
-
+        
+            
         # Create copy of instances of cars with only relevant data
         cars_dict = {}
         for car_id, car in car_ins_dict.items():
@@ -174,7 +175,7 @@ class depth_first_algorithm():
             
             
             depth_limit = depth
-            print(depth_limit)
+            # print(depth_limit)
 
         return best_solution if best_solution else "No solution found within depth limit"
 
