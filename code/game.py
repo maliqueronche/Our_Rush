@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import argparse
 import pandas as pd
 import classes
 import board
@@ -16,14 +17,16 @@ from helpers import export_bfs_to_csv, export_results_to_csv, export_hillclimber
 from animation import animate
 from hill_climb import hill_climber as hc
 from run_random_algorithm import run_random
+import iterative_deepening as it
 
-def game(filepath, rounds, algorithm, size, hill_climb = False):
+def game(filepath, rounds, algorithm, size, heuristic):
     """
     Takes csv file containing vehicles and adds them to game.
     Creates dictionary containing all car instances in game.
     Generates board with cars in their starting position.
     Takes input from user and makes moves based on this input.
     """
+    
     cars = pd.read_csv(filepath)
     iterations_list = []
     mean_i = 0
@@ -38,6 +41,12 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         end_position = [(4, 7), (4, 8)]
     elif size == 12:
         end_position = [(5, 10), (5, 11)]
+
+    if heuristic == 'bb':
+        
+        bb_ = True
+    else:
+        bb_ = False
 
     cars_dict = {}
     # Loop over cars dataframe, create vehicles and store them in dictionary
@@ -58,8 +67,12 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         return path
     elif algorithm == 'dfs':
         df_alg = df.depth_first_algorithm(size)
-        path = df_alg.search_depth(cars_dict)
+        path = df_alg.search_depth(cars_dict, bb=bb_)
         return path
+    elif algorithm == 'itdp':
+        itdp_alg = it.iterative_deepening_algorithm(size)
+        results = itdp_alg.search_depth_iteratively(cars_dict)
+        return results
     elif algorithm == 'hillclimb':
         hc_alg = hc(filepath, end_position, size)
         results = hc_alg.run_hc()
@@ -86,13 +99,19 @@ if __name__ == '__main__':
     algorithm = ''
     rounds = 1
 
-    if len(sys.argv) < 3:
-        print("Usage: python game.py <game_number> <algorithm> [<rounds>]")
-        sys.exit(1)
-    
-    game_number = int(sys.argv[1])
-    algorithm = sys.argv[2]
-    rounds = int(sys.argv[3]) if len(sys.argv) > 3 else 1
+    parser = argparse.ArgumentParser(description="Speel een spel met een bepaald algoritme en optionele parameters.")
+    parser.add_argument('-g', '--game', required=True, type=int, help='Het spelnummer')
+    parser.add_argument('-a', '--algorithm', required=True, type=str, help='Het te gebruiken algoritme')
+    parser.add_argument('-r', '--rounds', type=int, default=1, help='Aantal rondes (standaard 1)')
+    parser.add_argument('-e', '--heuristic', type=str, default=False, help='De te gebruiken heuristiek (standaard False)')
+
+    args = parser.parse_args()
+
+    game_number = args.game
+    algorithm = args.algorithm
+    rounds = args.rounds
+    heuristic = args.heuristic
+
 
     if game_number in [1, 2, 3]:
         size = 6
@@ -107,7 +126,7 @@ if __name__ == '__main__':
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
 
     start_time = time()
-    results = game(filepath, rounds, algorithm, size)
+    results = game(filepath, rounds, algorithm, size, heuristic)
     end_time = time()
     duration = end_time - start_time
     print("Experiment results: \n", results)
@@ -117,18 +136,13 @@ if __name__ == '__main__':
     
     if algorithm == 'random':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
-    elif algorithm in ['bfs', 'dfs']:
+    elif algorithm in ['bfs', 'dfs', 'itdp']:
         export_bfs_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm == 'hillclimb':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     
-    animate(filepath, f'results/{experiment_name}.csv', size)
-        # TODO: implement exporting of results
-
-    # export_bfs_to_csv(f'results/{experiment_name}.csv', results)
-    # experiment_name = 'random_2'
-    # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
-    
-    
+    if algorithm != 'random':
+        animate(filepath, f'results/{experiment_name}.csv', size)
+       
 
     
