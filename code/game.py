@@ -28,6 +28,7 @@ def game(filepath, rounds, algorithm, size, heuristic):
     cars = pd.read_csv(filepath)
     iterations_list = []
 
+    # set end position based on board size
     if size == 6:
         end_position = [(2,4), (2, 5)]
     elif size == 9:
@@ -59,32 +60,27 @@ def game(filepath, rounds, algorithm, size, heuristic):
         return path
     elif algorithm == 'dfs':
         df_alg = df.depth_first_algorithm(size)
-        path = df_alg.search_depth(cars_dict, bb=bb_)
+        path = df_alg.search_depth(cars_dict, bb = bb_)
         return path
     elif algorithm == 'itdp':
         itdp_alg = it.iterative_deepening_algorithm(size)
         results = itdp_alg.search_depth_iteratively(cars_dict)
         return results
-    elif algorithm == 'hillclimb':
-        hc_alg = hc(filepath, end_position, size)
-        results = hc_alg.run_hc()
-        return results
-
-    if hill_climb:
-        return min_iterations_config
-    else:
-        return iterations_list
-
+    
 
 if __name__ == '__main__':
+
+    # esnsure the results directory exists
     if not os.path.exists('results'):
         os.makedirs('results')
     
+    # argument parser for command-line arguments
     parser = argparse.ArgumentParser(description="Speel een spel met een bepaald algoritme en optionele parameters.")
-    parser.add_argument('-g', '--game', required=True, type=int, help='Het spelnummer')
-    parser.add_argument('-a', '--algorithm', required=True, type=str, help='Het te gebruiken algoritme')
-    parser.add_argument('-r', '--rounds', type=int, default=1, help='Aantal rondes (standaard 1)')
-    parser.add_argument('-e', '--heuristic', type=str, default=False, help='De te gebruiken heuristiek (standaard False)')
+    parser.add_argument('-g', '--game', required = True, type = int, help='The game number')
+    parser.add_argument('-a', '--algorithm', required = True, type = str, help='The algorithm')
+    parser.add_argument('-r', '--rounds', type = int, default = 1, help='Amound of rounds (default = 1)')
+    parser.add_argument('-e', '--heuristic', type = str, default = False, help='Heuristic (default = 1)')
+    parser.add_argument('-v', '--visualize', type = bool, default = False, help='Animation')
 
     args = parser.parse_args()
 
@@ -92,19 +88,20 @@ if __name__ == '__main__':
     algorithm = args.algorithm
     rounds = args.rounds
     heuristic = args.heuristic
+    visualization = args.visualize
 
+    # set file path based on game number
     if game_number in [1, 2, 3]:
         size = 6
         filepath = f'data/Rushhour6x6_{str(game_number)}.csv'
-        
     elif game_number in [4, 5, 6]:
         size = 9
         filepath = f'data/Rushhour9x9_{str(game_number)}.csv'
-        
     elif game_number == 7:
         size = 12
         filepath = f'data/Rushhour12x12_{str(game_number)}.csv'
 
+    # run the game and measure the duration
     start_time = time()
     results = game(filepath, rounds, algorithm, size, heuristic)
     end_time = time()
@@ -112,6 +109,7 @@ if __name__ == '__main__':
     print(f"Experiment duration: {duration:.2f} seconds")
     experiment_name = f'{algorithm}_{size}x{size}_{game_number}_{rounds}'
     
+    # export results based on algorithm
     if algorithm == 'random':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     elif algorithm in ['bfs', 'dfs', 'itdp']:
@@ -119,7 +117,8 @@ if __name__ == '__main__':
     elif algorithm == 'hillclimb':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     
-    if algorithm != 'random':
+    # optionally create an animation
+    if algorithm != 'random' and visualization == True:
         animate(filepath, f'results/{experiment_name}.csv', size)
        
 

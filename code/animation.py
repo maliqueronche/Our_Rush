@@ -5,6 +5,7 @@ import pandas as pd
 import random
 import os
 import imageio
+import shutil
 
 def animate(board_file, result_file, size):
     """Animate takes three files, one this the original board, one with the 
@@ -77,17 +78,19 @@ def animate(board_file, result_file, size):
         pygame.image.save(screen, frame_filename)
         frames.append(frame_filename)
 
-    video_file = 'videos/rush_hour_animation.mp4'
-    if not os.path.exists('videos'):
-        os.makedirs('videos')
+    gif_file = 'results/rush_hour_animation.gif'
+    if not os.path.exists('results'):
+        os.makedirs('results')
     
-    with imageio.get_writer(video_file, fps=8) as writer:
+    with imageio.get_writer(gif_file, mode='I', duration=0.125) as writer:
         for frame_filename in frames:
             image = imageio.imread(frame_filename)
             writer.append_data(image)
     
     for frame_filename in frames:
         os.remove(frame_filename)
+    
+    # shutil.rmtree(frames)
 
 def load_start_board(file_path):
     """Imports initial start board from csv and turns it into dictionary"""
