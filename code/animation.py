@@ -3,6 +3,8 @@ import sys
 import time
 import pandas as pd
 import random
+import os
+import imageio
 
 def animate(board_file, result_file, size):
     """Animate takes three files, one this the original board, one with the 
@@ -14,11 +16,8 @@ def animate(board_file, result_file, size):
 
     # create grid
     screen_width, screen_height = 600, 600
-
     grid_size = size
-    
     cell_size = screen_width // grid_size
-
     border_size = 50
 
     # display screen
@@ -35,19 +34,16 @@ def animate(board_file, result_file, size):
     # load cars and steps
     cars = load_start_board(board_file)
     steps = load_steps(result_file)
-    # load cars and steps
-    cars = load_start_board(board_file)
-    steps = load_steps(result_file)
 
     step_count = 0
-
     font = pygame.font.SysFont(None, 36)
 
-    font = pygame.font.SysFont(None, 36)
+    if not os.path.exists('frames'):
+        os.makedirs('frames')
+    
+    frames = []
 
-    while True:
-
-        # keep 'playing' until quit
+    while step_count < len(steps):
 
         # keep 'playing' until quit
         for event in pygame.event.get():
@@ -58,16 +54,11 @@ def animate(board_file, result_file, size):
         screen.fill(background_colour)
 
         # count steps
-        # count steps
         if step_count < len(steps):
             car_id, distance = steps[step_count]
             cars[car_id].move_car(distance)
             step_count += 1
 
-        # draw border
-        pygame.draw.rect(screen, (0, 0, 0), (border_size, border_size, screen_width, screen_height), 5)
-
-        # draw cars
         # draw border
         pygame.draw.rect(screen, (0, 0, 0), (border_size, border_size, screen_width, screen_height), 5)
 
@@ -78,19 +69,28 @@ def animate(board_file, result_file, size):
         # display moves
         counter_text = font.render(f'Moves: {step_count}', True, (255, 255, 255))
         screen.blit(counter_text, (10, 10))
-        car.draw_car(screen, cell_size, border_size)
-
-        # display moves
-        counter_text = font.render(f'Moves: {step_count}', True, (255, 255, 255))
-        screen.blit(counter_text, (10, 10))
-
+        
         pygame.display.flip()
         clock.tick(8)  
-        time.sleep(0.005)
+        # time.sleep(0.005)
+        frame_filename = f'frames/frame_{step_count:04d}.png'
+        pygame.image.save(screen, frame_filename)
+        frames.append(frame_filename)
+
+    video_file = 'videos/rush_hour_animation.mp4'
+    if not os.path.exists('videos'):
+        os.makedirs('videos')
+    
+    with imageio.get_writer(video_file, fps=8) as writer:
+        for frame_filename in frames:
+            image = imageio.imread(frame_filename)
+            writer.append_data(image)
+    
+    for frame_filename in frames:
+        os.remove(frame_filename)
 
 def load_start_board(file_path):
     """Imports initial start board from csv and turns it into dictionary"""
-
 
     start_data = pd.read_csv(file_path)
     cars = {}
@@ -120,7 +120,6 @@ def load_start_board(file_path):
 
 def get_unique_colours(taken_colours):
     """Makes sure there are only unique colours on the board"""
-    """Makes sure there are only unique colours on the board"""
 
     while True:
         colour = tuple(random.randint(0, 255) for _ in range(3))
@@ -129,18 +128,14 @@ def get_unique_colours(taken_colours):
 
 def load_steps(file_path):
     """Loads steps from csv"""
-
-    """Loads steps from csv"""
-
+    
     steps_df = pd.read_csv(file_path)
     steps = []
-
 
     for row, column in steps_df.iterrows():
         car_id = column['car']
         move = column['move']
         steps.append((car_id, move))
-
 
     return steps
 
@@ -160,31 +155,22 @@ class car:
     def draw_car(self, screen, cell_size, border_size):
         """Draws car based in screen, cell size and border size"""
 
-    def draw_car(self, screen, cell_size, border_size):
-        """Draws car based in screen, cell size and border size"""
-
         x, y = self.position
 
         # main car rectangle
         if self.orientation == 'H':
             pygame.draw.rect(screen, self.colour, (x * cell_size + border_size, y * cell_size + border_size, self.length * cell_size, cell_size), border_radius = 40)
-            pygame.draw.rect(screen, self.colour, (x * cell_size + border_size, y * cell_size + border_size, self.length * cell_size, cell_size), border_radius = 40)
         else:
-            pygame.draw.rect(screen, self.colour, (x * cell_size + border_size, y * cell_size + border_size, cell_size, self.length * cell_size), border_radius = 40)
             pygame.draw.rect(screen, self.colour, (x * cell_size + border_size, y * cell_size + border_size, cell_size, self.length * cell_size), border_radius = 40)
 
         # car roof
         roof_colour = tuple(max(0, c - 50) for c in self.colour)
         if self.orientation == 'H':
             pygame.draw.rect(screen, roof_colour, (x * cell_size + border_size + cell_size // 4, y * cell_size + border_size + cell_size // 4, self.length * cell_size - cell_size // 2, cell_size // 2))
-            pygame.draw.rect(screen, roof_colour, (x * cell_size + border_size + cell_size // 4, y * cell_size + border_size + cell_size // 4, self.length * cell_size - cell_size // 2, cell_size // 2))
         else:
-            pygame.draw.rect(screen, roof_colour, (x * cell_size + border_size + cell_size // 4, y * cell_size + border_size + cell_size // 4, cell_size // 2, self.length * cell_size - cell_size // 2))
             pygame.draw.rect(screen, roof_colour, (x * cell_size + border_size + cell_size // 4, y * cell_size + border_size + cell_size // 4, cell_size // 2, self.length * cell_size - cell_size // 2))
 
     def move_car(self, steps):
-        """Moves car based on steps"""
-        
         """Moves car based on steps"""
         
         x, y = self.position
@@ -193,8 +179,8 @@ class car:
         else:
             self.position = (x, y + steps)
  
-if __name__ == '__main__':
-    size = 6
-    board_file = 'data/Rushhour6x6_1_test_red_only.csv'
-    result_file = 'results/test_hillclimb.csv'
-    animate(board_file, result_file, size)
+# if __name__ == '__main__':
+#     size = 6
+#     board_file = 'data/Rushhour6x6_1_test_red_only.csv'
+#     result_file = 'results/test_hillclimb.csv'
+#     animate(board_file, result_file, size)

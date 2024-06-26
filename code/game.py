@@ -1,5 +1,4 @@
 import numpy as np
-# import sys
 import argparse
 import pandas as pd
 import classes
@@ -81,11 +80,6 @@ if __name__ == '__main__':
     if not os.path.exists('results'):
         os.makedirs('results')
     
-    # Set default values
-    game_number = 0
-    algorithm = ''
-    rounds = 1
-
     parser = argparse.ArgumentParser(description="Speel een spel met een bepaald algoritme en optionele parameters.")
     parser.add_argument('-g', '--game', required=True, type=int, help='Het spelnummer')
     parser.add_argument('-a', '--algorithm', required=True, type=str, help='Het te gebruiken algoritme')
