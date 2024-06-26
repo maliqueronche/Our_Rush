@@ -13,10 +13,11 @@ from pprint import pprint
 class hillclimb():
     # step one: 5 random outputs
 
-    def __init__(self, size):
+    def __init__(self, filepath, end_position, size):
+        self.list_of_cars = pd.read_csv(filepath, index_col = 'car') 
         self.size = size
         self.end_position = end_position
-        
+
         # Loop over cars dataframe, create vehicles and store them in dictionary
         cars_dict = self.list_to_cars_dict(self.list_of_cars)
 
@@ -293,7 +294,8 @@ class hillclimb():
 
 if __name__ == '__main__':
     filepath = 'data/Rushhour6x6_1.csv'
-    car_moves = hc_alg(filepath, 200, 100, 6)
+    hc = hillclimb(filepath, [(3, 5),(3,6)], 6)
+    car_moves = hc.run_hc(filepath, 200, 100, 6)
     print("solution:", len(optimized_solution.keys()))
 
     

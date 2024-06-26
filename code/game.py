@@ -121,13 +121,8 @@ if __name__ == '__main__':
     elif algorithm == 'hillclimb':
         export_hillclimber_to_csv(f'results/{experiment_name}.csv', results)
     
-    animate(filepath, f'results/{experiment_name}.csv', size)
-        # TODO: implement exporting of results
-
-    # export_bfs_to_csv(f'results/{experiment_name}.csv', results)
-    # experiment_name = 'random_2'
-    # export_results_to_csv(f'results/{experiment_name}_{rounds}.csv', results)
-    
-    
+    if algorithm != 'random':
+        animate(filepath, f'results/{experiment_name}.csv', size)
+       
 
     
