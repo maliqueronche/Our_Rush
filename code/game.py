@@ -32,9 +32,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     min_iterations_config = {}
     start = time()
 
-    # step_counter = 0
-    # print(f"Initial step_counter: {step_counter}")
-
     if size == 6:
         end_position = [(2,4), (2, 5)]
     elif size == 9:
@@ -42,8 +39,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
     elif size == 12:
         end_position = [(5, 10), (5, 11)]
 
-    
-        
     cars_dict = {}
     # Loop over cars dataframe, create vehicles and store them in dictionary
     for idx, row in cars.iterrows():
@@ -53,7 +48,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         vehicle = classes.Vehicle(ID, row['orientation'], row['col'], row['row'], row['length'])
         cars_dict[ID] = vehicle
 
- 
     if algorithm == 'random':
         print(rounds)
         results = run_random(filepath, rounds, algorithm, size, end_position, hill_climb)
@@ -71,7 +65,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         results = hc_alg.run_hc()
         return results
         
-
     # Calculate the mean iterations and return the list of iterations
     mean_i = mean_i/rounds
     # print (f'the mean amount of iterations over {rounds} rounds is {mean_i}')
@@ -83,7 +76,6 @@ def game(filepath, rounds, algorithm, size, hill_climb = False):
         return iterations_list
 
 
-
 if __name__ == '__main__':
     if not os.path.exists('results'):
         os.makedirs('results')
@@ -93,18 +85,8 @@ if __name__ == '__main__':
     algorithm = ''
     rounds = 1
 
-    # Keep looping over user prompts while answers are wrong
-    # while game_number < 1 or game_number > 7:
-    #     game_number = int(input("Hi, which game of Rush Hour (1-7) would you like to play? "))
-        
-    # while algorithm not in ['random', 'bfs', 'dfs', 'hillclimb']:
-    #     algorithm = input("Which algorithm would you like to use? Enter one of the following: \n- random \n- bfs \n- dfs \n- hillclimb \nAlgorithm: ")
-    
-    # if algorithm in ['random']:
-    #     rounds = int(input("How many rounds would you like the algorithm to search? "))
-    
     if len(sys.argv) < 3:
-        print("Usage: python script.py <game_number> <algorithm> [<rounds>]")
+        print("Usage: python game.py <game_number> <algorithm> [<rounds>]")
         sys.exit(1)
     
     game_number = int(sys.argv[1])
