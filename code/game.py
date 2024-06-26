@@ -7,7 +7,7 @@ import board
 import breadth_first as bf
 import depth_first as df
 from visualization import visualize
-from user_input import user_input
+
 from algorithm_random import Random_algorithm as ra
 import csv
 import os

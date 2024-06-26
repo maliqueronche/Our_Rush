@@ -85,7 +85,7 @@ class depth_first_algorithm():
                 
                 # Get state from queue
                 state, depth = df_stack.pop()
-                print(depth)
+                
                 if bb and depth >= depth_limit:
                     
                     continue
@@ -132,7 +132,7 @@ class depth_first_algorithm():
                         if car_id == 88 and car['position'] == end_position:
                             if bb:
                                 best_solution = new_state
-                                max_depth = depth
+                                depth_limit = depth
                                 
                                 break
                             else: 
@@ -168,7 +168,7 @@ class depth_first_algorithm():
                         if car_id == 88 and car['position'] == end_position:
                             if bb:
                                 best_solution = new_state
-                                max_depth = depth
+                                depth_limit = depth
                                 
                                 break
                             else: 
@@ -188,11 +188,10 @@ class depth_first_algorithm():
                 # Remove old states out of the state dict
                 # del state_dict[state]
             
-            if max_depth == depth_limit:
-                depth_limit -= 1
+            
                 
-            else:
-                depth_limit = max_depth
+         
+            
             # print("depth_limit", depth_limit)
 
         return best_solution if best_solution else "No solution found within depth limit"
